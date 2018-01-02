@@ -2,8 +2,8 @@ pragma solidity ^0.4.13;
 
 import 'zeppelin-solidity/contracts/token/MintableToken.sol';
 
-contract GustavoCoin is MintableToken {
-  string public name = "GUSTAVO COIN";
-  string public symbol = "GUS";
+contract Tulip is MintableToken {
+  string public name = "TULIP";
+  string public symbol = "TLP";
   uint8 public decimals = 18;
 }

@@ -1,12 +1,12 @@
-var GustavoCoinCrowdsale = artifacts.require("./GustavoCoinCrowdsale.sol");
+var TulipCrowdsale = artifacts.require("./TulipCrowdsale.sol");
 
-contract('GustavoCoinCrowdsale', function(accounts) {
+contract('TulipCrowdsale', function(accounts) {
   it("should assert true", function() {
     var crowdsale;
     var account = web3.eth.accounts[2];
     var accountTokenBalance;
 
-    return GustavoCoinCrowdsale
+    return TulipCrowdsale
             .deployed()
             .then(function(instance) {
               crowdsale = instance;
