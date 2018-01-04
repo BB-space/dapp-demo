@@ -1,103 +1,85 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import { Hand } from 'pokersolver';
-import OpponentSpace from './OpponentSpace';
+import BigNumber from 'bignumber.js';
 
+import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
 
-const cards = {
-    spades: ['♠A', '♠2', '♠3', '♠4', '♠5', '♠6', '♠7', '♠8', '♠9', '♠10', '♠J', '♠Q', '♠K'],
-    clovers: ['♣A', '♣2', '♣3', '♣4', '♣5', '♣6', '♣7', '♣8', '♣9', '♣10', '♣J', '♣Q', '♣K'],
-    hearts: ['♥A', '♥2', '♥3', '♥4', '♥5', '♥6', '♥7', '♥8', '♥9', '♥10', '♥J', '♥Q', '♥K'],
-    diamonds: ['♦A', '♦2', '♦3', '♦4', '♦5', '♦6', '♦7', '♦8', '♦9', '♦10', '♦J', '♦Q', '♦K']
-};
-
-const shapeMap = {
-	'♠': 's',
-	'♣': 'c',
-	'♥': 'h',
-	'♦': 'd'
-}
 
 
 export default class MainPage extends Component {
 	constructor(props) {
 		super(props);
 
+		const tulipSaleInstance = new web3.eth.Contract(tulipSaleABI);
+
+		this.handleSaleAddressChange = this.handleInputChange.bind(this, 'crowdsaleAddress');
+		this.handleTokenAddressChange = this.handleInputChange.bind(this, 'tokenAddress');
+
 		this.state = {
-			isIn: [true, true, true, true],
+			currentAccount: null,
+			ethBalance: null,
+			tulipSaleInstance,
+			crowdsaleAddress: '',
+			tokenAddress: ''
 		};
+
+		this.getAccountStatus();
     }
 
-	togglePlayer = (evt) => {
-		const playerNum = evt.target.dataset.playernum;
-		const isIn = _.clone(this.state.isIn);
-		isIn[playerNum] = !isIn[playerNum];
-		
-		this.setState({ isIn });
+	getAccountStatus = () => {
+		web3.eth.getCoinbase()
+			.then(account => {
+				this.setState({
+					currentAccount: account
+				});
+				return web3.eth.getBalance(account);
+			})
+			.then(balance => {
+				this.setState({
+					ethBalance: balance
+				});
+			});
 	}
+
+	handleInputChange(whichState, evt) {
+		const newVal = evt.target.value;
+
+		this.setState({ whichState: newVal });
+	}
+	
 
     render() {
 		const {
-			isIn
+			currentAccount,
+			ethBalance,
+			crowdsaleAddress
 		} = this.state;
 		
-		const createBtns = shape => (
-			shape.map((e, i) => (
-				<button
-					key={i}
-					className={classNames({
-							'btn': true,
-							'btn-default': true,
-							'btn-sm': true,
-							'btn-card': true,
-							'text-red': ['♥', '♦'].indexOf(e[0][0]) > -1
-					})}>
-					{ e }
-				</button>
-			))
-		);
-
-		console.log(Hand.solve(['Ad', 'As', 'Jc', 'Th', '2d', 'Qs', 'Qd']));
-			
 		return (
 			<main>
-				<h1>Main Page</h1>
+				<h1>Demo Dapp</h1>
 
-				<div className="row">
-					<div className="col-sm-3">
-						<OpponentSpace
-							playerNum={0}
-						    isIn={isIn[0]}
-							onSwitchClick={this.togglePlayer} />
-						<OpponentSpace
-							playerNum={1}
-							isIn={isIn[1]}
-						    onSwitchClick={this.togglePlayer} />
-					</div>
-					<div className="col-sm-6">
-						<div className="btn-space">
-							<div>{ createBtns(cards.spades) }</div>
-							<div>{ createBtns(cards.clovers) }</div>
-							<div>{ createBtns(cards.hearts) }</div>
-							<div>{ createBtns(cards.diamonds) }</div>
-						</div>
-
-						<div className="my-space">
-							hello
-						</div>
-					</div>
-					<div className="col-sm-3">
-						<OpponentSpace
-							playerNum={2}
-							isIn={isIn[2]}
-						    onSwitchClick={this.togglePlayer} />
-						<OpponentSpace
-							playerNum={3}
-							isIn={isIn[3]}
-						    onSwitchClick={this.togglePlayer} />
-					</div>
-					
+				<div className="panel">
+					<ul>
+						<li>Account: {currentAccount || 'Not Connected'}</li>
+						<li>ETH Balance: {ethBalance || '0.0'}</li>
+						<button onClick={this.getAccountStatus}>Refresh</button>
+					</ul>
 				</div>
+				
+				<div className="panel">
+					<ul>
+						<li>Crowdsale Address:
+							<input value={crowdsaleAddress}
+								   onChange={this.handleSaleAddressChange} />
+						</li>
+						<li>Token Address:
+							<input value={tokenAddress}
+								   onChange={this.handleTokenAddressChange} />
+						</li>
+					</ul>
+				</div>
+				
 			</main>
 		);
     }
