@@ -10,6 +10,7 @@ contract('TulipCrowdsale', function(accounts) {
 		return TulipCrowdsale
             .deployed()
             .then(instance => {
+				console.log('Crowdsale Address:', instance.address);
 				crowdsale = instance;
 				return crowdsale.sendTransaction({ 
 					from: account, 
