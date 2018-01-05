@@ -6,6 +6,7 @@ import {abi as tulipABI} from '../../../build/contracts/Tulip.json';
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
 
 
+const issuerAddress = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
 
 export default class MainPage extends Component {
 	constructor(props) {
@@ -20,12 +21,13 @@ export default class MainPage extends Component {
 		this.state = {
 			currentAccount: null,
 			ethBalance: 0,
-			crowdsaleAddress: '0x345ca3e014aaf5dca488057592ee47305d9b3e10',
-			tokenAddress: '0xf2beae25b23f0ccdd234410354cb42d08ed54981',
+			crowdsaleAddress: '0xf204a4ef082f5c04bb89f7d5e6568b796096735a',
+			tokenAddress: '0x633baefc98220497eb7ee323480c87ce51a44955',
 			ethForTokenPurchase: 0,
 			tokenBalance: 0,
 			tlpForTransfer: 0,
-			tlpRecipient: ''
+			tlpRecipient: '',
+			issuerBalance: 0
 		};
 
 		this.getAccountStatus();
@@ -44,6 +46,13 @@ export default class MainPage extends Component {
 			.then(balance => {
 				this.setState({
 					ethBalance: balance
+				});
+			});
+
+		web3.eth.getBalance(issuerAddress)
+			.then(balance => {
+				this.setState({
+					issuerBalance: balance
 				});
 			});
 	}
@@ -117,7 +126,8 @@ export default class MainPage extends Component {
 			ethForTokenPurchase,
 			tokenBalance,
 			tlpForTransfer,
-			tlpRecipient
+			tlpRecipient,
+			issuerBalance
 		} = this.state;
 		
 		return (
@@ -128,6 +138,7 @@ export default class MainPage extends Component {
 					<ul>
 						<li>Account: {currentAccount || 'Not Connected'}</li>
 						<li>ETH Balance: {fromWei(ethBalance).toString() || '0.0'}</li>
+						<li>Token Issuer ETH Balance: {fromWei(issuerBalance).toString() || '0.0'}</li>
 						<button onClick={this.getAccountStatus}>Refresh</button>
 					</ul>
 				</div>
