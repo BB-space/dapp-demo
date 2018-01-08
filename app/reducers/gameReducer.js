@@ -2,32 +2,32 @@ import actionTypes from '../constants/actionTypes';
 
 
 const {
-	ETH_SET_CURRENT_ACCOUNT,
-	ETH_SET_ETH_BALANCE,
-	ETH_SET_TOKEN_BALANCE
+	GAME_SET_HASHED_SERVER_SEED,
+	GAME_SET_CLIENT_SEED,
+	GAME_SET_BET_MONEY
 } = actionTypes;
 
 const initialState = {
-	currentAccount: null,
-	ethBalance: 0,
-	tokenBalance: 0
+	hashedServerSeed: '',
+	clientSeed: '',
+	betMoney: 0
 };
 
 export default function web3Reducer(state=initialState, action) {
     switch(action.type) {
-		case ETH_SET_CURRENT_ACCOUNT:
+		case GAME_SET_HASHED_SERVER_SEED:
 			return Object.assign({}, state, {
-				currentAccount: action.newAccount
+				hashedServerSeed: action.hashedServerSeed
 			});
 
-		case ETH_SET_ETH_BALANCE:
+		case GAME_SET_CLIENT_SEED:
 			return Object.assign({}, state, {
-				ethBalance: action.balance
+				clientSeed: action.newSeed
 			});
 
-		case ETH_SET_TOKEN_BALANCE:
+		case GAME_SET_BET_MONEY:
 			return Object.assign({}, state, {
-				tokenBalance: action.balance
+				betMoney: action.betMoney
 			});
 
         default:

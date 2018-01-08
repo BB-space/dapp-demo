@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
+import { getAccountStatus } from '../../actions/ethStateActions';
 import { fromWei, toWei } from '../../utils/misc';
 import GamePage from '../game/GamePage';
 
-import {abi as tulipABI} from '../../../build/contracts/Tulip.json';
+
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
 
 
@@ -15,17 +16,16 @@ const issuerAddress = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
 	(state, ownProps) => ({
 		currentAccount: state.ethState.currentAccount,
 		ethBalance: state.ethState.ethBalance,
-		crowdsaleAddress: state.ethState.crowdsaleAddress,
-		tokenAddress: state.ethState.tokenAddress,
 		tokenBalance: state.ethState.tokenBalance
 	}),	{
-		
+		getAccountStatus
 	}
 )
 export default class MainPage extends Component {
 	constructor(props) {
 		super(props);
 
+		this.refreshStatus = this.refreshStatus.bind(this);
 		this.handleSaleAddressChange = this.handleInputChange.bind(this, 'crowdsaleAddress');
 		this.handleTokenAddressChange = this.handleInputChange.bind(this, 'tokenAddress');
 		this.handleEthForTokenChange = this.handleInputChange.bind(this, 'ethForTokenPurchase');
@@ -33,58 +33,24 @@ export default class MainPage extends Component {
 		this.handleTlpRecipientChange = this.handleInputChange.bind(this, 'tlpRecipient');
 
 		this.state = {
-			currentAccount: null,
-			ethBalance: 0,
 			crowdsaleAddress: '0xf204a4ef082f5c04bb89f7d5e6568b796096735a',
-			tokenAddress: '0x633baefc98220497eb7ee323480c87ce51a44955',
+			tokenAddress: '0x6b5f2b72ed649a5018701eb2b71c4fd8f472595c',
 			ethForTokenPurchase: 0,
-			tokenBalance: 0,
 			tlpForTransfer: 0,
 			tlpRecipient: '',
 			issuerBalance: 0
 		};
 
-		this.getAccountStatus();
-		this.getTokenBalance();
+		this.refreshStatus();
     }
 
-	getAccountStatus = () => {
-		web3.eth.getCoinbase()
-			.then(account => {
-				
-				this.setState({
-					currentAccount: account
-				});
-				return web3.eth.getBalance(account);
-			})
-			.then(balance => {
-				this.setState({
-					ethBalance: balance
-				});
-			});
-
-		web3.eth.getBalance(issuerAddress)
-			.then(balance => {
-				this.setState({
-					issuerBalance: balance
-				});
-			});
-	}
-
-	getTokenBalance = () => {
-		const {
-			currentAccount,
-			tokenAddress
-		} = this.state;
-
-		const tokenInstance = new web3.eth.Contract(tulipABI, tokenAddress);
-
-		tokenInstance
-			.methods
-			.balanceOf(currentAccount).call()
-			.then(balance => {
-				this.setState({ tokenBalance: balance });
-			});
+	refreshStatus = async () => {
+		const issuerBalance = await web3.eth.getBalance(issuerAddress);
+		
+		this.props.getAccountStatus(this.state.tokenAddress);
+		this.setState({
+			issuerBalance
+		});
 	}
 
 	purchaseToken = () => {
@@ -135,15 +101,18 @@ export default class MainPage extends Component {
 		const {
 			currentAccount,
 			ethBalance,
+			tokenBalance
+		} = this.props;
+		
+		const {
 			crowdsaleAddress,
 			tokenAddress,
 			ethForTokenPurchase,
-			tokenBalance,
 			tlpForTransfer,
 			tlpRecipient,
 			issuerBalance
 		} = this.state;
-		
+
 		return (
 			<main>
 				<h1>Sample Dapp</h1>
@@ -154,7 +123,29 @@ export default class MainPage extends Component {
 							<li>Account: {currentAccount || 'Not Connected'}</li>
 							<li>ETH Balance: {fromWei(ethBalance).toString() || '0.0'}</li>
 							<li>Token Issuer ETH Balance: {fromWei(issuerBalance).toString() || '0.0'}</li>
-							<button onClick={this.getAccountStatus}>Refresh</button>
+							<button onClick={this.refreshStatus}>Refresh</button>
+						</ul>
+					</div>
+				</div>
+
+				<div className="panel panel-default">
+					<div className="panel-body">
+						<ul>
+							<li>Token Address:
+								<input value={tokenAddress}
+									   onChange={this.handleTokenAddressChange} />
+							</li>
+							<li>Token Balance: {fromWei(tokenBalance).toString() || '0.0'}</li>
+							<button onClick={this.refreshStatus}>Refresh</button>
+							<li>Send {' '}
+								<input value={tlpForTransfer}
+									   onChange={this.handleTlpForTransferChange} />
+								TLP {' '}
+								to {' '}
+								<input value={tlpRecipient}
+									   onChange={this.handleTlpRecipientChange} />
+								{' '} <button onClick={this.sendTLP}>Send</button>
+							</li>
 						</ul>
 					</div>
 				</div>
@@ -177,27 +168,7 @@ export default class MainPage extends Component {
 					</div>
 				</div>
 
-				<div className="panel panel-default">
-					<div className="panel-body">
-						<ul>
-							<li>Token Address:
-								<input value={tokenAddress}
-									   onChange={this.handleTokenAddressChange} />
-							</li>
-							<li>Token Balance: {fromWei(tokenBalance).toString() || '0.0'}</li>
-							<button onClick={this.getTokenBalance}>Refresh</button>
-							<li>Send {' '}
-								<input value={tlpForTransfer}
-									   onChange={this.handleTlpForTransferChange} />
-								TLP {' '}
-								to {' '}
-								<input value={tlpRecipient}
-									   onChange={this.handleTlpRecipientChange} />
-								{' '} <button onClick={this.sendTLP}>Send</button>
-							</li>
-						</ul>
-					</div>
-				</div>
+
 
 				<GamePage />
 				
