@@ -1,26 +1,29 @@
 /* eslint-disable no-console */
 
-const webpack          = require('webpack'),
-      WebpackDevServer = require('webpack-dev-server'),
-      config           = require('./webpack.config');
+const express				= require('express'),
+	  webpack				= require('webpack'),
+	  webpackDevMiddleware	= require('webpack-dev-middleware'),
+	  webpackHotMiddleware	= require('webpack-hot-middleware'),
+      webpackConfig			= require('./webpack.config');
 
 
-
+const app = express();
 const PORT = process.env.PORT || 3000;
 
+const compiler = webpack(webpackConfig);
 
-new WebpackDevServer(webpack(config), {
-    publicPath: config.output.publicPath,
+
+app.use(webpackDevMiddleware(compiler, {
+    publicPath: webpackConfig.output.publicPath,
     hot: true,
-    historyApiFallback: true,
+    quiet: false,
+    noInfo: true,
     stats: {
         colors: true
-    },
-    proxy: {
-        // '/apis/': 'http://192.168.18.62:10080'
     }
-})
-    .listen(PORT, function(err) {
+}))
+   .use(webpackHotMiddleware(compiler))
+   .listen(PORT, function(err) {
         if (err) {
             console.log(err);
         }

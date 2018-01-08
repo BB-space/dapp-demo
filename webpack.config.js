@@ -6,8 +6,8 @@ const path              = require('path'),
 module.exports = {
     devtool: 'source-map',
     entry: [
-		'webpack-dev-server/client?http://localhost:3000',
-		'webpack/hot/only-dev-server',
+		'webpack-hot-middleware/client?reload=true',
+        'webpack/hot/only-dev-server',
 		'babel-polyfill',
         'whatwg-fetch',
 		'./src/index.js',

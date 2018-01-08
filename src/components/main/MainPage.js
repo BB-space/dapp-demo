@@ -134,51 +134,57 @@ export default class MainPage extends Component {
 			<main>
 				<h1>Sample Dapp</h1>
 
-				<div className="panel">
-					<ul>
-						<li>Account: {currentAccount || 'Not Connected'}</li>
-						<li>ETH Balance: {fromWei(ethBalance).toString() || '0.0'}</li>
-						<li>Token Issuer ETH Balance: {fromWei(issuerBalance).toString() || '0.0'}</li>
-						<button onClick={this.getAccountStatus}>Refresh</button>
-					</ul>
+				<div className="panel panel-default">
+					<div className="panel-body">
+						<ul>
+							<li>Account: {currentAccount || 'Not Connected'}</li>
+							<li>ETH Balance: {fromWei(ethBalance).toString() || '0.0'}</li>
+							<li>Token Issuer ETH Balance: {fromWei(issuerBalance).toString() || '0.0'}</li>
+							<button onClick={this.getAccountStatus}>Refresh</button>
+						</ul>
+					</div>
 				</div>
 				
-				<div className="panel">
-					<ul>
-						<li>Crowdsale Address:
-							<input value={crowdsaleAddress}
-								   onChange={this.handleSaleAddressChange} />
-						</li>
-						<li>
-							Buy Tokens for <br/>
-							<input value={ethForTokenPurchase}
-								   onChange={this.handleEthForTokenChange} /> ETH
-							( = {ethForTokenPurchase * 1000} TLP)
-						</li>
-						<button onClick={this.purchaseToken}>Purchase</button>
-					</ul>
+				<div className="panel panel-default">
+					<div className="panel-body">
+						<ul>
+							<li>Crowdsale Address:
+								<input value={crowdsaleAddress}
+									   onChange={this.handleSaleAddressChange} />
+							</li>
+							<li>
+								Buy Tokens for <br/>
+								<input value={ethForTokenPurchase}
+									   onChange={this.handleEthForTokenChange} /> ETH
+								( = {ethForTokenPurchase * 1000} TLP)
+							</li>
+							<button onClick={this.purchaseToken}>Purchase</button>
+						</ul>
+					</div>
 				</div>
 
-				<div className="panel">
-					<ul>
-						<li>Token Address:
-							<input value={tokenAddress}
-								   onChange={this.handleTokenAddressChange} />
-						</li>
-						<li>Token Balance: {fromWei(tokenBalance).toString() || '0.0'}</li>
-						<button onClick={this.getTokenBalance}>Refresh</button>
-						<li>Send {' '}
-							<input value={tlpForTransfer}
-								   onChange={this.handleTlpForTransferChange} />
-							TLP {' '}
-							to {' '}
-							<input value={tlpRecipient}
-								   onChange={this.handleTlpRecipientChange} />
-							{' '} <button onClick={this.sendTLP}>Send</button>
-						</li>
-					</ul>
+				<div className="panel panel-default">
+					<div className="panel-body">
+						<ul>
+							<li>Token Address:
+								<input value={tokenAddress}
+									   onChange={this.handleTokenAddressChange} />
+							</li>
+							<li>Token Balance: {fromWei(tokenBalance).toString() || '0.0'}</li>
+							<button onClick={this.getTokenBalance}>Refresh</button>
+							<li>Send {' '}
+								<input value={tlpForTransfer}
+									   onChange={this.handleTlpForTransferChange} />
+								TLP {' '}
+								to {' '}
+								<input value={tlpRecipient}
+									   onChange={this.handleTlpRecipientChange} />
+								{' '} <button onClick={this.sendTLP}>Send</button>
+							</li>
+						</ul>
+					</div>
 				</div>
-				
+					
 			</main>
 		);
     }
