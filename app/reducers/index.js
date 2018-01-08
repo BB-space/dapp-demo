@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import global from './globalReducer';
+import ethState from './ethStateReducer';
 
 
 const rootReducer = combineReducers({
-    global
+    ethState
 });
 
 export default rootReducer;

@@ -1,4 +1,6 @@
 const TulipCrowdsale = artifacts.require("./TulipCrowdsale.sol")
+const Sha3Test = artifacts.require("./Sha3Test.sol")
+
 
 module.exports = function(deployer, network, accounts) {
   const startTime = web3.eth.getBlock(web3.eth.blockNumber).timestamp + 1;  // one second in the future
@@ -7,4 +9,5 @@ module.exports = function(deployer, network, accounts) {
   const wallet = accounts[0];
 
   deployer.deploy(TulipCrowdsale, startTime, endTime, rate, wallet);
+  deployer.deploy(Sha3Test);
 };

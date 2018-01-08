@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +19,7 @@
     "classnames": "^2.2.5",
     "express": "^4.16.2",
     "jquery": "^3.2.1",
+    "keymirror": "^0.1.1",
     "lodash": "^4.17.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
@@ -58,8 +59,8 @@
     "zeppelin-solidity": "^1.5.0"
   },
   "nodemonConfig": {
-	"watch": [
-	  "server.js"
-	]
+    "watch": [
+      "server/*"
+    ]
   }
 }

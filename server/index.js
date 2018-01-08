@@ -4,7 +4,8 @@ const express				= require('express'),
 	  webpack				= require('webpack'),
 	  webpackDevMiddleware	= require('webpack-dev-middleware'),
 	  webpackHotMiddleware	= require('webpack-hot-middleware'),
-      webpackConfig			= require('./webpack.config');
+	  apiRouter				= require('./api.js'),
+	  webpackConfig			= require('../webpack.config');
 
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(webpackDevMiddleware(compiler, {
     }
 }))
    .use(webpackHotMiddleware(compiler))
+   .use('/api', apiRouter)
    .listen(PORT, function(err) {
         if (err) {
             console.log(err);

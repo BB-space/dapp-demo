@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 import { fromWei, toWei } from '../../utils/misc';
+import GamePage from '../game/GamePage';
 
 import {abi as tulipABI} from '../../../build/contracts/Tulip.json';
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
@@ -8,6 +10,18 @@ import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json'
 
 const issuerAddress = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
 
+
+@connect(
+	(state, ownProps) => ({
+		currentAccount: state.ethState.currentAccount,
+		ethBalance: state.ethState.ethBalance,
+		crowdsaleAddress: state.ethState.crowdsaleAddress,
+		tokenAddress: state.ethState.tokenAddress,
+		tokenBalance: state.ethState.tokenBalance
+	}),	{
+		
+	}
+)
 export default class MainPage extends Component {
 	constructor(props) {
 		super(props);
@@ -184,7 +198,9 @@ export default class MainPage extends Component {
 						</ul>
 					</div>
 				</div>
-					
+
+				<GamePage />
+				
 			</main>
 		);
     }
