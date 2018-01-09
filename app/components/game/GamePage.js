@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import MersenneTwister from 'mersenne-twister';
 import {
 	fetchHashedServerSeed,
 	setClientSeed,
 	setBetMoney,
 	getGameResult
 } from '../../actions/gameActions';
-import { generateRandomStr } from '../../utils/misc'
+import { generateRandomHex } from '../../utils/misc'
 
+
+const mt = new MersenneTwister();
 
 @connect(
 	(state, ownProps) => ({
@@ -28,7 +31,7 @@ export default class GamePage extends Component {
 
 	componentDidMount() {
 		this.props.fetchHashedServerSeed();
-		this.props.setClientSeed(generateRandomStr());
+		this.props.setClientSeed(generateRandomHex());
 	}
 
 	handleClientSeedChange = (evt) => {
@@ -40,6 +43,8 @@ export default class GamePage extends Component {
 		const newVal = evt.target.value;
 		this.props.setBetMoney(newVal);
 	}
+
+	
 
 	render() {
 		const {

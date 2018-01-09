@@ -2,15 +2,15 @@ const Web3 = require('web3');
 const web3 = new Web3();
 
 
-function generateRandomStr(strLen=10) {
-	var text = '';
-	var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+function generateRandomHex(length=16) {
+	var hex = '';
+	var possible = '0123456789abcdef';
 
-	for (var i = 0; i < strLen; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	for (var i = 0; i < length; i++) {
+		hex += possible.charAt(Math.floor(Math.random() * possible.length));
 	}
 
-	return text;
+	return hex;
 }
 
 function keccak256(str) {
@@ -19,6 +19,6 @@ function keccak256(str) {
 
 
 module.exports = {
-	generateRandomStr,
+	generateRandomHex,
 	keccak256
 };

@@ -1,4 +1,7 @@
 import BigNumber from 'bignumber.js';
+import MersenneTwister from 'mersenne-twister';
+
+
 
 
 export function fromWei(amtInWei) {
@@ -9,17 +12,22 @@ export function toWei(amtInEth) {
 	return BigNumber(amtInEth).times('1.0e18');
 }
 
-export function generateRandomStr(strLen=10) {
-	var text = '';
-	var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+export function generateRandomHex(length=16) {
+	var hex = '';
+	var possible = '0123456789abcdef';
 
-	for (var i = 0; i < strLen; i++) {
-		text += possible.charAt(Math.floor(Math.random() * possible.length));
+	for (var i = 0; i < length; i++) {
+		hex += possible.charAt(Math.floor(Math.random() * possible.length));
 	}
 
-	return text;
+	return hex;
 }
 
 export function keccak256(str) {
 	return web3.utils.keccak256(str);
+}
+
+export function getRandom(serverSeed, clientSeed) {
+	const seedCombined = parseInt(serverSeed, 16) + parseInt(clientSeed, 16);
+	const mt = new MersenneTwister();
 }

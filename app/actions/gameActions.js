@@ -36,7 +36,6 @@ export function getGameResult() {
 	const url = '/api/game';
 
 	return async (dispatch, getState) => {
-		
 		const {
 			hashedServerSeed,
 			clientSeed
@@ -46,6 +45,7 @@ export function getGameResult() {
 			hashedServerSeed,
 			clientSeed
 		});
-		console.log(res.serverSeed);
+		debugger;
+		alert('server seed: ' + res.serverSeed);
 	};
 }

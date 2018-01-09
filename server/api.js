@@ -1,5 +1,5 @@
 const express = require('express');
-const { generateRandomStr, keccak256 } = require('./utils/misc.js');
+const { generateRandomHex, keccak256 } = require('./utils/misc.js');
 
 
 const router = express.Router();
@@ -9,7 +9,7 @@ let decryptionMap = {};
 
 router
 	.get('/seedhash', function(req, res) {
-		const str = generateRandomStr();
+		const str = generateRandomHex();
 		const hashed = keccak256(str);
 
 		decryptionMap[hashed] = str;
@@ -23,7 +23,7 @@ router
 		const { hashedServerSeed, clientSeed } = req.body;
 		const serverSeed = decryptionMap[hashedServerSeed];
 
-		res.json({ serverSeed });
+		res.json({ serverSeed, clientSeed });
 	})
 
 
