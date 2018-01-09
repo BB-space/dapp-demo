@@ -10,7 +10,7 @@ import {
 import { generateRandomHex } from '../../utils/misc'
 
 
-const mt = new MersenneTwister();
+
 
 @connect(
 	(state, ownProps) => ({
@@ -27,6 +27,10 @@ const mt = new MersenneTwister();
 export default class GamePage extends Component {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			
+		};
 	}
 
 	componentDidMount() {
@@ -51,25 +55,39 @@ export default class GamePage extends Component {
 			hashedServerSeed,
 			clientSeed,
 			betMoney,
-			getGameResult
+			getGameResult,
+			fetchHashedServerSeed
 		} = this.props;
 		
 		return (
 			<div className="panel panel-default">
 				<div className="panel-body">
-					<div>Game</div>
-					<div><b>Hashed Server Seed</b>: { hashedServerSeed }</div>
-					<div>
-						<b>Client Seed</b><span>: {' '}</span>
-						<input value={clientSeed}
-							   onChange={this.handleClientSeedChange} />
-					</div>
-					<div>
-						<b>Betting Tulip</b><span>: {' '}</span>
-						<input value={betMoney}
-							   onChange={this.handleBetMoneyChange} />
-					</div>
+					<h4>Game - 0 or 1</h4>
+					<ul>
+						<li>
+							<b>Hashed Server Seed</b>
+							<span>: { hashedServerSeed } </span>
+							<button onClick={fetchHashedServerSeed}>Get Another One</button>
+						</li>
+						<li>
+							<b>Client Seed</b><span>: {' '}</span>
+							<input value={clientSeed}
+								   onChange={this.handleClientSeedChange} />
+						</li>
+						<li>
+							<b>Betting Tulip</b><span>: {' '}</span>
+							<input value={betMoney}
+								   onChange={this.handleBetMoneyChange} />
+						</li>
+					</ul>
 					<button onClick={getGameResult}>Play</button>
+
+					<div className="text-center">
+						<span style={{fontSize: 32}}>1</span>
+						
+					</div>
+					
+					
 				</div>
 			</div>
 		);

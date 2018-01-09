@@ -45,7 +45,6 @@ export function getGameResult() {
 			hashedServerSeed,
 			clientSeed
 		});
-		debugger;
 		alert('server seed: ' + res.serverSeed);
 	};
 }
