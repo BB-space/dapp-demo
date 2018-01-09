@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import MersenneTwister from 'mersenne-twister';
 import {
 	fetchHashedServerSeed,
 	setClientSeed,
@@ -65,6 +64,9 @@ export default class GamePage extends Component {
 			prevGameResult: result,
 			prevGameHashedServerSeed: this.props.hashedServerSeed
 		});
+
+		this.props.fetchHashedServerSeed();
+		this.props.setClientSeed(generateRandomHex());
 	}
 
 	render() {
@@ -114,7 +116,7 @@ export default class GamePage extends Component {
 					<div className="text-center">
 						<div>Client Seed: {prevGameClientSeed}</div>
 						<div>Server Seed: {prevGameServerSeed}</div>
-						<div>Server Seed(Hashed): {prevGameHashedServerSeed}</div>
+						<div>Server Seed (Hashed): {prevGameHashedServerSeed}</div>
 					</div>
 					
 				</div>

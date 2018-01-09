@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { getAccountStatus } from '../../actions/ethStateActions';
 import { fromWei, toWei } from '../../utils/misc';
 import GamePage from '../game/GamePage';
+import ValidationSection from '../game/ValidationSection';
 
 
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
@@ -171,6 +172,7 @@ export default class MainPage extends Component {
 
 
 				<GamePage />
+				<ValidationSection />
 				
 			</main>
 		);
