@@ -3,7 +3,6 @@ import MersenneTwister from 'mersenne-twister';
 
 
 
-
 export function fromWei(amtInWei) {
 	return BigNumber(amtInWei).dividedBy('1.0e18');
 }
@@ -30,4 +29,7 @@ export function keccak256(str) {
 export function getRandom(serverSeed, clientSeed) {
 	const seedCombined = parseInt(serverSeed, 16) + parseInt(clientSeed, 16);
 	const mt = new MersenneTwister();
+
+	mt.init_seed(seedCombined);
+	return mt.random() < 0.5 ? 0 : 1;
 }

@@ -7,7 +7,7 @@ import {
 	setBetMoney,
 	getGameResult
 } from '../../actions/gameActions';
-import { generateRandomHex } from '../../utils/misc'
+import { generateRandomHex, getRandom } from '../../utils/misc'
 
 
 
@@ -29,7 +29,10 @@ export default class GamePage extends Component {
 		super(props);
 
 		this.state = {
-			
+			prevGameResult: '',
+			prevGameServerSeed: '',
+			prevGameClientSeed: '',
+			prevGameHashedServerSeed: ''
 		};
 	}
 
@@ -48,16 +51,36 @@ export default class GamePage extends Component {
 		this.props.setBetMoney(newVal);
 	}
 
-	
+	handlePlayBtnClick = async (evt) => {
+		const res = await this.props.getGameResult();
+		const {
+			serverSeed,
+			clientSeed
+		} = res
+		const result = getRandom(serverSeed, clientSeed);
+
+		this.setState({
+			prevGameServerSeed: serverSeed,
+			prevGameClientSeed: clientSeed,
+			prevGameResult: result,
+			prevGameHashedServerSeed: this.props.hashedServerSeed
+		});
+	}
 
 	render() {
 		const {
 			hashedServerSeed,
 			clientSeed,
 			betMoney,
-			getGameResult,
 			fetchHashedServerSeed
 		} = this.props;
+
+		const {
+			prevGameResult,
+			prevGameServerSeed,
+			prevGameClientSeed,
+			prevGameHashedServerSeed
+		} = this.state;
 		
 		return (
 			<div className="panel panel-default">
@@ -80,13 +103,19 @@ export default class GamePage extends Component {
 								   onChange={this.handleBetMoneyChange} />
 						</li>
 					</ul>
-					<button onClick={getGameResult}>Play</button>
+					<button onClick={this.handlePlayBtnClick}>Play</button>
 
 					<div className="text-center">
-						<span style={{fontSize: 32}}>1</span>
+						<div>Result:</div>
+						<span style={{fontSize: 32}}>{prevGameResult}</span>
 						
 					</div>
-					
+
+					<div className="text-center">
+						<div>Client Seed: {prevGameClientSeed}</div>
+						<div>Server Seed: {prevGameServerSeed}</div>
+						<div>Server Seed(Hashed): {prevGameHashedServerSeed}</div>
+					</div>
 					
 				</div>
 			</div>

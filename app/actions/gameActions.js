@@ -35,16 +35,15 @@ export function fetchHashedServerSeed() {
 export function getGameResult() {
 	const url = '/api/game';
 
-	return async (dispatch, getState) => {
+	return (dispatch, getState) => {
 		const {
 			hashedServerSeed,
 			clientSeed
 		} = getState().game;
 		
-		const res = await request.post(url, {
+		return request.post(url, {
 			hashedServerSeed,
 			clientSeed
 		});
-		alert('server seed: ' + res.serverSeed);
 	};
 }
