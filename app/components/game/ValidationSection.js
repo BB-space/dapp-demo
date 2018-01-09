@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { generateRandomHex, getRandom } from '../../utils/misc'
+import { keccak256, getRandom } from '../../utils/misc'
 
 
 export default class ValidationSection extends Component {
@@ -9,10 +9,40 @@ export default class ValidationSection extends Component {
 		this.state = {
 			clientSeed: '',
 			serverSeed: '',
-			
+			hashedServerSeed: '',
+			result: ''
 		};
+
+		this.handleClientSeedChange = this.handleInputChange.bind(this, 'clientSeed');
+		this.handleServerSeedChange = this.handleInputChange.bind(this, 'serverSeed');
 	}
+	
+	handleInputChange(whichState, evt) {
+		const newVal = evt.target.value;
+
+		this.setState({ [whichState]: newVal }, this.setNewHashAndResult);
+	}
+
+	setNewHashAndResult = () => {
+		const {
+			clientSeed,
+			serverSeed
+		} = this.state;
+
+		this.setState({
+			hashedServerSeed: keccak256(serverSeed),
+			result: getRandom(serverSeed, clientSeed)
+		});
+	}
+	
 	render() {
+		const {
+			clientSeed,
+			serverSeed,
+			hashedServerSeed,
+			result
+		} = this.state;
+		
 		return (
 			<div className="panel panel-default">
 				<div className="panel-body">
@@ -21,16 +51,19 @@ export default class ValidationSection extends Component {
 					<ul>
 						<li>
 							Client Seed<span>: {' '}</span>
-							<input value={''}
-								   onChange={()=>{}} />
+							<input value={clientSeed}
+								   onChange={this.handleClientSeedChange} />
 						</li>
 						<li>
 							Server Seed<span>: {' '}</span>
-							<input value={''}
-								   onChange={()=>{}} />
+							<input value={serverSeed}
+								   onChange={this.handleServerSeedChange} />
 						</li>
 						<li>
-							Server Seed (Hashed): {' '}
+							Server Seed (Hashed): {hashedServerSeed}
+						</li>
+						<li>
+							Result Then: {result}
 						</li>
 					</ul>
 				</div>
