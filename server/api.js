@@ -22,7 +22,12 @@ router
 		console.log('req data:', req.body);
 		console.log(decryptionMap);
 
-		const { hashedServerSeed, clientSeed } = req.body;
+		const {
+			hashedServerSeed,
+			clientSeed,
+			betSide,
+			betMoney
+		} = req.body;
 		const serverSeed = decryptionMap[hashedServerSeed];
 
 		// code
@@ -30,11 +35,16 @@ router
 		console.log('Server seed:', serverSeed);
 		console.log(result);
 
+		const playerWin = (betSide.toString() === result.toString());
+
 		const thisGame = {
 			hashedServerSeed,
 			clientSeed,
 			serverSeed,
-			result
+			result,
+			betMoney,
+			betSide,
+			playerWin
 		};
 
 		games[gameCount] = thisGame;

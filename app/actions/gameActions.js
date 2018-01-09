@@ -23,6 +23,13 @@ export function setBetMoney(betMoney) {
 	};
 }
 
+export function setBetSide(side) {
+	return {
+		type: actionTypes.GAME_SET_BET_SIDE,
+		side
+	};
+}
+
 export function fetchHashedServerSeed() {
 	const url = '/api/seedhash'
 	
@@ -36,14 +43,8 @@ export function getGameResult() {
 	const url = '/api/game';
 
 	return (dispatch, getState) => {
-		const {
-			hashedServerSeed,
-			clientSeed
-		} = getState().game;
+		const gameObj = getState().game;
 		
-		return request.post(url, {
-			hashedServerSeed,
-			clientSeed
-		});
+		return request.post(url, gameObj);
 	};
 }

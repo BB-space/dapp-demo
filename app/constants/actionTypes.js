@@ -9,5 +9,6 @@ export default keymirror({
 	// game
 	GAME_SET_HASHED_SERVER_SEED: null,
 	GAME_SET_CLIENT_SEED: null,
+	GAME_SET_BET_SIDE: null,
 	GAME_SET_BET_MONEY: null
 });

@@ -4,6 +4,7 @@ import {
 	fetchHashedServerSeed,
 	setClientSeed,
 	setBetMoney,
+	setBetSide,
 	getGameResult
 } from '../../actions/gameActions';
 import { generateRandomHex, getRandom } from '../../utils/misc'
@@ -15,11 +16,13 @@ import { generateRandomHex, getRandom } from '../../utils/misc'
 	(state, ownProps) => ({
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed,
+		betSide: state.game.betSide,
 		betMoney: state.game.betMoney
 	}),	{
 		fetchHashedServerSeed,
 		setClientSeed,
 		setBetMoney,
+		setBetSide,
 		getGameResult
 	}
 )
@@ -28,10 +31,12 @@ export default class GamePage extends Component {
 		super(props);
 
 		this.state = {
-			prevGameResult: '',
-			prevGameServerSeed: '',
-			prevGameClientSeed: '',
-			prevGameHashedServerSeed: ''
+			prevResult: '',
+			prevServerSeed: '',
+			prevClientSeed: '',
+			prevHashedServerSeed: '',
+			prevBetMoney: '',
+			prevBetSide: ''
 		};
 	}
 
@@ -50,19 +55,29 @@ export default class GamePage extends Component {
 		this.props.setBetMoney(newVal);
 	}
 
+	handleBetSideChange = (evt) => {
+		const newVal = evt.target.value;
+		this.props.setBetSide(newVal);
+	}
+
 	handlePlayBtnClick = async (evt) => {
 		const res = await this.props.getGameResult();
 		const {
 			serverSeed,
-			clientSeed
+			clientSeed,
+			betSide,
+			betMoney,
+			playerWin
 		} = res
 		const result = getRandom(serverSeed, clientSeed);
 
 		this.setState({
-			prevGameServerSeed: serverSeed,
-			prevGameClientSeed: clientSeed,
-			prevGameResult: result,
-			prevGameHashedServerSeed: this.props.hashedServerSeed
+			prevServerSeed: serverSeed,
+			prevClientSeed: clientSeed,
+			prevResult: result,
+			prevBetSide: betSide,
+			prevBetMoney: betMoney,
+			prevHashedServerSeed: this.props.hashedServerSeed
 		});
 
 		this.props.fetchHashedServerSeed();
@@ -73,15 +88,18 @@ export default class GamePage extends Component {
 		const {
 			hashedServerSeed,
 			clientSeed,
+			betSide,
 			betMoney,
 			fetchHashedServerSeed
 		} = this.props;
 
 		const {
-			prevGameResult,
-			prevGameServerSeed,
-			prevGameClientSeed,
-			prevGameHashedServerSeed
+			prevResult,
+			prevServerSeed,
+			prevClientSeed,
+			prevBetSide,
+			prevBetMoney,
+			prevHashedServerSeed
 		} = this.state;
 		
 		return (
@@ -92,7 +110,7 @@ export default class GamePage extends Component {
 						<li>
 							<b>Hashed Server Seed</b>
 							<span>: { hashedServerSeed } </span>
-							<button onClick={fetchHashedServerSeed}>Get Another One</button>
+							<button onClick={fetchHashedServerSeed}>Get Other One</button>
 						</li>
 						<li>
 							<b>Client Seed</b><span>: {' '}</span>
@@ -100,23 +118,36 @@ export default class GamePage extends Component {
 								   onChange={this.handleClientSeedChange} />
 						</li>
 						<li>
-							<b>Betting Tulip</b><span>: {' '}</span>
+							<div><b>Your Bet:</b></div>
 							<input value={betMoney}
-								   onChange={this.handleBetMoneyChange} />
+								   onChange={this.handleBetMoneyChange} /> TLP on {' '}
+							<input type="radio"
+								   name="gender"
+								   value="0"
+							       onChange={this.handleBetSideChange}
+								   checked={betSide === '0'} />0
+							{' or '}
+							<input type="radio"
+								   name="gender"
+								   value="1"
+							       onChange={this.handleBetSideChange}
+								   checked={betSide === '1'}/>1
 						</li>
 					</ul>
 					<button onClick={this.handlePlayBtnClick}>Play</button>
 
 					<div className="text-center">
 						<div>Result:</div>
-						<span style={{fontSize: 32}}>{prevGameResult}</span>
-						
+						<span style={{fontSize: 32}}>{prevResult}</span>
 					</div>
 
 					<div className="text-center">
-						<div>Client Seed: {prevGameClientSeed}</div>
-						<div>Server Seed: {prevGameServerSeed}</div>
-						<div>Server Seed (Hashed): {prevGameHashedServerSeed}</div>
+						<div>Client Seed: {prevClientSeed}</div>
+						<div>Server Seed: {prevServerSeed}</div>
+						<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
+						<div>Your Bet Side: {prevBetSide}</div>
+						<div>Your Bet Money: {prevBetMoney}</div>
+						
 					</div>
 					
 				</div>
