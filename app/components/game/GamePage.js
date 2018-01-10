@@ -7,13 +7,14 @@ import {
 	setBetSide,
 	getGameResult
 } from '../../actions/gameActions';
-import { generateRandomHex, getRandom } from '../../utils/misc'
+import { generateRandomHex, getRandom, toWei } from '../../utils/misc'
 
-
+import { abi as gameAbi } from '../../../build/contracts/OddEven.json';
 
 
 @connect(
 	(state, ownProps) => ({
+		account: state.ethState.currentAccount,
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed,
 		betSide: state.game.betSide,
@@ -62,14 +63,29 @@ export default class GamePage extends Component {
 
 	handlePlayBtnClick = async (evt) => {
 		const res = await this.props.getGameResult();
+		const { hashedServerSeed, account } = this.props;
 		const {
+			gameId,
 			serverSeed,
 			clientSeed,
 			betSide,
 			betMoney,
 			playerWin
 		} = res
+
+		const gameInstance = new web3.eth.Contract(gameAbi, '0xf204a4ef082f5c04bb89f7d5e6568b796096735a');
+		await gameInstance
+			.methods
+			.initGame(gameId, hashedServerSeed, clientSeed, betSide)
+			.send({
+				from: account, 
+				value: toWei(betMoney)
+			});
+
+		
 		const result = getRandom(serverSeed, clientSeed);
+
+		
 
 		this.setState({
 			prevServerSeed: serverSeed,

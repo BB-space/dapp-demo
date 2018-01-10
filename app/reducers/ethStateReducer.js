@@ -13,7 +13,7 @@ const initialState = {
 	tokenBalance: 0
 };
 
-export default function web3Reducer(state=initialState, action) {
+export default function ethState(state=initialState, action) {
     switch(action.type) {
 		case ETH_SET_CURRENT_ACCOUNT:
 			return Object.assign({}, state, {

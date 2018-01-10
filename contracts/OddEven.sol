@@ -5,8 +5,8 @@ contract OddEven {
   address owner;
 
   struct Game {
-    bytes32 dealerHash;
-    bytes32 userSeed;
+    string dealerHash;
+    string userSeed;
     address player;
     uint bet;
     uint decision;
@@ -28,7 +28,7 @@ contract OddEven {
 
   }
 
-  function initGame(uint id, bytes32 dealerHash, bytes32 userSeed, uint decision) payable {
+  function initGame(uint id, string dealerHash, string userSeed, uint decision) payable {
     //throw if this account has enough money
     //throw if already exists
     if(this.balance < msg.value * 3){
@@ -47,11 +47,11 @@ contract OddEven {
     );
   }
 
-  function computeHash(bytes32 _string) pure returns(bytes32){
+  function computeHash(string _string) pure returns(bytes32){
     return keccak256(_string);
   }
 
-  function finalize(uint id, bytes32 dealerSeed, bool win) onlyowner{
+  function finalize(uint id, string dealerSeed, bool win) {
     /*check if dealerHash == sha3(dealerSeed)*/
     /*check if player has played the game*/
     /*send money to user if modulo == bet*/
@@ -63,9 +63,9 @@ contract OddEven {
       throw;
     }
 
-    if(game.dealerHash != keccak256(dealerSeed)){
-      throw;
-    }
+    /* if(game.dealerHash != keccak256(dealerSeed)){ */
+    /*   throw; */
+    /* } */
     /*if((uint(dealerSeed) + uint(game.userSeed)) % 2 == game.decision){
       msg.sender.transfer(game.bet * 2);
     }

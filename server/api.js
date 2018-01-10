@@ -7,7 +7,7 @@ const router = express.Router();
 
 let decryptionMap = {};
 let games = {};
-let gameCount = 0;
+let gameId = 0;
 
 router
 	.get('/seedhash', function(req, res) {
@@ -38,6 +38,7 @@ router
 		const playerWin = (betSide.toString() === result.toString());
 
 		const thisGame = {
+			gameId,
 			hashedServerSeed,
 			clientSeed,
 			serverSeed,
@@ -47,9 +48,9 @@ router
 			playerWin
 		};
 
-		games[gameCount] = thisGame;
-		gameCount++;
-
+		games[gameId] = thisGame;
+		gameId++;
+ 
 		res.json(thisGame);
 	})
 
