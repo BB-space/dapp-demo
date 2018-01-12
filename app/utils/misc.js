@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import MersenneTwister from 'mersenne-twister';
+import MersenneTwister from 'mersennetwister';
 
 
 
@@ -11,9 +11,9 @@ export function toWei(amtInEth) {
 	return BigNumber(amtInEth).times('1.0e18');
 }
 
-export function generateRandomHex(length=16) {
+export function generateRandomString(length=16) {
 	var hex = '';
-	var possible = '0123456789abcdef';
+	var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
 
 	for (var i = 0; i < length; i++) {
 		hex += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -26,10 +26,18 @@ export function keccak256(str) {
 	return web3.utils.keccak256(str);
 }
 
-export function getRandom(serverSeed, clientSeed) {
-	const seedCombined = parseInt(serverSeed, 16) + parseInt(clientSeed, 16);
-	const mt = new MersenneTwister();
+export function reconstructResult(serverSeed, clientSeed) {
+	serverSeed = BigNumber(web3.utils.asciiToHex(serverSeed), 16);
+	clientSeed = BigNumber(web3.utils.asciiToHex(clientSeed), 16);
+	let seedsCombined = serverSeed.plus(clientSeed);
 
-	mt.init_seed(seedCombined);
+	seedsCombined = seedsCombined
+		.toString(16)
+		.match(/.{1,3}/g)
+		.map(str => parseInt(str, 16));
+	
+	const mt = new MersenneTwister();
+	mt.seedArray(seedsCombined);
+
 	return mt.random() < 0.5 ? 0 : 1;
 }

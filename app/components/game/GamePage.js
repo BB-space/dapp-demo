@@ -7,7 +7,7 @@ import {
 	setBetSide,
 	getGameResult
 } from '../../actions/gameActions';
-import { generateRandomHex, getRandom, toWei } from '../../utils/misc'
+import { generateRandomString, reconstructResult, toWei } from '../../utils/misc'
 
 import { abi as gameAbi } from '../../../build/contracts/OddEven.json';
 
@@ -43,7 +43,7 @@ export default class GamePage extends Component {
 
 	componentDidMount() {
 		this.props.fetchHashedServerSeed();
-		this.props.setClientSeed(generateRandomHex());
+		this.props.setClientSeed(generateRandomString());
 	}
 
 	handleClientSeedChange = (evt) => {
@@ -83,7 +83,7 @@ export default class GamePage extends Component {
 			});
 
 		
-		const result = getRandom(serverSeed, clientSeed);
+		const result = reconstructResult(serverSeed, clientSeed);
 
 		
 
@@ -97,7 +97,7 @@ export default class GamePage extends Component {
 		});
 
 		this.props.fetchHashedServerSeed();
-		this.props.setClientSeed(generateRandomHex());
+		this.props.setClientSeed(generateRandomString());
 	}
 
 	render() {

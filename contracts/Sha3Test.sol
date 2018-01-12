@@ -16,5 +16,9 @@ contract SHA3Test {
   function getSHA3Hash(string input) returns (string hashedOutput) {
 	hashedOutput = bytes32ToString(keccak256(input));
   }
+
+  function bytesTest(bytes data) returns (bytes){
+	return data;
+  }
 }
 

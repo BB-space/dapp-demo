@@ -8,6 +8,7 @@ import ValidationSection from '../game/ValidationSection';
 
 
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
+import {abi as tulipABI} from '../../../build/contracts/Tulip.json';
 
 
 const issuerAddress = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
@@ -34,8 +35,8 @@ export default class MainPage extends Component {
 		this.handleTlpRecipientChange = this.handleInputChange.bind(this, 'tlpRecipient');
 
 		this.state = {
-			crowdsaleAddress: '0xf204a4ef082f5c04bb89f7d5e6568b796096735a',
-			tokenAddress: '0x6b5f2b72ed649a5018701eb2b71c4fd8f472595c',
+			crowdsaleAddress: '0xfb88de099e13c3ed21f80a7a1e49f8caecf10df6',
+			tokenAddress: '0x440b7f9b667420af04e88d4da0b9122e05cca5a0',
 			ethForTokenPurchase: 0,
 			tlpForTransfer: 0,
 			tlpRecipient: '',
@@ -56,7 +57,10 @@ export default class MainPage extends Component {
 
 	purchaseToken = () => {
 		const {
-			currentAccount,
+			currentAccount
+		} = this.props;
+		
+		const {
 			ethForTokenPurchase,
 			crowdsaleAddress,
 			tulipSaleContract
@@ -64,6 +68,8 @@ export default class MainPage extends Component {
 
 		const crowdsaleInstance = new web3.eth.Contract(tulipSaleABI, crowdsaleAddress);
 
+		debugger;
+		
 		crowdsaleInstance
 			.methods
 			.buyTokens(currentAccount)
@@ -76,6 +82,9 @@ export default class MainPage extends Component {
 	sendTLP = () => {
 		const {
 			currentAccount,
+		} = this.props;
+		
+		const {
 			tokenAddress,
 			tlpForTransfer,
 			tlpRecipient

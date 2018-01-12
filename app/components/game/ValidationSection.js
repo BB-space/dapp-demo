@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { keccak256, getRandom } from '../../utils/misc'
+import { keccak256, reconstructResult } from '../../utils/misc'
 
 
 export default class ValidationSection extends Component {
@@ -31,7 +31,7 @@ export default class ValidationSection extends Component {
 
 		this.setState({
 			hashedServerSeed: keccak256(serverSeed),
-			result: getRandom(serverSeed, clientSeed)
+			result: reconstructResult(serverSeed, clientSeed)
 		});
 	}
 	

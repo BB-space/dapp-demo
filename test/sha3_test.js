@@ -8,7 +8,7 @@ contract('Sha3Test', function(accounts) {
 			.then(instance => {
 				console.log('Sha3Test Address:', instance.address);
 
-				return instance.getSHA3Hash.call('123');
+				return instance.bytesTest.call('{a: 1}');
             })
 			.then(console.log);
 	});
