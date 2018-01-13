@@ -8,8 +8,9 @@ import {
 	getGameResult
 } from '../../actions/gameActions';
 import { generateRandomString, reconstructResult, toWei } from '../../utils/misc'
+import { abi as gameAbi, networks as gameNetworks } from '../../../build/contracts/OddEven.json';
 
-import { abi as gameAbi } from '../../../build/contracts/OddEven.json';
+//clientSeed 를 무조건 hex of length 64 로 강제 하고 있는데 ui가 별로면 sha3 태운걸로 하면됨
 
 
 @connect(
@@ -37,7 +38,8 @@ export default class GamePage extends Component {
 			prevClientSeed: '',
 			prevHashedServerSeed: '',
 			prevBetMoney: '',
-			prevBetSide: ''
+			prevBetSide: '',
+			gameInstance : new web3.eth.Contract(gameAbi, gameNetworks["5777"].address)
 		};
 	}
 
@@ -72,22 +74,26 @@ export default class GamePage extends Component {
 			betMoney,
 			playerWin
 		} = res
-
-		const gameInstance = new web3.eth.Contract(gameAbi, '0xf204a4ef082f5c04bb89f7d5e6568b796096735a');
+		const {
+			gameInstance
+		} = this.state;
 		await gameInstance
 			.methods
-			.initGame(gameId, hashedServerSeed, clientSeed, betSide)
-			.send({
-				from: account, 
+			.initGame(
+				gameId,
+				hashedServerSeed,
+				clientSeed,
+				betSide
+			).send({
+				from: account,
 				value: toWei(betMoney)
 			});
 
-		
+
 		const result = reconstructResult(serverSeed, clientSeed);
 
-		
-
 		this.setState({
+			prevGameId: gameId,
 			prevServerSeed: serverSeed,
 			prevClientSeed: clientSeed,
 			prevResult: result,
@@ -95,9 +101,32 @@ export default class GamePage extends Component {
 			prevBetMoney: betMoney,
 			prevHashedServerSeed: this.props.hashedServerSeed
 		});
+		//this.props.fetchHashedServerSeed();
+		//this.props.setClientSeed(generateRandomString());
+	}
 
-		this.props.fetchHashedServerSeed();
-		this.props.setClientSeed(generateRandomString());
+	handleClickFinalze = async (evt) => {
+		const {
+			gameInstance,
+			prevServerSeed,
+			prevResult,
+			prevBetSide,
+			prevGameId
+		} = this.state;
+		const {
+			account
+		} = this.props;
+		const win = parseInt(prevResult) === parseInt(prevBetSide);
+		debugger;
+		await gameInstance
+			.methods
+			.finalize(
+				prevGameId,
+				prevServerSeed,
+				win
+			).send({
+				from: account,
+			});
 	}
 
 	render() {
@@ -117,7 +146,7 @@ export default class GamePage extends Component {
 			prevBetMoney,
 			prevHashedServerSeed
 		} = this.state;
-		
+
 		return (
 			<div className="panel panel-default">
 				<div className="panel-body">
@@ -163,9 +192,9 @@ export default class GamePage extends Component {
 						<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						<div>Your Bet Side: {prevBetSide}</div>
 						<div>Your Bet Money: {prevBetMoney}</div>
-						
+						<button onClick={this.handleClickFinalze}>Play</button>
 					</div>
-					
+
 				</div>
 			</div>
 		);
