@@ -23,10 +23,9 @@ function keccak256(hex) {
 function getRandom(serverSeed, clientSeed) {
 	const intParsedServerSeed = parseInt(serverSeed, 16);
 	const intParsedClientSeed = parseInt(clientSeed, 16);
-	const seedCombined = intParsedServerSeed + intParsedClientSeed;
-
+	//overflow 떠서 항상 result를 1로 반환하는 것 같음 아래와 같이 처리
+	const seedCombined = (intParsedServerSeed + intParsedClientSeed)%10000;
 	const mt = new MersenneTwister(seedCombined);
-
 	let rv = mt.random() < 0.5 ? 0 : 1;
 	return rv;
 }
