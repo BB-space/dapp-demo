@@ -19,9 +19,6 @@ router
 		res.json({ hashed_seed: hashed });
 	})
 	.post('/game', function(req, res) {
-		console.log('req data:', req.body);
-		console.log(decryptionMap);
-
 		const {
 			hashedServerSeed,
 			clientSeed,

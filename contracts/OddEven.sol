@@ -1,15 +1,17 @@
 pragma solidity ^0.4.13;
 
+import './Gamble.sol';
 
-contract OddEven {
+
+contract OddEven is Gamble {
   address owner;
 
   struct Game {
+    address player;	
     string dealerHash;
     string userSeed;
-    address player;
     uint bet;
-    uint decision;
+    bytes decision;
     bool finalized;
   }
   /* use game id as key of the following mapping*/
@@ -28,23 +30,30 @@ contract OddEven {
 
   }
 
-  function initGame(uint id, string dealerHash, string userSeed, uint decision) payable {
-    //throw if this account has enough money
-    //throw if already exists
+  function initGame(uint id,
+					address player,
+					string dealerHash,
+					string userSeed,
+					uint bet,
+					bytes data) returns(bool) {
+	
+    // throw if this account has enough money
+    // throw if already exists
     if(this.balance < msg.value * 3){
       throw;
     }
     if(games[id].player != address(0)){
       throw;
     }
-    games[id] = Game(
-      dealerHash,
-      userSeed,
-      msg.sender,
-      msg.value,
-      decision,
-      false
-    );
+	
+    games[id].player = player;
+    games[id].dealerHash = dealerHash;
+    games[id].userSeed = userSeed;
+    games[id].bet = bet;
+    games[id].decision = data;
+    games[id].finalized = false;
+
+	return true;
   }
 
   function computeHash(string _string) pure returns(bytes32){
