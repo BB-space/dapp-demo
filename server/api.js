@@ -25,10 +25,10 @@ router
 			betSide,
 			betMoney
 		} = req.body;
+		
 		const serverSeed = decryptionMap[hashedServerSeed];
-
-		// code
 		const result = reconstructResult(serverSeed, clientSeed);
+		
 		console.log('Server seed:', serverSeed);
 		console.log(result);
 

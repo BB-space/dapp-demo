@@ -1,6 +1,7 @@
 var TulipCrowdsale = artifacts.require("./TulipCrowdsale.sol");
 var Tulip = artifacts.require("./Tulip.sol");
 
+
 contract('TulipCrowdsale', function(accounts) {
 	it("should assert true", function() {
 		var crowdsale;
