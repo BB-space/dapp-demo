@@ -33,6 +33,10 @@ contract OddEven is Gamble {
 
   }
 
+  function changeToken(address newToken) {
+	tokenAddress = newToken;
+  }
+
   function initGame(uint id,
 					address player,
 					bytes32 dealerHash,
@@ -81,8 +85,9 @@ contract OddEven is Gamble {
     }
     */
     if(win) {
-	  
+	  GambleToken(tokenAddress).transfer(game.player, game.bet * 2);
     }
+	
     game.finalized = true;
   }
 

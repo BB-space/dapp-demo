@@ -67,8 +67,6 @@ export default class MainPage extends Component {
 
 		const crowdsaleInstance = new web3.eth.Contract(tulipSaleABI, crowdsaleAddress);
 
-		debugger;
-		
 		crowdsaleInstance
 			.methods
 			.buyTokens(currentAccount)
@@ -125,63 +123,71 @@ export default class MainPage extends Component {
 		return (
 			<main>
 				<h1>Sample Dapp</h1>
+				<div className="row">
 
-				<div className="panel panel-default">
-					<div className="panel-body">
-						<ul>
-							<li>Account: {currentAccount || 'Not Connected'}</li>
-							<li>ETH Balance: {fromWei(ethBalance).toString() || '0.0'}</li>
-							<li>Token Issuer ETH Balance: {fromWei(issuerBalance).toString() || '0.0'}</li>
-							<button onClick={this.refreshStatus}>Refresh</button>
-						</ul>
+					<div className="col-md-6">
+						<div className="panel panel-default">
+							<div className="panel-body">
+								<ul>
+									<li>Account: {currentAccount || 'Not Connected'}</li>
+									<li>ETH Balance: {fromWei(ethBalance).toString() || '0.0'}</li>
+									<li>Token Issuer ETH Balance: {fromWei(issuerBalance).toString() || '0.0'}</li>
+									<button onClick={this.refreshStatus}>Refresh</button>
+								</ul>
+							</div>
+						</div>
+					</div>
+
+					<div className="col-md-6">
+						<div className="panel panel-default">
+							<div className="panel-body">
+								<ul>
+									<li>Token Address:
+										<input value={tokenAddress}
+											   onChange={this.handleTokenAddressChange} />
+									</li>
+									<li>Token Balance: {fromWei(tokenBalance).toString() || '0.0'}</li>
+									<button onClick={this.refreshStatus}>Refresh</button>
+									<li>Send {' '}
+										<input value={tlpForTransfer}
+											   onChange={this.handleTlpForTransferChange} />
+										TLP {' '}
+										to {' '}
+										<input value={tlpRecipient}
+											   onChange={this.handleTlpRecipientChange} />
+										{' '} <button onClick={this.sendTLP}>Send</button>
+									</li>
+								</ul>
+							</div>
+						</div>
 					</div>
 				</div>
-
-				<div className="panel panel-default">
-					<div className="panel-body">
-						<ul>
-							<li>Token Address:
-								<input value={tokenAddress}
-									   onChange={this.handleTokenAddressChange} />
-							</li>
-							<li>Token Balance: {fromWei(tokenBalance).toString() || '0.0'}</li>
-							<button onClick={this.refreshStatus}>Refresh</button>
-							<li>Send {' '}
-								<input value={tlpForTransfer}
-									   onChange={this.handleTlpForTransferChange} />
-								TLP {' '}
-								to {' '}
-								<input value={tlpRecipient}
-									   onChange={this.handleTlpRecipientChange} />
-								{' '} <button onClick={this.sendTLP}>Send</button>
-							</li>
-						</ul>
+				<div>
+						
+					<div className="panel panel-default">
+						<div className="panel-body">
+							<ul>
+								<li>Crowdsale Address:
+									<input value={crowdsaleAddress}
+										   onChange={this.handleSaleAddressChange} />
+								</li>
+								<li>
+									Buy Tokens for <br/>
+									<input value={ethForTokenPurchase}
+										   onChange={this.handleEthForTokenChange} /> ETH
+									( = {ethForTokenPurchase * 1000} TLP)
+								</li>
+								<button onClick={this.purchaseToken}>Purchase</button>
+							</ul>
+						</div>
 					</div>
+
+
+
+					<GamePage />
+					<ValidationSection />
+
 				</div>
-				
-				<div className="panel panel-default">
-					<div className="panel-body">
-						<ul>
-							<li>Crowdsale Address:
-								<input value={crowdsaleAddress}
-									   onChange={this.handleSaleAddressChange} />
-							</li>
-							<li>
-								Buy Tokens for <br/>
-								<input value={ethForTokenPurchase}
-									   onChange={this.handleEthForTokenChange} /> ETH
-								( = {ethForTokenPurchase * 1000} TLP)
-							</li>
-							<button onClick={this.purchaseToken}>Purchase</button>
-						</ul>
-					</div>
-				</div>
-
-
-
-				<GamePage />
-				<ValidationSection />
-				
 			</main>
 		);
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { keccak256, reconstructResult } from '../../utils/misc'
+import { keccak256, reconstructResult, stringToBytes32 } from '../../utils/misc'
 
 
 export default class ValidationSection extends Component {
@@ -30,7 +30,7 @@ export default class ValidationSection extends Component {
 		} = this.state;
 
 		this.setState({
-			hashedServerSeed: keccak256(serverSeed),
+			hashedServerSeed: keccak256(stringToBytes32(serverSeed)),
 			result: reconstructResult(serverSeed, clientSeed)
 		});
 	}

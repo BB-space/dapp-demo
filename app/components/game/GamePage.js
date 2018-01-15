@@ -98,7 +98,7 @@ export default class GamePage extends Component {
 		await tokenInstance
 			.methods
 			.makeGame(
-				gameInstance._address,
+				gameAddress,
 				toWei(betMoney),
 				gameId,
 				hashedServerSeed,
@@ -122,8 +122,9 @@ export default class GamePage extends Component {
 			prevBetMoney: betMoney,
 			prevHashedServerSeed: this.props.hashedServerSeed
 		});
-		//this.props.fetchHashedServerSeed();
-		//this.props.setClientSeed(generateRandomString());
+		
+		this.props.fetchHashedServerSeed();
+		this.props.setClientSeed(generateRandomString());
 	}
 
 	handleClickFinalze = async (evt) => {
@@ -148,7 +149,7 @@ export default class GamePage extends Component {
 				prevServerSeedBytes32,
 				win
 			)
-			.send();
+			.send({from: account});
 	}
 
 	render() {
