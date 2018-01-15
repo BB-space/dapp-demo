@@ -46,7 +46,9 @@ export default class GamePage extends Component {
 		this.state = {
 			prevResult: '',
 			prevServerSeed: '',
+			prevServerSeedBytes32: '',
 			prevClientSeed: '',
+			prevClientSeedBytes32: '',
 			prevHashedServerSeed: '',
 			prevBetMoney: '',
 			prevBetSide: '',
@@ -112,7 +114,9 @@ export default class GamePage extends Component {
 		this.setState({
 			prevGameId: gameId,
 			prevServerSeed: serverSeed,
+			prevServerSeedBytes32: serverSeedBytes32,
 			prevClientSeed: clientSeed,
+			prevClientSeedBytes32: clientSeedBytes32,
 			prevResult: result,
 			prevBetSide: betSide,
 			prevBetMoney: betMoney,
@@ -125,25 +129,26 @@ export default class GamePage extends Component {
 	handleClickFinalze = async (evt) => {
 		const {
 			gameInstance,
-			prevServerSeed,
+			prevServerSeedBytes32,
 			prevResult,
 			prevBetSide,
 			prevGameId
 		} = this.state;
+		
 		const {
 			account
 		} = this.props;
+		
 		const win = parseInt(prevResult) === parseInt(prevBetSide);
-		debugger;
+
 		await gameInstance
 			.methods
 			.finalize(
 				prevGameId,
-				prevServerSeed,
+				prevServerSeedBytes32,
 				win
-			).send({
-				from: account,
-			});
+			)
+			.send();
 	}
 
 	render() {
@@ -209,7 +214,7 @@ export default class GamePage extends Component {
 						<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						<div>Your Bet Side: {prevBetSide}</div>
 						<div>Your Bet Money: {prevBetMoney}</div>
-						<button onClick={this.handleClickFinalze}>Play</button>
+						<button onClick={this.handleClickFinalze}>Finalize</button>
 					</div>
 
 				</div>

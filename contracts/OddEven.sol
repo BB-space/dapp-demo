@@ -6,6 +6,7 @@ import './GambleToken.sol';
 
 contract OddEven is Gamble {
   address owner;
+  address tokenAddress;
 
   struct Game {
     address player;	  
@@ -23,8 +24,9 @@ contract OddEven is Gamble {
     _;
   }
 
-  function OddEven() {
+  function OddEven(address token) {
     owner = msg.sender;
+	tokenAddress = token;
   }
 
   function getEther() payable {
@@ -67,13 +69,10 @@ contract OddEven is Gamble {
     /*check if player has played the game*/
     /*send money to user if modulo == bet*/
     var game = games[id];
+	
     if(game.finalized){
       throw;
     }
-    if(game.player != msg.sender){
-      throw;
-    }
-
     if(game.dealerHash != keccak256(dealerSeed)){
       throw;
     }
@@ -82,7 +81,7 @@ contract OddEven is Gamble {
     }
     */
     if(win) {
-      msg.sender.transfer(game.bet * 2);
+	  
     }
     game.finalized = true;
   }
