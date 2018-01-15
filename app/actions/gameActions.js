@@ -1,5 +1,6 @@
 import actionTypes from '../constants/actionTypes';
 import { request } from '../utils/fetch';
+import { stringToBytes32 } from '../utils/misc';
 
 
 function setHashedServerSeed(hashedServerSeed) {
@@ -12,7 +13,8 @@ function setHashedServerSeed(hashedServerSeed) {
 export function setClientSeed(newSeed) {
 	return {
 		type: actionTypes.GAME_SET_CLIENT_SEED,
-		newSeed
+		newSeed,
+		newSeedBytes32: stringToBytes32(newSeed)
 	};
 }
 

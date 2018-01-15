@@ -5,13 +5,12 @@ import { getAccountStatus } from '../../actions/ethStateActions';
 import { fromWei, toWei } from '../../utils/misc';
 import GamePage from '../game/GamePage';
 import ValidationSection from '../game/ValidationSection';
+import { issuerAddress, tokenAddress, crowdsaleAddress } from '../../constants/addresses';
 
 
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
 import {abi as tulipABI} from '../../../build/contracts/Tulip.json';
 
-
-const issuerAddress = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
 
 
 @connect(
@@ -35,8 +34,8 @@ export default class MainPage extends Component {
 		this.handleTlpRecipientChange = this.handleInputChange.bind(this, 'tlpRecipient');
 
 		this.state = {
-			crowdsaleAddress: '0xfb88de099e13c3ed21f80a7a1e49f8caecf10df6',
-			tokenAddress: '0x440b7f9b667420af04e88d4da0b9122e05cca5a0',
+			crowdsaleAddress,
+			tokenAddress,
 			ethForTokenPurchase: 0,
 			tlpForTransfer: 0,
 			tlpRecipient: '',

@@ -11,6 +11,7 @@ const {
 const initialState = {
 	hashedServerSeed: '',
 	clientSeed: '',
+	clientSeedBytes32: '',
 	betSide: '0',
 	betMoney: 0
 };
@@ -24,7 +25,8 @@ export default function gameReducer(state=initialState, action) {
 
 		case GAME_SET_CLIENT_SEED:
 			return Object.assign({}, state, {
-				clientSeed: action.newSeed
+				clientSeed: action.newSeed,
+				clientSeedBytes32: action.newSeedBytes32
 			});
 
 		case GAME_SET_BET_MONEY:

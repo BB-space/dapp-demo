@@ -36,7 +36,6 @@ export function generateRandomString(length=16) {
 	return hex;
 }
 
-
 export function keccak256(hex) {
 	return web3.utils.soliditySha3(hex);
 }
@@ -53,8 +52,28 @@ export function getRandom(serverSeed, clientSeed) {
 	return rv;
 }
 
-
-
 export function reconstructResult(serverSeed, clientSeed) {
-	return getRandom(serverSeed, clientSeed);
+	serverSeed = BigNumber(web3.utils.asciiToHex(serverSeed), 16);
+	clientSeed = BigNumber(web3.utils.asciiToHex(clientSeed), 16);
+	let seedsCombined = serverSeed.plus(clientSeed);
+
+	seedsCombined = seedsCombined
+		.toString(16)
+		.match(/.{1,3}/g)
+		.map(str => parseInt(str, 16));
+	
+	const mt = new MersenneTwister();
+	mt.seedArray(seedsCombined);
+
+	return mt.random() < 0.5 ? 0 : 1;
+}
+
+export function asciiToHex(str) {
+	return web3.utils.asciiToHex(str);
+}
+
+export function stringToBytes32(str) {
+	// cuts last 64 bits from hex if longer
+	const hex = asciiToHex(str).substr(2);
+	return '0x' + hex.substr(-64).padStart(64, '0');
 }

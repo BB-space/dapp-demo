@@ -1,6 +1,7 @@
 pragma solidity ^0.4.13;
 
 import './Gamble.sol';
+import './GambleToken.sol';
 
 
 contract OddEven is Gamble {
@@ -80,7 +81,7 @@ contract OddEven is Gamble {
       msg.sender.transfer(game.bet * 2);
     }
     */
-    if(win){
+    if(win) {
       msg.sender.transfer(game.bet * 2);
     }
     game.finalized = true;

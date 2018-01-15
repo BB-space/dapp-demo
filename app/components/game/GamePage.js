@@ -7,8 +7,19 @@ import {
 	setBetSide,
 	getGameResult
 } from '../../actions/gameActions';
-import { generateRandomString, reconstructResult, toWei } from '../../utils/misc'
-import { abi as gameAbi, networks as gameNetworks } from '../../../build/contracts/OddEven.json';
+import {
+	generateRandomString,
+	reconstructResult,
+	toWei,
+	asciiToHex
+} from '../../utils/misc';
+import {
+	gameAddress,
+	tokenAddress
+} from '../../constants/addresses';
+
+import { abi as gameAbi } from '../../../build/contracts/OddEven.json';
+import { abi as tokenAbi } from '../../../build/contracts/Tulip.json';
 
 //clientSeed 를 무조건 hex of length 64 로 강제 하고 있는데 ui가 별로면 sha3 태운걸로 하면됨
 
@@ -39,7 +50,8 @@ export default class GamePage extends Component {
 			prevHashedServerSeed: '',
 			prevBetMoney: '',
 			prevBetSide: '',
-			gameInstance : new web3.eth.Contract(gameAbi, gameNetworks["5777"].address)
+			gameInstance: new web3.eth.Contract(gameAbi, gameAddress),
+			tokenInstance: new web3.eth.Contract(tokenAbi, tokenAddress)
 		};
 	}
 
@@ -70,23 +82,28 @@ export default class GamePage extends Component {
 			gameId,
 			serverSeed,
 			clientSeed,
+			clientSeedBytes32,
+			serverSeedBytes32,
 			betSide,
 			betMoney,
 			playerWin
-		} = res
+		} = res;
 		const {
-			gameInstance
+			gameInstance,
+			tokenInstance
 		} = this.state;
-		await gameInstance
+
+		await tokenInstance
 			.methods
-			.initGame(
+			.makeGame(
+				gameInstance._address,
+				toWei(betMoney),
 				gameId,
 				hashedServerSeed,
-				clientSeed,
-				betSide
+				clientSeedBytes32,
+				asciiToHex(betSide)
 			).send({
 				from: account,
-				value: toWei(betMoney)
 			});
 
 
