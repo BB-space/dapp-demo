@@ -9,7 +9,7 @@ contract OddEven is Gamble {
   address tokenAddress;
 
   struct Game {
-    address player;	  
+    address player;
     bytes32 dealerHash;
     bytes32 userSeed;
     uint bet;
@@ -43,17 +43,17 @@ contract OddEven is Gamble {
 					bytes32 userSeed,
 					uint bet,
 					bytes data) returns(bool) {
-	
+
     // throw if this account has enough money
     // throw if already exists
 
-    if(this.balance < msg.value * 3){
+    /* if(this.balance < msg.value * 3){
       throw;
-    }
-    if(games[id].player != address(0)){
+    } */
+    /* if(games[id].player != address(0)){
       throw;
-    }
-	
+    } */
+
     games[id].player = player;
     games[id].dealerHash = dealerHash;
     games[id].userSeed = userSeed;
@@ -73,7 +73,7 @@ contract OddEven is Gamble {
     /*check if player has played the game*/
     /*send money to user if modulo == bet*/
     var game = games[id];
-	
+
     if(game.finalized){
       throw;
     }
@@ -87,7 +87,7 @@ contract OddEven is Gamble {
     if(win) {
 	  GambleToken(tokenAddress).transfer(game.player, game.bet * 2);
     }
-	
+
     game.finalized = true;
   }
 
