@@ -73,6 +73,12 @@ export default class MainPage extends Component {
 			.send({ 
 				from: currentAccount, 
 				value: toWei(ethForTokenPurchase)
+			})
+			.then(() => {
+				this.setState({
+					tlpForTransfer: 0
+				});
+				this.refreshStatus();
 			});
 	}
 
