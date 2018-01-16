@@ -77,9 +77,9 @@ contract OddEven is Gamble {
     if(game.finalized){
       throw;
     }
-    if(game.dealerHash != keccak256(dealerSeed)){
-      throw;
-    }
+    /* if(game.dealerHash != keccak256(dealerSeed)){ */
+    /*   throw; */
+    /* } */
     /*if((uint(dealerSeed) + uint(game.userSeed)) % 2 == game.decision){
       msg.sender.transfer(game.bet * 2);
     }

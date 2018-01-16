@@ -2,8 +2,8 @@ import { networks as gameNetworks } from '../../build/contracts/OddEven.json';
 import { networks as crowdsaleNetworks } from '../../build/contracts/TulipCrowdsale.json';
 
 
-export const issuerAddress = '0x627306090abaB3A6e1400e9345bC60c78a8BEf57';
-export const crowdsaleAddress = crowdsaleNetworks["5777"].address;
-export const tokenAddress = '0x6b5f2b72ed649a5018701eb2b71c4fd8f472595c';
-export const gameAddress = gameNetworks["5777"].address;
+export const issuerAddress = '0x1480c1b67eaf52dc701ac87cd18fdcf26825a293';
+export const crowdsaleAddress = crowdsaleNetworks["1516088334280"].address;
+export const tokenAddress = '0x0d3c18e4cd695814338ae11287a07c8baf7df77c';
+export const gameAddress = gameNetworks["1516088334280"].address;
 
