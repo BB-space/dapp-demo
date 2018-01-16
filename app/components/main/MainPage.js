@@ -5,7 +5,10 @@ import { getAccountStatus } from '../../actions/ethStateActions';
 import { fromWei, toWei } from '../../utils/misc';
 import GamePage from '../game/GamePage';
 import ValidationSection from '../game/ValidationSection';
-import { issuerAddress, tokenAddress, crowdsaleAddress } from '../../constants/addresses';
+import { issuerAddress,
+		 tokenAddress,
+		 crowdsaleAddress,
+		 gameAddress } from '../../constants/addresses';
 
 
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
@@ -169,7 +172,9 @@ export default class MainPage extends Component {
 										<input value={tokenAddress}
 											   onChange={this.handleTokenAddressChange} />
 									</li>
+									
 									<li>내 토큰 잔고: {fromWei(tokenBalance).toString() || '0.0'}</li>
+
 
 									<li>Send {' '}
 										<input value={tlpForTransfer}
@@ -183,6 +188,7 @@ export default class MainPage extends Component {
 											className="btn btn-sm btn-default"
 											onClick={this.sendTLP}>Send</button>
 									</li>
+									<li>게임 Contract 주소: { gameAddress }</li>
 								</ul>
 							</div>
 						</div>
