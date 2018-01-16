@@ -61,7 +61,7 @@ export default class MainPage extends Component {
 		const {
 			currentAccount
 		} = this.props;
-		
+
 		const {
 			ethForTokenPurchase,
 			crowdsaleAddress,
@@ -73,14 +73,18 @@ export default class MainPage extends Component {
 		return crowdsaleInstance
 			.methods
 			.buyTokens(currentAccount)
-			.send({ 
-				from: currentAccount, 
+			.send({
+				from: currentAccount,
 				value: toWei(ethForTokenPurchase)
+			})
+			.on('confirmation', (confNum,receipt) => {
+				console.log(confNum, receipt)
 			})
 			.then(() => {
 				this.setState({
 					tlpForTransfer: 0
 				});
+				this.refreshStatus();
 			});
 	}
 
@@ -88,7 +92,7 @@ export default class MainPage extends Component {
 		const {
 			currentAccount,
 		} = this.props;
-		
+
 		const {
 			tokenAddress,
 			tlpForTransfer,
@@ -100,7 +104,7 @@ export default class MainPage extends Component {
 		tokenInstance
 			.methods
 			.transfer(tlpRecipient, toWei(tlpForTransfer))
-			.send({ 
+			.send({
 				from: currentAccount
 			});
 	}
@@ -110,7 +114,7 @@ export default class MainPage extends Component {
 
 		this.setState({ [whichState]: newVal });
 	}
-	
+
 
     render() {
 		const {
@@ -118,7 +122,7 @@ export default class MainPage extends Component {
 			ethBalance,
 			tokenBalance
 		} = this.props;
-		
+
 		const {
 			crowdsaleAddress,
 			tokenAddress,
@@ -132,7 +136,7 @@ export default class MainPage extends Component {
 			<main>
 				<div className="page-header">
 					<h1>Sample Dapp</h1>
-				</div>					
+				</div>
 				<div className="row">
 
 					<div className="col-md-6">
@@ -185,7 +189,7 @@ export default class MainPage extends Component {
 					</div>
 				</div>
 				<div>
-					
+
 					<div className="panel panel-default">
 						<div className="panel-heading">
 							토큰 구매
