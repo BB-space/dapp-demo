@@ -173,7 +173,7 @@ export default class GamePage extends Component {
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					<h4>Game - 0 or 1</h4>
+					Game - 0 or 1
 				</div>
 				<div className="panel-body">
 

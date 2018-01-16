@@ -47,9 +47,12 @@ export default class MainPage extends Component {
 
 	refreshStatus = async () => {
 		const issuerBalance = await web3.eth.getBalance(issuerAddress);
-		
-		this.props.getAccountStatus(this.state.tokenAddress);
+		const crowdsaleInstance = new web3.eth.Contract(tulipSaleABI, crowdsaleAddress);
+		const tokenAddress = await crowdsaleInstance.methods.token().call();
+
+		this.props.getAccountStatus(tokenAddress);
 		this.setState({
+			tokenAddress,
 			issuerBalance
 		});
 	}
@@ -67,7 +70,7 @@ export default class MainPage extends Component {
 
 		const crowdsaleInstance = new web3.eth.Contract(tulipSaleABI, crowdsaleAddress);
 
-		crowdsaleInstance
+		return crowdsaleInstance
 			.methods
 			.buyTokens(currentAccount)
 			.send({ 
@@ -78,7 +81,6 @@ export default class MainPage extends Component {
 				this.setState({
 					tlpForTransfer: 0
 				});
-				this.refreshStatus();
 			});
 	}
 

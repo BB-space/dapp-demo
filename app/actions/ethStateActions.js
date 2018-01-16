@@ -60,7 +60,7 @@ export function sendToken() {
 
 	const tokenInstance = new web3.eth.Contract(tulipABI, tokenAddress);
 
-	tokenInstance
+	return tokenInstance
 		.methods
 		.transfer(tlpRecipient, toWei(tlpForTransfer))
 		.send({ 

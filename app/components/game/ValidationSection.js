@@ -46,7 +46,7 @@ export default class ValidationSection extends Component {
 		return (
 			<div className="panel panel-default">
 				<div className="panel-heading">
-					<h5>Validation</h5>					
+					Validation
 				</div>
 				<div className="panel-body">
 
