@@ -172,8 +172,11 @@ export default class GamePage extends Component {
 
 		return (
 			<div className="panel panel-default">
-				<div className="panel-body">
+				<div className="panel-heading">
 					<h4>Game - 0 or 1</h4>
+				</div>
+				<div className="panel-body">
+
 					<ul>
 						<li>
 							<b>Hashed Server Seed</b>
@@ -202,7 +205,9 @@ export default class GamePage extends Component {
 								   checked={betSide === '1'}/>1
 						</li>
 					</ul>
-					<button onClick={this.handlePlayBtnClick}>Play</button>
+					<button
+						className="btn btn-default"
+						onClick={this.handlePlayBtnClick}>Play</button>
 
 					<div className="text-center">
 						<div>Result:</div>

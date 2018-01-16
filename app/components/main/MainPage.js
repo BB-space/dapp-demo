@@ -122,17 +122,25 @@ export default class MainPage extends Component {
 
 		return (
 			<main>
-				<h1>Sample Dapp</h1>
+				<div className="page-header">
+					<h1>Sample Dapp</h1>
+				</div>					
 				<div className="row">
 
 					<div className="col-md-6">
 						<div className="panel panel-default">
+							<div className="panel-heading">
+								ETH 잔고 정보
+							</div>
 							<div className="panel-body">
+
 								<ul>
-									<li>Account: {currentAccount || 'Not Connected'}</li>
-									<li>ETH Balance: {fromWei(ethBalance).toString() || '0.0'}</li>
-									<li>Token Issuer ETH Balance: {fromWei(issuerBalance).toString() || '0.0'}</li>
-									<button onClick={this.refreshStatus}>Refresh</button>
+									<li>내 계좌 주소: {currentAccount || 'Not Connected'}</li>
+									<li>ETH 잔고: {fromWei(ethBalance).toString() || '0.0'}</li>
+									<li>토큰 발행인 ETH 잔고: {fromWei(issuerBalance).toString() || '0.0'}</li>
+									<button
+										className="btn btn-default pull-right"
+										onClick={this.refreshStatus}>Refresh</button>
 								</ul>
 							</div>
 						</div>
@@ -140,14 +148,17 @@ export default class MainPage extends Component {
 
 					<div className="col-md-6">
 						<div className="panel panel-default">
+							<div className="panel-heading">
+								토큰 정보
+							</div>
 							<div className="panel-body">
 								<ul>
-									<li>Token Address:
+									<li>토큰 Contract 주소:
 										<input value={tokenAddress}
 											   onChange={this.handleTokenAddressChange} />
 									</li>
-									<li>Token Balance: {fromWei(tokenBalance).toString() || '0.0'}</li>
-									<button onClick={this.refreshStatus}>Refresh</button>
+									<li>내 토큰 잔고: {fromWei(tokenBalance).toString() || '0.0'}</li>
+
 									<li>Send {' '}
 										<input value={tlpForTransfer}
 											   onChange={this.handleTlpForTransferChange} />
@@ -155,7 +166,10 @@ export default class MainPage extends Component {
 										to {' '}
 										<input value={tlpRecipient}
 											   onChange={this.handleTlpRecipientChange} />
-										{' '} <button onClick={this.sendTLP}>Send</button>
+										{' '}
+										<button
+											className="btn btn-sm btn-default"
+											onClick={this.sendTLP}>Send</button>
 									</li>
 								</ul>
 							</div>
@@ -163,11 +177,15 @@ export default class MainPage extends Component {
 					</div>
 				</div>
 				<div>
-						
+					
 					<div className="panel panel-default">
+						<div className="panel-heading">
+							토큰 구매
+						</div>
 						<div className="panel-body">
 							<ul>
-								<li>Crowdsale Address:
+								<li>1 ETH {'<=>'} 1,000 TLP</li>
+								<li>판매 Contract 주소:
 									<input value={crowdsaleAddress}
 										   onChange={this.handleSaleAddressChange} />
 								</li>
