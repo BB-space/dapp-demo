@@ -1,7 +1,7 @@
 pragma solidity ^0.4.13;
 
-import 'zeppelin-solidity/contracts/token/MintableToken.sol';
-import './GambleToken.sol';
+import './token/MintableToken.sol';
+import './token/GambleToken.sol';
 
 
 contract Tulip is MintableToken, GambleToken {

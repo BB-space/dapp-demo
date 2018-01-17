@@ -1,9 +1,10 @@
 pragma solidity ^0.4.13;
 
-import './Gamble.sol';
-import 'zeppelin-solidity/contracts/token/StandardToken.sol';
+import './ERC20.sol';
+import '../game/Gamble.sol';
 
-contract GambleToken is StandardToken {
+
+contract GambleToken is ERC20 {
   function makeGame(address contractAddress,
 					uint256 value,
 					uint gameId,
