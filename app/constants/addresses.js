@@ -1,5 +1,5 @@
-export const issuerAddress = '0x0203fe92af9b378c5f1de0ac7ac9ec5ab0aff508';
+export const issuerAddress = '0x0f8b9f87eb70fe45c460aa50eee4f21957cb4d57';
 export const crowdsaleAddress = '';
-export const tokenAddress = '0xfd8bc777b3e37c73578f1aca3ae763426265e26f';
-export const gameAddress = '';
+export const tokenAddress = '0x3bcd7fa6a03003e9405e8e6b788677afb10286f6';
+export const gameAddress = '0xfd942ef9eb7d7ed4e8a165a3d29d4b3f81f98c4c';
 

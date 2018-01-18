@@ -1,7 +1,7 @@
 pragma solidity ^0.4.13;
 
-import './Gamble.sol';
-import './GambleToken.sol';
+import './game/Gamble.sol';
+import './token/GambleToken.sol';
 
 
 contract OddEven is Gamble {
