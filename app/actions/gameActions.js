@@ -46,7 +46,7 @@ export function getGameResult() {
 
 	return (dispatch, getState) => {
 		const gameObj = getState().game;
-		
+
 		return request.post(url, gameObj);
 	};
 }

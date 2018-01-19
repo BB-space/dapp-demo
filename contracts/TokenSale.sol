@@ -48,13 +48,13 @@ contract TokenSale {
     uint256 weiAmount = msg.value;
 
     // calculate token amount to be created
-    uint256 token = weiAmount.mul(rate);
+    uint256 tokenAmount = weiAmount.mul(rate);
 
     // update state
     weiRaised = weiRaised.add(weiAmount);
 
-    token.transferFrom(seller, beneficiary, token);
-    TokenPurchase(msg.sender, beneficiary, weiAmount, token);
+    token.transferFrom(seller, beneficiary, tokenAmount);
+    TokenPurchase(msg.sender, beneficiary, weiAmount, tokenAmount);
 
     forwardFunds();
   }

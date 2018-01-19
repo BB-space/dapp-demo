@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { crowdsaleAddress } from '../../constants/addresses';
+import { toWei } from '../../utils/misc';
 
 import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
 

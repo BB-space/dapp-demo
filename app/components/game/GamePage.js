@@ -95,6 +95,7 @@ export default class GamePage extends Component {
 			tokenInstance
 		} = this.state;
 
+		
 		await tokenInstance
 			.methods
 			.makeGame(

@@ -5,11 +5,11 @@ contract('Sha3Test', function(accounts) {
 	it("should assert true", function() {
 		return Sha3Test
             .deployed()
-			.then(instance => {
+			.then(async instance => {
 				console.log('Sha3Test Address:', instance.address);
 
-				return instance.bytesTest.call('{a: 1}');
+				let x = await instance.bytesTest.call('{a: 1}');
+				console.log(x);
             })
-			.then(console.log);
 	});
 });

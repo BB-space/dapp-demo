@@ -6,7 +6,7 @@ import './token/GambleToken.sol';
 
 contract OddEven is Gamble {
   address owner;
-  address tokenAddress;
+  GambleToken public token;
 
   struct Game {
     address player;
@@ -24,17 +24,17 @@ contract OddEven is Gamble {
     _;
   }
 
-  function OddEven(address token) {
+  function OddEven(address tokenAddress) {
     owner = msg.sender;
-	tokenAddress = token;
+	token = GambleToken(tokenAddress);
   }
 
   function getEther() payable {
 
   }
 
-  function changeToken(address newToken) {
-	tokenAddress = newToken;
+  function changeToken(address newTokenAddress) {
+	token = GambleToken(newTokenAddress);
   }
 
   function initGame(uint id,
@@ -85,7 +85,7 @@ contract OddEven is Gamble {
     }
     */
     if(win) {
-	  GambleToken(tokenAddress).transfer(game.player, game.bet * 2);
+	  token.transfer(game.player, game.bet * 2);
     }
 
     game.finalized = true;
