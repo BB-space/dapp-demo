@@ -33,7 +33,7 @@ export function setBetSide(side) {
 }
 
 export function fetchHashedServerSeed() {
-	const url = '/api/seedhash'
+	const url = '/api/games/seedhash'
 	
 	return async (dispatch, getState) => {
 		const res = await request.get(url);
@@ -42,7 +42,7 @@ export function fetchHashedServerSeed() {
 }
 
 export function getGameResult() {
-	const url = '/api/game';
+	const url = '/api/games';
 
 	return (dispatch, getState) => {
 		const gameObj = getState().game;
