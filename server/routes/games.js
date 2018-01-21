@@ -1,36 +1,37 @@
-const express = require('express');
+const Router = require('koa-router');
 const {
 	generateRandomString,
 	keccak256,
 	reconstructResult,
 	stringToBytes32
-} = require('./utils/misc.js');
+} = require('../utils/misc.js');
 
+const router = new Router();
 
-const router = express.Router();
-
+const BASE_URL = '/api/games';
 
 let decryptionMap = {};
 let games = {};
 let gameId = 0;
 
+
 router
-	.get('/seedhash', function(req, res) {
+	.get(`${BASE_URL}/seedhash`, ctx => {
 		const str = generateRandomString();
 		const hashed = keccak256(stringToBytes32(str));
 
 		decryptionMap[hashed] = str;
 		
-		res.json({ hashed_seed: hashed });
+		ctx.body = { hashed_seed: hashed };
 	})
-	.post('/game', function(req, res) {
+	.post(`${BASE_URL}`, ctx => {
 		const {
 			hashedServerSeed,
 			clientSeed,
 			clientSeedBytes32,
 			betSide,
 			betMoney
-		} = req.body;
+		} = ctx.request.body;
 		
 		const serverSeed = decryptionMap[hashedServerSeed];
 		const serverSeedBytes32 = stringToBytes32(serverSeed);
@@ -57,10 +58,8 @@ router
 
 		games[gameId] = thisGame;
 		gameId++;
- 
-		res.json(thisGame);
-	})
 
-
+		ctx.body = thisGame;
+	});
 
 module.exports = router;

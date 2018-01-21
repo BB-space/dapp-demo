@@ -1,23 +1,42 @@
 /* eslint-disable no-console */
 
-const express				= require('express'),
-	  bodyParser			= require('body-parser'),
+const Koa					= require('koa'),
+	  bodyParser			= require('koa-bodyparser'),
+	  session				= require('koa-session'),
+	  passport				= require('koa-passport'),
 	  webpack				= require('webpack'),
-	  webpackDevMiddleware	= require('webpack-dev-middleware'),
-	  webpackHotMiddleware	= require('webpack-hot-middleware'),
-	  apiRouter				= require('./api.js'),
+	  webpackDevMiddleware	= require('koa-webpack-dev-middleware'),
+	  webpackHotMiddleware	= require('koa-webpack-hot-middleware'),
+	  gameRoutes			= require('./routes/games'),
+	  authRoutes			= require('./routes/auth'),
 	  webpackConfig			= require('../webpack.config');
 
 
-const app = express();
+const app = new Koa();
 const PORT = process.env.PORT || 3000;
 
 const compiler = webpack(webpackConfig);
 
 
+
+// sessions
+app.keys = ['super-secret-key'];
+app.use(session(app));
+
+// body parser
+app.use(bodyParser());
+
+// authentication
+require('./auth');
+app.use(passport.initialize());
+app.use(passport.session());
+
+// routes
+app.use(gameRoutes.routes());
+app.use(authRoutes.routes());
+
+
 app
-	.use(bodyParser.urlencoded({ extended: true }))
-	.use(bodyParser.json())
 	.use(webpackDevMiddleware(compiler, {
 		publicPath: webpackConfig.output.publicPath,
 		hot: true,
@@ -28,7 +47,6 @@ app
 		}
 	}))
 	.use(webpackHotMiddleware(compiler))
-	.use('/api', apiRouter)
 	.listen(PORT, function(err) {
         if (err) {
             console.log(err);
