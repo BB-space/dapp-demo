@@ -14,8 +14,6 @@ router.post(`${BASE_URL}/register`, async (ctx) => {
 	const reqBody = ctx.request.body;
 	const wallet = web3.eth.accounts.create();
 
-	console.log(ctx.request);
-	
 	try {
 		await queries.addUser(reqBody, wallet);
 	} catch(err) {
@@ -73,7 +71,6 @@ router.get(`${BASE_URL}/logout`, async (ctx) => {
 		ctx.throw(401);
 	}
 });
-
 
 
 

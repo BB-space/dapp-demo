@@ -9,6 +9,7 @@ const Koa					= require('koa'),
 	  webpackHotMiddleware	= require('koa-webpack-hot-middleware'),
 	  gameRoutes			= require('./routes/games'),
 	  authRoutes			= require('./routes/auth'),
+	  ethRoutes				= require('./routes/eth'),
 	  webpackConfig			= require('../webpack.config');
 
 
@@ -37,6 +38,7 @@ app.use(passport.session());
 // routes
 app.use(gameRoutes.routes());
 app.use(authRoutes.routes());
+app.use(ethRoutes.routes());
 
 
 app

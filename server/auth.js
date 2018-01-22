@@ -13,7 +13,6 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-	console.log(id);
 	return knex('users')
 		.where({ id }).first()
 		.then((user) => {
