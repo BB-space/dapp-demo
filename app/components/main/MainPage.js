@@ -6,6 +6,7 @@ import { fromWei, toWei } from '../../utils/misc';
 import { issuerAddress,
 		 tokenAddress,
 		 gameAddress } from '../../constants/addresses';
+import SignUpPage from '../auth/SignUpPage';
 import GamePage from '../game/GamePage';
 import TokenPurchaseSection from '../token/TokenPurchaseSection';
 import ValidationSection from '../game/ValidationSection';
@@ -17,7 +18,8 @@ import {abi as tulipABI} from '../../../build/contracts/Tulip.json';
 
 @connect(
 	(state, ownProps) => ({
-		currentAccount: state.ethState.currentAccount,
+		isAuthenticated: state.auth.isAuthenticated,
+		wallet: state.auth.wallet,
 		ethBalance: state.ethState.ethBalance,
 		tokenBalance: state.ethState.tokenBalance
 	}),	{
@@ -81,7 +83,8 @@ export default class MainPage extends Component {
 
     render() {
 		const {
-			currentAccount,
+			isAuthenticated,
+			wallet,
 			ethBalance,
 			tokenBalance
 		} = this.props;
@@ -98,8 +101,10 @@ export default class MainPage extends Component {
 				<div className="page-header">
 					<h1>Sample Dapp</h1>
 				</div>
-				<div className="row">
 
+				{!isAuthenticated && <SignUpPage />}
+				
+				<div className="row">
 					<div className="col-md-6">
 						<div className="panel panel-default">
 							<div className="panel-heading">
@@ -108,7 +113,7 @@ export default class MainPage extends Component {
 							<div className="panel-body">
 
 								<ul>
-									<li>내 계좌 주소: {currentAccount || 'Not Connected'}</li>
+									<li>내 계좌 주소: {isAuthenticated ? wallet : 'Not Connected'}</li>
 									<li>ETH 잔고: {fromWei(ethBalance).toString() || '0.0'}</li>
 									<li>내 토큰 잔고: {fromWei(tokenBalance).toString() || '0.0'}</li>
 
@@ -139,7 +144,7 @@ export default class MainPage extends Component {
 					</div>
 				</div>
 				
-				<div>
+				<div className="row">
 					<GamePage />
 					<ValidationSection />
 				</div>

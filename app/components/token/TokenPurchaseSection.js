@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { crowdsaleAddress } from '../../constants/addresses';
 import { toWei } from '../../utils/misc';
 
-import {abi as tulipSaleABI} from '../../../build/contracts/TulipCrowdsale.json';
+import {abi as tulipSaleABI} from '../../../build/contracts/TokenSale.json';
 
 
 @connect(

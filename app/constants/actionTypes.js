@@ -7,6 +7,13 @@ export default keymirror({
 	ETH_SET_TOKEN_BALANCE: null,
 	ETH_SET_TOKEN_ADDRESS: null,
 
+	// auth
+	AUTH_SET_AUTHENTICATING: null,
+    AUTH_SET_AUTHENTICATED: null,
+    AUTH_SET_USER: null,
+	AUTH_SET_ETH_BALANCE: null,
+	AUTH_SET_TOKEN_BALANCE: null,
+
 	// game
 	GAME_SET_HASHED_SERVER_SEED: null,
 	GAME_SET_CLIENT_SEED: null,

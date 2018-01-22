@@ -3,11 +3,17 @@ const LocalStrategy = require('passport-local').Strategy;
 
 const knex = require('./db/connection');
 
-const options = {};
+const options = {
+	usernameField: 'email',
+    passwordField: 'password'
+};
 
-passport.serializeUser((user, done) => { done(null, user.id); });
+passport.serializeUser((user, done) => {
+	done(null, user.id);
+});
 
 passport.deserializeUser((id, done) => {
+	console.log(id);
 	return knex('users')
 		.where({ id }).first()
 		.then((user) => {
@@ -18,9 +24,9 @@ passport.deserializeUser((id, done) => {
 		});
 });
 
-passport.use(new LocalStrategy(options, (username, password, done) => {
+passport.use(new LocalStrategy(options, (email, password, done) => {
 	knex('users')
-		.where({ username }).first()
+		.where({ email }).first()
 		.then((user) => {
 			if (!user) return done(null, false);
 			if (password === user.password) {
@@ -33,3 +39,4 @@ passport.use(new LocalStrategy(options, (username, password, done) => {
 			return done(err);
 		});
 }));
+

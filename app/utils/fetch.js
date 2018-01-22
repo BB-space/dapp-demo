@@ -11,6 +11,7 @@ export const request = {
             headers: {
                 'Content-Type': 'application/json'
             },
+			credentials: 'include',
             body: JSON.stringify(data)
         })
             .then(checkStatus)

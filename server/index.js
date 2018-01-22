@@ -12,6 +12,7 @@ const Koa					= require('koa'),
 	  webpackConfig			= require('../webpack.config');
 
 
+
 const app = new Koa();
 const PORT = process.env.PORT || 3000;
 
@@ -19,9 +20,10 @@ const compiler = webpack(webpackConfig);
 
 
 
+
 // sessions
-app.keys = ['super-secret-key'];
-app.use(session(app));
+app.keys = ['super-secret-key!'];
+app.use(session({ key: 'app:sess' }, app));
 
 // body parser
 app.use(bodyParser());
@@ -30,6 +32,7 @@ app.use(bodyParser());
 require('./auth');
 app.use(passport.initialize());
 app.use(passport.session());
+
 
 // routes
 app.use(gameRoutes.routes());

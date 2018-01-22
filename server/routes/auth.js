@@ -13,6 +13,8 @@ const BASE_URL = '/api/auth';
 router.post(`${BASE_URL}/register`, async (ctx) => {
 	const reqBody = ctx.request.body;
 	const wallet = web3.eth.accounts.create();
+
+	console.log(ctx.request);
 	
 	try {
 		await queries.addUser(reqBody, wallet);
@@ -36,7 +38,15 @@ router.post(`${BASE_URL}/register`, async (ctx) => {
 
 router.get(`${BASE_URL}/status`, async (ctx) => {
 	if (ctx.isAuthenticated()) {
-		ctx.body = { status: 'logged in' };
+		const user = ctx.state.user;
+		
+		ctx.body = {
+			success: true,
+			user: {
+				email: user.email,
+				wallet: user.wallet
+			}
+		};
 	} else {
 		ctx.body = { status: 'not logged in' }
 	}
@@ -63,17 +73,6 @@ router.get(`${BASE_URL}/logout`, async (ctx) => {
 		ctx.throw(401);
 	}
 });
-
-router
-	.get(`${BASE_URL}/wallet`, async ctx => {
-		if (ctx.isAuthenticated()) {
-			const user = ctx.state.user;
-			ctx.body = { wallet: user.wallet };
-		} else {
-			ctx.body = { error: 'Unauthorized' };
-			ctx.throw(401);
-		}
-	});
 
 
 
