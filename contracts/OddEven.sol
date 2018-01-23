@@ -12,9 +12,11 @@ contract OddEven is Gamble {
     address player;
     bytes32 dealerHash;
     bytes32 userSeed;
+    bytes32 dealerSeed;
     uint bet;
-    bytes decision;
+	bool playerWin;
     bool finalized;
+	bytes data;
   }
   /* use game id as key of the following mapping*/
   mapping(uint => Game) games;
@@ -37,29 +39,38 @@ contract OddEven is Gamble {
 	token = GambleToken(newTokenAddress);
   }
 
-  function initGame(uint id,
+  function playGame(uint id,
 					address player,
 					bytes32 dealerHash,
 					bytes32 userSeed,
-					uint bet,
+					uint256 bet,
+					bytes32 dealerSeed,
+					bool win,
 					bytes data) returns(bool) {
 
     // throw if this account has enough money
     // throw if already exists
 
     /* if(this.balance < msg.value * 3){
-      throw;
+	   throw;
     } */
     /* if(games[id].player != address(0)){
       throw;
     } */
 
-    games[id].player = player;
-    games[id].dealerHash = dealerHash;
-    games[id].userSeed = userSeed;
-    games[id].bet = bet;
-    games[id].decision = data;
-    games[id].finalized = false;
+    // games[id].player = player;
+    // games[id].dealerHash = dealerHash;
+    // games[id].userSeed = userSeed;
+    // games[id].bet = bet;
+	// games[id].dealerSeed = dealerSeed;
+	// games[id].playerWin = win;
+    // games[id].data = data;
+
+	if(win) {
+	  token.transfer(player, bet * 2);
+    }
+	
+    // games[id].finalized = true;
 
 	return true;
   }
@@ -74,7 +85,7 @@ contract OddEven is Gamble {
     /*send money to user if modulo == bet*/
     var game = games[id];
 
-    if(game.finalized){
+    if(game.finalized) {
       throw;
     }
     /* if(game.dealerHash != keccak256(dealerSeed)){ */

@@ -65,8 +65,8 @@ function makeSignedTransaction(
 
 	const rawTx = {
 		nonce,
-		gas: '0x13880',
-		gasPrice: '0xe8d4a51000',
+		gasLimit: '0xf4240',
+		// gasPrice: '0xe8d4a51000',
 		to: toAddress,
 		value: web3.utils.numberToHex(valueWei), // in hex
 		data: txData

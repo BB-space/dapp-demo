@@ -5,13 +5,14 @@ const Router				= require('koa-router'),
 	  tokenSaleABI			= require('../../build/contracts/TokenSale.json').abi;
 
 
+
 const router = new Router();
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 const BASE_URL = '/api/eth';
 
-const tokenAddress = '0x5cbd6de884c715f92356d82a0aba1b1aa693e77e';
-const tokenSaleAddress = '0x1c41267dfc86ae1d195a2fc164e53c5c9193d34e';
+const tokenAddress = '0x5072d9c700d8867093301211764b9ff082167248';
+const tokenSaleAddress = '0xbba9a6f9356520d6ac6892ffcaeb4e37c8560c45';
 
 
 router.get(`${BASE_URL}/balance`, async (ctx) => {
@@ -61,6 +62,11 @@ router.post(`${BASE_URL}/tokenpurchase`, async (ctx) => {
 		.encodeABI();
 
 	const nonce = await web3.eth.getTransactionCount(wallet);
+
+	console.log('wallet', wallet);
+	console.log('private_key', private_key);
+	console.log('tokenSaleAddress', tokenSaleAddress);
+	console.log('amtWei', amtWei);
 
 	const tran = makeSignedTransaction(
 		wallet,

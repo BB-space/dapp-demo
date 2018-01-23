@@ -9,10 +9,12 @@ module.exports = function(deployer, network, accounts) {
 	deployer
 		.deploy(Tulip)
 		.then(async () => {
-			console.log('token address', Tulip.address);
-			deployer.deploy(OddEven, Tulip.address);
 			await deployer.deploy(TokenSale, Tulip.address, 1000, web3.eth.coinbase);
 			await Tulip.at(Tulip.address).mint(web3.eth.coinbase, web3.toWei(1000000));
-			Tulip.at(Tulip.address).approve(TokenSale.address, web3.toWei(500000));
+
+			await Tulip.at(Tulip.address).approve(TokenSale.address, web3.toWei(500000));
+
+			await deployer.deploy(OddEven, Tulip.address);
+			await Tulip.at(Tulip.address).mint(OddEven.address, web3.toWei(1000000));
 		});
 };

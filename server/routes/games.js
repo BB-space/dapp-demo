@@ -1,10 +1,17 @@
 const Router = require('koa-router');
+const Web3 = require('web3');
 const {
 	generateRandomString,
 	keccak256,
 	reconstructResult,
-	stringToBytes32
+	stringToBytes32,
+	makeSignedTransaction,
+	toWei
 } = require('../utils/misc.js');
+
+const tokenABI = require('../../build/contracts/Tulip.json').abi;
+
+
 
 const router = new Router();
 
@@ -14,6 +21,10 @@ let decryptionMap = {};
 let games = {};
 let gameId = 0;
 
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+
+const gameAddress = '0x2a8ed75eda665181910976aa105b2356b49de8c6';
+const tokenAddress = '0x5072d9c700d8867093301211764b9ff082167248';
 
 router
 	.get(`${BASE_URL}/seedhash`, ctx => {
@@ -24,7 +35,13 @@ router
 		
 		ctx.body = { hashed_seed: hashed };
 	})
-	.post(`${BASE_URL}`, ctx => {
+	.post(`${BASE_URL}`, async ctx => {
+		const user = ctx.state.user;
+		const {
+			wallet,
+			private_key
+		} = user;
+		
 		const {
 			hashedServerSeed,
 			clientSeed,
@@ -32,7 +49,7 @@ router
 			betSide,
 			betMoney
 		} = ctx.request.body;
-		
+
 		const serverSeed = decryptionMap[hashedServerSeed];
 		const serverSeedBytes32 = stringToBytes32(serverSeed);
 		const result = reconstructResult(serverSeed, clientSeed);
@@ -41,7 +58,53 @@ router
 		console.log('Server seed (in bytes):', serverSeedBytes32);
 		console.log('Result:', result);
 
+		console.log('betmoney:', toWei(betMoney).toString());
+
 		const playerWin = (betSide.toString() === result.toString());
+
+		const tokenInstance = new web3.eth.Contract(tokenABI, tokenAddress);
+		const txData = tokenInstance
+			.methods
+			.makeOneTimeGame(
+				gameAddress,
+				toWei(betMoney),
+				gameId,
+				hashedServerSeed,
+				clientSeedBytes32,
+				serverSeedBytes32,
+				playerWin,
+				web3.utils.asciiToHex(JSON.stringify({
+					betSide
+				}))
+			)
+			.encodeABI();
+
+		const nonce = await web3.eth.getTransactionCount(wallet);
+
+		const tran = makeSignedTransaction(
+			wallet,
+			private_key,
+			tokenAddress,
+			betMoney,
+			nonce,
+			txData
+		);
+
+		tran.on('transactionHash', hash => {
+			console.log('hash');
+			console.log(hash);
+		});
+		
+		tran.on('confirmation', (confirmationNumber, receipt) => {
+			console.log('confirmation: ' + confirmationNumber);
+		});
+
+		tran.on('receipt', receipt => {
+			console.log('reciept');
+			console.log(receipt);
+		});
+
+		tran.on('error', console.error);
 
 		const thisGame = {
 			gameId,
@@ -53,7 +116,8 @@ router
 			result,
 			betSide,			
 			betMoney,
-			playerWin
+			playerWin,
+			tran
 		};
 
 		games[gameId] = thisGame;

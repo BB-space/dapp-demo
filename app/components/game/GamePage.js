@@ -90,25 +90,6 @@ export default class GamePage extends Component {
 			betMoney,
 			playerWin
 		} = res;
-		const {
-			gameInstance,
-			tokenInstance
-		} = this.state;
-
-		
-		await tokenInstance
-			.methods
-			.makeGame(
-				gameAddress,
-				toWei(betMoney),
-				gameId,
-				hashedServerSeed,
-				clientSeedBytes32,
-				asciiToHex(betSide)
-			).send({
-				from: account,
-			});
-
 
 		const result = reconstructResult(serverSeed, clientSeed);
 
