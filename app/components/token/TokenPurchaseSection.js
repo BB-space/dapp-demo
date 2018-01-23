@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { buyTokens } from '../../actions/ethStateActions';
 import { crowdsaleAddress } from '../../constants/addresses';
 import { toWei } from '../../utils/misc';
 
-// import {abi as tulipSaleABI} from '../../../build/contracts/TokenSale.json';
+import {abi as tokenSaleABI} from '../../../build/contracts/TokenSale.json';
 
 
 @connect(
 	(state, ownProps) => ({
-		currentAccount: state.ethState.currentAccount,
-		tokenBalance: state.ethState.tokenBalance
+		tokenBalance: state.auth.tokenBalance
 	}),	{
-
+		buyTokens
 	}
 )
 export default class TokenPurchaseSection extends Component {
@@ -36,32 +36,14 @@ export default class TokenPurchaseSection extends Component {
 
 	purchaseToken = () => {
 		const {
-			currentAccount
+			buyTokens
 		} = this.props;
 
 		const {
 			ethForTokenPurchase,
-			crowdsaleAddress
 		} = this.state;
-
-		const crowdsaleInstance = new web3.eth.Contract(tulipSaleABI, crowdsaleAddress);
-
-		return crowdsaleInstance
-			.methods
-			.buyTokens(currentAccount)
-			.send({
-				from: currentAccount,
-				value: toWei(ethForTokenPurchase)
-			})
-			.on('confirmation', (confNum, receipt) => {
-				console.log(confNum, receipt);
-			})
-			.then(() => {
-				this.setState({
-					tlpForTransfer: 0
-				});
-				this.refreshStatus();
-			});
+		
+		buyTokens(ethForTokenPurchase);
 	}
 
 	
@@ -79,10 +61,6 @@ export default class TokenPurchaseSection extends Component {
 				<div className="panel-body">
 					<ul>
 						<li>1 ETH {'<=>'} 1,000 TLP</li>
-						<li>판매 Contract 주소:
-							<input value={crowdsaleAddress}
-								   onChange={this.handleSaleAddressChange} />
-						</li>
 						<li>
 							Buy Tokens for <br/>
 							<input value={ethForTokenPurchase}

@@ -39,7 +39,7 @@ router.get(`${BASE_URL}/status`, async (ctx) => {
 		const user = ctx.state.user;
 		
 		ctx.body = {
-			success: true,
+			authorized: true,
 			user: {
 				email: user.email,
 				wallet: user.wallet

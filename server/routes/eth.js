@@ -1,6 +1,8 @@
-const Router	= require('koa-router'),
-	  Web3		= require('web3'),
-	  Tx		= require('ethereumjs-tx');
+const Router				= require('koa-router'),
+	  Web3					= require('web3'),
+	  makeSignedTransaction	= require('../utils/misc').makeSignedTransaction,
+	  tokenABI				= require('../../build/contracts/Tulip.json').abi,
+	  tokenSaleABI			= require('../../build/contracts/TokenSale.json').abi;
 
 
 const router = new Router();
@@ -8,16 +10,16 @@ const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 const BASE_URL = '/api/eth';
 
+const tokenAddress = '0x5cbd6de884c715f92356d82a0aba1b1aa693e77e';
+const tokenSaleAddress = '0x1c41267dfc86ae1d195a2fc164e53c5c9193d34e';
+
 
 router.get(`${BASE_URL}/balance`, async (ctx) => {
-	const reqBody = ctx.request.body;
 	const user = ctx.state.user;
 	const {
 		wallet,
 		private_key
 	} = user;
-
-	console.log(wallet, private_key);
 
 	if (!ctx.isAuthenticated()) {
 		ctx.body = { status: 'not logged in' }
@@ -25,24 +27,49 @@ router.get(`${BASE_URL}/balance`, async (ctx) => {
 	}
 
 	const ethBalance = await web3.eth.getBalance(wallet);
+	
+	const tokenInstance = new web3.eth.Contract(tokenABI, tokenAddress);
+	const tokenBalance = await tokenInstance
+		.methods
+		.balanceOf(wallet)
+		.call();
 
+	ctx.body = {
+		ethBalance,
+		tokenBalance
+	};
+});
 
-	var privateKey = new Buffer(private_key.substring(2), 'hex')
+router.post(`${BASE_URL}/tokenpurchase`, async (ctx) => {
+	const user = ctx.state.user;
+	const { amtWei } = ctx.request.body;
+	const {
+		wallet,
+		private_key
+	} = user;
 
-	var rawTx = {
-		nonce: 6,
-		gasLimit: '0x5208',
-		to: '0x7153705eF9e71F9611aca240E2FE660E4F4314ff',
-		value: '0xde0b6b3a7640000', // in hex
-		data: ''
+	if (!ctx.isAuthenticated()) {
+		ctx.body = { status: 'not logged in' }
+		return false;
 	}
+	
+	const tokenSaleInstance = new web3.eth.Contract(tokenSaleABI, tokenSaleAddress);
+	
+	const txData = tokenSaleInstance
+		.methods
+		.buyTokens(wallet)
+		.encodeABI();
 
-	var tx = new Tx(rawTx);
-	tx.sign(privateKey);
+	const nonce = await web3.eth.getTransactionCount(wallet);
 
-	var serializedTx = tx.serialize();
-
-	var tran = web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'));
+	const tran = makeSignedTransaction(
+		wallet,
+		private_key,
+		tokenSaleAddress,
+		amtWei,
+		nonce,
+		txData
+	);
 
 	tran.on('transactionHash', hash => {
 		console.log('hash');
@@ -60,7 +87,8 @@ router.get(`${BASE_URL}/balance`, async (ctx) => {
 
 	tran.on('error', console.error);
 
-	ctx.body = { ethBalance };
+	ctx.body = { success: true, transaction: tran };
+
 });
 
 

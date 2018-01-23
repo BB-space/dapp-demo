@@ -1,6 +1,9 @@
 export const request = {
     get(url, queryObj = {}) {
-        return fetch(buildUrl(url, queryObj))
+        return fetch(buildUrl(url, queryObj), {
+			method: 'GET',
+			credentials: 'include'
+		})
             .then(checkStatus)
             .then(res => res.json());
     },

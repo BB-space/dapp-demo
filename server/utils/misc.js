@@ -1,8 +1,9 @@
 const Web3 = require('web3');
 const MersenneTwister = require('mersennetwister');
-const BigNumber = require('bignumber.js')
+const BigNumber = require('bignumber.js');
+const Tx = require('ethereumjs-tx');
 
-const web3 = new Web3();
+const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 
 function fromWei(amtInWei) {
@@ -52,6 +53,35 @@ function stringToBytes32(str) {
 	return '0x' + hex.substr(-64).padStart(64, '0');
 }
 
+function makeSignedTransaction(
+	wallet,
+	privateKey,
+	toAddress,
+	valueWei,
+	nonce,
+	txData=''
+) {
+	privateKey = new Buffer(privateKey.substring(2), 'hex')
+
+	const rawTx = {
+		nonce,
+		gas: '0x13880',
+		gasPrice: '0xe8d4a51000',
+		to: toAddress,
+		value: web3.utils.numberToHex(valueWei), // in hex
+		data: txData
+	}
+
+	const tx = new Tx(rawTx);
+	tx.sign(privateKey);
+	
+	const serializedTx = tx.serialize();
+
+	return web3.eth.sendSignedTransaction(
+		'0x' + serializedTx.toString('hex')
+	);
+}
+
 
 module.exports = {
 	fromWei,
@@ -59,5 +89,6 @@ module.exports = {
 	generateRandomString,
 	keccak256,
 	reconstructResult,
-	stringToBytes32
+	stringToBytes32,
+	makeSignedTransaction
 };

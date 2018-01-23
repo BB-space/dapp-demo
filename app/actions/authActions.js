@@ -11,7 +11,7 @@ export function attemptSignIn(email, password) {
         return request
             .post(url, { email, password })
             .then(res => {
-                if(res.success === true) {
+                if(res.authorized === true) {
                     return dispatch(loginSuccess(res.user));
                 }
             });
@@ -46,6 +46,21 @@ export function attemptSignUp(email, password) {
 				res => dispatch(loginSuccess(res.user)),
 				reason => Promise.reject(reason)
 			);
+    };
+}
+
+export function checkAuth() {
+    const url = '/api/auth/status';
+
+	return (dispatch, getState) => {
+        dispatch(setAuthenticating(true));
+        return request
+            .get(url)
+            .then(res => {
+                if(res.authorized === true) {
+                    return dispatch(loginSuccess(res.user));
+                }
+            });
     };
 }
 

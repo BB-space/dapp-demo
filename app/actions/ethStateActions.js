@@ -1,4 +1,5 @@
 import actionTypes from '../constants/actionTypes';
+import { request } from '../utils/fetch';
 
 import { abi as tokenABI } from '../../build/contracts/Tulip.json';
 
@@ -25,28 +26,25 @@ function setTokenBalance(balance) {
 }
 
 export function getAccountStatus(tokenAddress='') {
+	const url = '/api/eth/balance';
+	
     return async (dispatch, getState) => {
-		const account = await web3.eth.getCoinbase();
-		const ethBalance = await web3.eth.getBalance(account);
-
-		if(tokenAddress) {
-			dispatch(getTokenBalance(account, tokenAddress));
-		}
-		
-		dispatch(setCurrentAccount(account));
-		dispatch(setEthBalance(ethBalance));
+		const account = getState().auth.wallet;
+		const res = await request.get(url);
+		dispatch(setEthBalance(res.ethBalance));
+		dispatch(setTokenBalance(res.tokenBalance));
 	};
 }
 
-export function getTokenBalance(accountAddress, tokenAddress) {
-    return async (dispatch, getState) => {
-		const tokenInstance = new web3.eth.Contract(tokenABI, tokenAddress);
-		const tokenBalance = await tokenInstance
-			.methods
-			.balanceOf(accountAddress)
-			.call();
+export function buyTokens(amtEth) {
+	const url = '/api/eth/tokenpurchase';
 
-		dispatch(setTokenBalance(tokenBalance));
+	return (dispatch, getState) => {
+		const account = getState().auth.wallet;
+		
+		return request.post(url, {
+			amtWei: web3.utils.toWei(String(amtEth))
+		});
 	};
 }
 

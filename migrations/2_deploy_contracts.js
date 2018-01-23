@@ -8,9 +8,11 @@ module.exports = function(deployer, network, accounts) {
 	deployer.deploy(Sha3Test);
 	deployer
 		.deploy(Tulip)
-		.then(() => {
+		.then(async () => {
 			console.log('token address', Tulip.address);
 			deployer.deploy(OddEven, Tulip.address);
-			deployer.deploy(TokenSale, Tulip.address, 1000, web3.eth.coinbase);
+			await deployer.deploy(TokenSale, Tulip.address, 1000, web3.eth.coinbase);
+			await Tulip.at(Tulip.address).mint(web3.eth.coinbase, web3.toWei(1000000));
+			Tulip.at(Tulip.address).approve(TokenSale.address, web3.toWei(500000));
 		});
 };

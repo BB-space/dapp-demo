@@ -38,19 +38,14 @@ export default class MainPage extends Component {
 		this.state = {
 			tokenAddress,
 			tlpForTransfer: 0,
-			tlpRecipient: '',
-			issuerBalance: 0
+			tlpRecipient: ''
 		};
 
 		this.refreshStatus();
     }
 
-	refreshStatus = async () => {
-		const issuerBalance = await web3.eth.getBalance(issuerAddress);
+	refreshStatus = () => {
 		this.props.getAccountStatus(tokenAddress);
-		this.setState({
-			issuerBalance
-		});
 	}
 
 	sendTLP = () => {
@@ -117,20 +112,19 @@ export default class MainPage extends Component {
 									<li>ETH 잔고: {fromWei(ethBalance).toString() || '0.0'}</li>
 									<li>내 토큰 잔고: {fromWei(tokenBalance).toString() || '0.0'}</li>
 
-									<li>Send {' '}
+									{/* <li>Send {' '}
 										<input value={tlpForTransfer}
-											   onChange={this.handleTlpForTransferChange} />
+										onChange={this.handleTlpForTransferChange} />
 										TLP {' '}
 										to {' '}
 										<input value={tlpRecipient}
-											   onChange={this.handleTlpRecipientChange} />
+										onChange={this.handleTlpRecipientChange} />
 										{' '}
 										<button
-											className="btn btn-sm btn-default"
-											onClick={this.sendTLP}>Send</button>
-									</li>
-									
-									<li>토큰 발행인 ETH 잔고: {fromWei(issuerBalance).toString() || '0.0'}</li>
+										className="btn btn-sm btn-default"
+										onClick={this.sendTLP}>Send</button>
+										</li>
+									  */}						
 									<button
 										className="btn btn-default pull-right"
 										onClick={this.refreshStatus}>Refresh</button>
