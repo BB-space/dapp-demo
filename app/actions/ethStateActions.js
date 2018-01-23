@@ -1,7 +1,7 @@
 import actionTypes from '../constants/actionTypes';
 import { request } from '../utils/fetch';
+import { toWei } from '../utils/misc';
 
-import { abi as tokenABI } from '../../build/contracts/Tulip.json';
 
 
 function setCurrentAccount(newAccount) {
@@ -43,7 +43,7 @@ export function buyTokens(amtEth) {
 		const account = getState().auth.wallet;
 		
 		return request.post(url, {
-			amtWei: web3.utils.toWei(String(amtEth))
+			amtWei: toWei(amtEth).toString(10)
 		});
 	};
 }

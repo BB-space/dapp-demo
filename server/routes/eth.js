@@ -11,8 +11,13 @@ const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 const BASE_URL = '/api/eth';
 
-const tokenAddress = '0x5072d9c700d8867093301211764b9ff082167248';
-const tokenSaleAddress = '0xbba9a6f9356520d6ac6892ffcaeb4e37c8560c45';
+/* const tokenAddress = '0x47ac6bcdf8c345cc4c0b53df3a1d7dfbc9c76cd1';
+ * const tokenSaleAddress = '0xf9be640d44f66b80669326e6e26aa41174f36b01';*/
+
+const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['1516714730290']['address'];
+const tokenSaleAddress = require('../../build/contracts/TokenSale.json')['networks']['1516714730290']['address'];
+
+
 
 
 router.get(`${BASE_URL}/balance`, async (ctx) => {

@@ -44,31 +44,33 @@ export default class ValidationSection extends Component {
 		} = this.state;
 		
 		return (
-			<div className="panel panel-default">
-				<div className="panel-heading">
-					Validation
-				</div>
-				<div className="panel-body">
+			<div className="col-md-12">
+				<div className="panel panel-default">
+					<div className="panel-heading">
+						Validation
+					</div>
+					<div className="panel-body">
 
 
-					<ul>
-						<li>
-							Client Seed<span>: {' '}</span>
-							<input value={clientSeed}
-								   onChange={this.handleClientSeedChange} />
-						</li>
-						<li>
-							Server Seed<span>: {' '}</span>
-							<input value={serverSeed}
-								   onChange={this.handleServerSeedChange} />
-						</li>
-						<li>
-							Server Seed (Hashed): {hashedServerSeed}
-						</li>
-						<li>
-							Result Then: {result}
-						</li>
-					</ul>
+						<ul>
+							<li>
+								Client Seed<span>: {' '}</span>
+								<input value={clientSeed}
+									   onChange={this.handleClientSeedChange} />
+							</li>
+							<li>
+								Server Seed<span>: {' '}</span>
+								<input value={serverSeed}
+									   onChange={this.handleServerSeedChange} />
+							</li>
+							<li>
+								Server Seed (Hashed): {hashedServerSeed}
+							</li>
+							<li>
+								Result Then: {result}
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		);

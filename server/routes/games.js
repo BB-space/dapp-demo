@@ -23,8 +23,13 @@ let gameId = 0;
 
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
-const gameAddress = '0x2a8ed75eda665181910976aa105b2356b49de8c6';
-const tokenAddress = '0x5072d9c700d8867093301211764b9ff082167248';
+// const gameAddress = '0x2a8ed75eda665181910976aa105b2356b49de8c6';
+// const tokenAddress = '';
+
+const gameAddress = require('../../build/contracts/OddEven.json')['networks']['1516714730290']['address'];
+const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['1516714730290']['address'];
+
+
 
 router
 	.get(`${BASE_URL}/seedhash`, ctx => {
@@ -56,9 +61,11 @@ router
 		
 		console.log('Server seed:', serverSeed);
 		console.log('Server seed (in bytes):', serverSeedBytes32);
+		console.log('Client seed (in bytes):', clientSeedBytes32);
 		console.log('Result:', result);
 
 		console.log('betmoney:', toWei(betMoney).toString());
+		console.log('gameId:', gameId);
 
 		const playerWin = (betSide.toString() === result.toString());
 
@@ -85,7 +92,7 @@ router
 			wallet,
 			private_key,
 			tokenAddress,
-			betMoney,
+			'0',
 			nonce,
 			txData
 		);

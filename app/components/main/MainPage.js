@@ -59,14 +59,14 @@ export default class MainPage extends Component {
 			tlpRecipient
 		} = this.state;
 
-		const tokenInstance = new web3.eth.Contract(tulipABI, tokenAddress);
+		// const tokenInstance = new web3.eth.Contract(tulipABI, tokenAddress);
 
-		tokenInstance
-			.methods
-			.transfer(tlpRecipient, toWei(tlpForTransfer))
-			.send({
-				from: currentAccount
-			});
+		/* tokenInstance
+		   .methods
+		   .transfer(tlpRecipient, toWei(tlpForTransfer))
+		   .send({
+		   from: currentAccount
+		   });*/
 	}
 
 	handleInputChange(whichState, evt) {

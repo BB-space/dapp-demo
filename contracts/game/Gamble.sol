@@ -12,7 +12,7 @@ contract Gamble {
 					address player,
 					bytes32 dealerHash,
 					bytes32 userSeed,
-					uint bet,
+					uint256 bet,
 					bytes32 dealerSeed,
 					bool win,
 					bytes data) public returns(bool);

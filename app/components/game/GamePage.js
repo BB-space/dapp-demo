@@ -51,9 +51,7 @@ export default class GamePage extends Component {
 			prevClientSeedBytes32: '',
 			prevHashedServerSeed: '',
 			prevBetMoney: '',
-			prevBetSide: '',
-			gameInstance: new web3.eth.Contract(gameAbi, gameAddress),
-			tokenInstance: new web3.eth.Contract(tokenAbi, tokenAddress)
+			prevBetSide: ''
 		};
 	}
 
@@ -153,58 +151,60 @@ export default class GamePage extends Component {
 		} = this.state;
 
 		return (
-			<div className="panel panel-default">
-				<div className="panel-heading">
-					Game - 0 or 1
-				</div>
-				<div className="panel-body">
-
-					<ul>
-						<li>
-							<b>Hashed Server Seed</b>
-							<span>: { hashedServerSeed } </span>
-							<button onClick={fetchHashedServerSeed}>Get Other One</button>
-						</li>
-						<li>
-							<b>Client Seed</b><span>: {' '}</span>
-							<input value={clientSeed}
-								   onChange={this.handleClientSeedChange} />
-						</li>
-						<li>
-							<div><b>Your Bet:</b></div>
-							<input value={betMoney}
-								   onChange={this.handleBetMoneyChange} /> TLP on {' '}
-							<input type="radio"
-								   name="gender"
-								   value="0"
-							       onChange={this.handleBetSideChange}
-								   checked={betSide === '0'} />0
-							{' or '}
-							<input type="radio"
-								   name="gender"
-								   value="1"
-							       onChange={this.handleBetSideChange}
-								   checked={betSide === '1'}/>1
-						</li>
-					</ul>
-					<button
-						className="btn btn-default"
-						onClick={this.handlePlayBtnClick}>Play</button>
-
-					<div className="text-center">
-						<div>Result:</div>
-						<span style={{fontSize: 32}}>{prevResult}</span>
+			<div className="col-md-12">
+				<div className="panel panel-default">
+					<div className="panel-heading">
+						Game - 0 or 1
 					</div>
+					<div className="panel-body">
 
-					<div className="text-center">
-						<div>Client Seed: {prevClientSeed}</div>
-						<div>Server Seed: {prevServerSeed}</div>
-						<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
-						<div>Your Bet Side: {prevBetSide}</div>
-						<div>Your Bet Money: {prevBetMoney}</div>
-						<button onClick={this.handleClickFinalze}>Finalize</button>
+						<ul>
+							<li>
+								<b>Hashed Server Seed</b>
+								<span>: { hashedServerSeed } </span>
+								<button onClick={fetchHashedServerSeed}>Get Other One</button>
+							</li>
+							<li>
+								<b>Client Seed</b><span>: {' '}</span>
+								<input value={clientSeed}
+									   onChange={this.handleClientSeedChange} />
+							</li>
+							<li>
+								<div><b>Your Bet:</b></div>
+								<input value={betMoney}
+									   onChange={this.handleBetMoneyChange} /> TLP on {' '}
+								<input type="radio"
+									   name="gender"
+									   value="0"
+									   onChange={this.handleBetSideChange}
+									   checked={betSide === '0'} />0
+								{' or '}
+								<input type="radio"
+									   name="gender"
+									   value="1"
+									   onChange={this.handleBetSideChange}
+									   checked={betSide === '1'}/>1
+							</li>
+						</ul>
+						<button
+							className="btn btn-default"
+							onClick={this.handlePlayBtnClick}>Play</button>
+
+						<div className="text-center">
+							<div>Result:</div>
+							<span style={{fontSize: 32}}>{prevResult}</span>
+						</div>
+
+						<div className="text-center">
+							<div>Client Seed: {prevClientSeed}</div>
+							<div>Server Seed: {prevServerSeed}</div>
+							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
+							<div>Your Bet Side: {prevBetSide}</div>
+							<div>Your Bet Money: {prevBetMoney}</div>
+							<button onClick={this.handleClickFinalze}>Finalize</button>
+						</div>
+
 					</div>
-
 				</div>
 			</div>
 		);
