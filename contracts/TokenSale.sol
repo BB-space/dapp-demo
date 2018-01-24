@@ -26,7 +26,7 @@ contract TokenSale {
    * @param amount amount of tokens purchased
    */
   event TokenPurchase(address indexed purchaser, address indexed beneficiary, uint256 value, uint256 amount);
-  
+
   function TokenSale(address tokenAddress,
 					 uint256 _rate,
 					 address _wallet) {
@@ -41,7 +41,13 @@ contract TokenSale {
   }
 
   // low level token purchase function
+  event BuyTokens(
+    address beneficiary
+  );
   function buyTokens(address beneficiary) public payable {
+    BuyTokens(
+      beneficiary
+    );
     require(beneficiary != address(0));
     require(msg.value != 0);
 
@@ -58,7 +64,6 @@ contract TokenSale {
 
     forwardFunds();
   }
-
   function forwardFunds() internal {
     seller.transfer(msg.value);
   }
