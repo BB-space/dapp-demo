@@ -6,8 +6,11 @@ import { generateRandomString,
 		 stringToBytes32,
 		 toWei } from '../../common/utils';
 import { makeSignedTransaction } from '../utils';
+import { tokenAddress,
+		 gameAddress } from '../../common/constants/addresses';
 
-const tokenABI = require('../../build/contracts/Tulip.json').abi;
+
+const tokenABI = require('../../../build/contracts/Tulip.json').abi;
 
 
 
@@ -20,12 +23,6 @@ let games = {};
 let gameId = 0;
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
-
-// const gameAddress = '0x2a8ed75eda665181910976aa105b2356b49de8c6';
-// const tokenAddress = '';
-
-const gameAddress = require('../../build/contracts/OddEven.json')['networks']['6000']['address'];
-const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['6000']['address'];
 
 
 

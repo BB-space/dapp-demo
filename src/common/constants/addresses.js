@@ -10,9 +10,9 @@ const addresses = {
 		game: '0x9eb780637d57456ee1bdd72e14ad4873cd1fc747'
 	},
 	private: {
-		token: '',
-		tokenSale: '',
-		game: ''
+		token: require('../../../build/contracts/Tulip.json')['networks']['6000']['address'],
+		tokenSale: require('../../../build/contracts/TokenSale.json')['networks']['6000']['address'],
+		game: require('../../../build/contracts/OddEven.json')['networks']['6000']['address']
 	}
 };
 

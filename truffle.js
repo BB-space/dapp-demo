@@ -3,7 +3,7 @@ module.exports = {
 		development: {
 			host: "127.0.0.1",
 			port: 8545,
-			network_id: "1516328570173"
+			network_id: "6000"
 		},
 		rinkeby: {
 			host: "localhost", // Connect to geth on the specified

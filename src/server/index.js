@@ -10,7 +10,7 @@ const Koa					= require('koa'),
 	  gameRoutes			= require('./routes/games'),
 	  authRoutes			= require('./routes/auth'),
 	  ethRoutes				= require('./routes/eth'),
-	  webpackConfig			= require('../webpack.config');
+	  webpackConfig			= require('../../webpack.config');
 
 
 

@@ -5,14 +5,14 @@ import { getAccountStatus } from '../../actions/ethStateActions';
 import { fromWei, toWei } from '../../utils/misc';
 import { issuerAddress,
 		 tokenAddress,
-		 gameAddress } from '../../constants/addresses';
+		 gameAddress } from '../../../common/constants/addresses';
 import SignUpPage from '../auth/SignUpPage';
 import GamePage from '../game/GamePage';
 import TokenPurchaseSection from '../token/TokenPurchaseSection';
 import ValidationSection from '../game/ValidationSection';
 
 
-import {abi as tulipABI} from '../../../build/contracts/Tulip.json';
+import {abi as tulipABI} from '../../../../build/contracts/Tulip.json';
 
 
 

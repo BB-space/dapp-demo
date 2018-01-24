@@ -1,24 +1,21 @@
 const Router				= require('koa-router'),
 	  Web3					= require('web3'),
 	  
-	  tokenABI				= require('../../build/contracts/Tulip.json').abi,
-	  tokenSaleABI			= require('../../build/contracts/TokenSale.json').abi;
+	  tokenABI				= require('../../../build/contracts/Tulip.json').abi,
+	  tokenSaleABI			= require('../../../build/contracts/TokenSale.json').abi;
 
 import { makeSignedTransaction } from '../utils';
+import { tokenAddress,
+		 tokenSaleAddress } from '../../common/constants/addresses';
+import { nodeLocation } from '../../common/constants/config';
 
 
 const router = new Router();
-const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+const web3 = new Web3(
+	new Web3.providers.WebsocketProvider(nodeLocation)
+);
 
 const BASE_URL = '/api/eth';
-
-/* const tokenAddress = '0x47ac6bcdf8c345cc4c0b53df3a1d7dfbc9c76cd1';
- * const tokenSaleAddress = '0xf9be640d44f66b80669326e6e26aa41174f36b01';*/
-
-const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['6000']['address'];
-const tokenSaleAddress = require('../../build/contracts/TokenSale.json')['networks']['6000']['address'];
-
-
 
 
 router.get(`${BASE_URL}/balance`, async (ctx) => {

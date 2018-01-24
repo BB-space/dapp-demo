@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Web3 from 'web3';
 import { buyTokens } from '../../actions/ethStateActions';
-import { crowdsaleAddress } from '../../constants/addresses';
+import { crowdsaleAddress } from '../../../common/constants/addresses';
 import { toWei } from '../../utils/misc';
 
-import {abi as tokenSaleABI} from '../../../build/contracts/TokenSale.json';
+import {abi as tokenSaleABI} from '../../../../build/contracts/TokenSale.json';
 
 const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 
