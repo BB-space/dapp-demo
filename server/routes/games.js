@@ -21,13 +21,13 @@ let decryptionMap = {};
 let games = {};
 let gameId = 0;
 
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 
 // const gameAddress = '0x2a8ed75eda665181910976aa105b2356b49de8c6';
 // const tokenAddress = '';
 
-const gameAddress = require('../../build/contracts/OddEven.json')['networks']['1516714730290']['address'];
-const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['1516714730290']['address'];
+const gameAddress = require('../../build/contracts/OddEven.json')['networks']['6000']['address'];
+const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['6000']['address'];
 
 
 
@@ -37,7 +37,7 @@ router
 		const hashed = keccak256(stringToBytes32(str));
 
 		decryptionMap[hashed] = str;
-		
+
 		ctx.body = { hashed_seed: hashed };
 	})
 	.post(`${BASE_URL}`, async ctx => {
@@ -46,7 +46,7 @@ router
 			wallet,
 			private_key
 		} = user;
-		
+
 		const {
 			hashedServerSeed,
 			clientSeed,
@@ -58,7 +58,7 @@ router
 		const serverSeed = decryptionMap[hashedServerSeed];
 		const serverSeedBytes32 = stringToBytes32(serverSeed);
 		const result = reconstructResult(serverSeed, clientSeed);
-		
+
 		console.log('Server seed:', serverSeed);
 		console.log('Server seed (in bytes):', serverSeedBytes32);
 		console.log('Client seed (in bytes):', clientSeedBytes32);
@@ -101,7 +101,7 @@ router
 			console.log('hash');
 			console.log(hash);
 		});
-		
+
 		tran.on('confirmation', (confirmationNumber, receipt) => {
 			console.log('confirmation: ' + confirmationNumber);
 		});
@@ -121,7 +121,7 @@ router
 			serverSeed,
 			serverSeedBytes32,
 			result,
-			betSide,			
+			betSide,
 			betMoney,
 			playerWin,
 			tran

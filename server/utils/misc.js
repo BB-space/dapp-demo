@@ -3,7 +3,7 @@ const MersenneTwister = require('mersennetwister');
 const BigNumber = require('bignumber.js');
 const Tx = require('ethereumjs-tx');
 
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 
 
 function fromWei(amtInWei) {

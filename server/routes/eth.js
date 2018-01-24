@@ -7,15 +7,15 @@ const Router				= require('koa-router'),
 
 
 const router = new Router();
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 
 const BASE_URL = '/api/eth';
 
 /* const tokenAddress = '0x47ac6bcdf8c345cc4c0b53df3a1d7dfbc9c76cd1';
  * const tokenSaleAddress = '0xf9be640d44f66b80669326e6e26aa41174f36b01';*/
 
-const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['1516714730290']['address'];
-const tokenSaleAddress = require('../../build/contracts/TokenSale.json')['networks']['1516714730290']['address'];
+const tokenAddress = require('../../build/contracts/Tulip.json')['networks']['6000']['address'];
+const tokenSaleAddress = require('../../build/contracts/TokenSale.json')['networks']['6000']['address'];
 
 
 
@@ -33,7 +33,7 @@ router.get(`${BASE_URL}/balance`, async (ctx) => {
 	}
 
 	const ethBalance = await web3.eth.getBalance(wallet);
-	
+
 	const tokenInstance = new web3.eth.Contract(tokenABI, tokenAddress);
 	const tokenBalance = await tokenInstance
 		.methods
@@ -58,9 +58,9 @@ router.post(`${BASE_URL}/tokenpurchase`, async (ctx) => {
 		ctx.body = { status: 'not logged in' }
 		return false;
 	}
-	
+
 	const tokenSaleInstance = new web3.eth.Contract(tokenSaleABI, tokenSaleAddress);
-	
+
 	const txData = tokenSaleInstance
 		.methods
 		.buyTokens(wallet)
@@ -86,7 +86,7 @@ router.post(`${BASE_URL}/tokenpurchase`, async (ctx) => {
 		console.log('hash');
 		console.log(hash);
 	});
-	
+
 	tran.on('confirmation', (confirmationNumber, receipt) => {
 		console.log('confirmation: ' + confirmationNumber);
 	});

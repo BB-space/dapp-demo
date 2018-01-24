@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import Web3 from 'web3';
 import {
 	fetchHashedServerSeed,
 	setClientSeed,
@@ -20,7 +21,7 @@ import {
 
 import { abi as gameAbi } from '../../../build/contracts/OddEven.json';
 import { abi as tokenAbi } from '../../../build/contracts/Tulip.json';
-
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
 //clientSeed 를 무조건 hex of length 64 로 강제 하고 있는데 ui가 별로면 sha3 태운걸로 하면됨
 
 
@@ -58,7 +59,33 @@ export default class GamePage extends Component {
 	componentDidMount() {
 		this.props.fetchHashedServerSeed();
 		this.props.setClientSeed(generateRandomString());
+		// this.watchContractOddEvenPlayGame();
+		this.watchContractOddEven();
 	}
+	watchContractOddEven(){
+		const oddEven = new web3.eth.Contract(gameAbi,gameAddress)
+		oddEven.events.allEvents(
+			(error, result)=>{
+				if(error){
+					console.log("error",error);
+				}else{
+					console.log("=======================")
+					console.log("event",result.event)
+					console.log("returnValues",result.returnValues)
+					console.log("=======================")
+				}
+			}
+		)
+	}
+
+	// watchContractOddEvenPlayGame(){
+	// 	const oddEven = new web3.eth.Contract(gameAbi,gameAddress)
+	// 	const events = oddEven.events;
+	// 	events.PlayGame((error,result)=>{
+	// 		console.log("error",error)
+	// 		console.log("result",result)
+	// 	})
+	// }
 
 	handleClientSeedChange = (evt) => {
 		const newVal = evt.target.value;
@@ -102,7 +129,7 @@ export default class GamePage extends Component {
 			prevBetMoney: betMoney,
 			prevHashedServerSeed: this.props.hashedServerSeed
 		});
-		
+
 		this.props.fetchHashedServerSeed();
 		this.props.setClientSeed(generateRandomString());
 	}
@@ -115,11 +142,11 @@ export default class GamePage extends Component {
 			prevBetSide,
 			prevGameId
 		} = this.state;
-		
+
 		const {
 			account
 		} = this.props;
-		
+
 		const win = parseInt(prevResult) === parseInt(prevBetSide);
 
 		await gameInstance
