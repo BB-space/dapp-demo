@@ -1,13 +1,11 @@
-const Router = require('koa-router');
-const Web3 = require('web3');
-const {
-	generateRandomString,
-	keccak256,
-	reconstructResult,
-	stringToBytes32,
-	makeSignedTransaction,
-	toWei
-} = require('../utils/misc.js');
+import Router from 'koa-router';
+import Web3 from 'web3';
+import { generateRandomString,
+		 keccak256,
+		 reconstructResult,
+		 stringToBytes32,
+		 toWei } from '../../common/utils';
+import { makeSignedTransaction } from '../utils';
 
 const tokenABI = require('../../build/contracts/Tulip.json').abi;
 

@@ -1,9 +1,10 @@
 const Router				= require('koa-router'),
 	  Web3					= require('web3'),
-	  makeSignedTransaction	= require('../utils/misc').makeSignedTransaction,
+	  
 	  tokenABI				= require('../../build/contracts/Tulip.json').abi,
 	  tokenSaleABI			= require('../../build/contracts/TokenSale.json').abi;
 
+import { makeSignedTransaction } from '../utils';
 
 
 const router = new Router();

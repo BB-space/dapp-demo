@@ -7,9 +7,12 @@
     "test": "test"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/index.js",
-    "testrpc": "ganache-cli -i 6000"
+	"babel-cli": "./node_modules/babel-cli/bin/babel-node.js",
+	"testrpc": "ganache-cli -i 6000",
+	"start": "npm run dev:private",
+	"dev": "nodemon --exec npm run babel-cli -- src/server/index.js",
+	"dev:private": "ETH_ENV=private npm run dev",
+	"dev:testnet": "ETH_ENV=testnet npm run dev"
   },
   "author": "",
   "license": "ISC",

@@ -10,7 +10,7 @@ module.exports = {
         'webpack/hot/only-dev-server',
 		'babel-polyfill',
         'whatwg-fetch',
-		'./app/index.js',
+		'./src/app/index.js',
 	],
     target: 'web',
     output: {
@@ -21,7 +21,7 @@ module.exports = {
     resolve: {
         alias: {},
         modules: [
-            path.join(__dirname, 'app'),
+            path.join(__dirname, 'src'),
             'node_modules'
         ],
         extensions: ['.js', '.jsx', '.json']
@@ -35,7 +35,7 @@ module.exports = {
         }),
         new webpack.NoEmitOnErrorsPlugin(),
 		new HtmlWebpackPlugin({
-            template: './app/index.html',
+            template: './src/app/index.html',
             filename: 'index.html'
 		})
 	],
@@ -89,7 +89,7 @@ module.exports = {
                         options: {
 							sourceMap: true,
                             includePaths: [
-                                path.resolve(__dirname, 'app', 'stylesheets'),
+                                path.resolve(__dirname, 'src', 'app', 'stylesheets'),
 								path.resolve(__dirname, './node_modules/compass-mixins/lib')
                             ]
                         }
