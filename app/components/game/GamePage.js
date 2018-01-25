@@ -21,6 +21,9 @@ import {
 
 import { abi as gameAbi } from '../../../build/contracts/OddEven.json';
 import { abi as tokenAbi } from '../../../build/contracts/Tulip.json';
+
+
+
 const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 //clientSeed 를 무조건 hex of length 64 로 강제 하고 있는데 ui가 별로면 sha3 태운걸로 하면됨
 
@@ -45,7 +48,7 @@ export default class GamePage extends Component {
 		super(props);
 
 		this.state = {
-			prevResult: '',
+			prevResult: [],
 			prevServerSeed: '',
 			prevServerSeedBytes32: '',
 			prevClientSeed: '',
@@ -159,6 +162,71 @@ export default class GamePage extends Component {
 			.send({from: account});
 	}
 
+	getDiceComponent(numbers) {
+		const dices = [
+			(
+				<div className="first-face">
+					<span className="pip" />
+				</div>
+			), (
+				<div className="second-face">
+					<span className="pip" />
+					<span className="pip" />
+				</div>
+			), (
+				<div className="third-face">
+					<span className="pip" />
+					<span className="pip" />
+					<span className="pip" />
+				</div>
+			), (
+				<div className="fourth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			), (
+				<div className="fifth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			), (
+				<div className="sixth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			)
+		];
+
+		return (
+			<div className="dice-box">
+				{ numbers.map(e => dices[e-1]) }
+			</div>
+		)
+	}
+
 	render() {
 		const {
 			hashedServerSeed,
@@ -204,13 +272,13 @@ export default class GamePage extends Component {
 									   name="gender"
 									   value="0"
 									   onChange={this.handleBetSideChange}
-									   checked={betSide === '0'} />0
+									   checked={betSide === '0'} />Even
 								{' or '}
 								<input type="radio"
 									   name="gender"
 									   value="1"
 									   onChange={this.handleBetSideChange}
-									   checked={betSide === '1'}/>1
+									   checked={betSide === '1'}/>Odd
 							</li>
 						</ul>
 						<button
@@ -219,7 +287,11 @@ export default class GamePage extends Component {
 
 						<div className="text-center">
 							<div>Result:</div>
-							<span style={{fontSize: 32}}>{prevResult}</span>
+							{ this.getDiceComponent(prevResult) }
+							
+							<span style={{fontSize: 32}}>
+								{prevResult.length > 0 ? prevResult.reduce((a,b) => a+b) : ''}
+							</span>
 						</div>
 
 						<div className="text-center">

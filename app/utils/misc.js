@@ -67,7 +67,11 @@ export function reconstructResult(serverSeed, clientSeed) {
 	const mt = new MersenneTwister();
 	mt.seedArray(seedsCombined);
 
-	return mt.random() < 0.5 ? 0 : 1;
+	return [
+		Math.floor(mt.random() * 6) + 1,
+		Math.floor(mt.random() * 6) + 1,
+		Math.floor(mt.random() * 6) + 1
+	];
 }
 
 export function asciiToHex(str) {

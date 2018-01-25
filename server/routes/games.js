@@ -67,7 +67,7 @@ router
 		console.log('betmoney:', toWei(betMoney).toString());
 		console.log('gameId:', gameId);
 
-		const playerWin = (betSide.toString() === result.toString());
+		const playerWin = (betSide === (result[0] + result[1] + result[2]) % 2);
 
 		const tokenInstance = new web3.eth.Contract(tokenABI, tokenAddress);
 		const txData = tokenInstance
