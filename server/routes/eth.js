@@ -7,7 +7,7 @@ const Router				= require('koa-router'),
 
 
 const router = new Router();
-const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 
 const BASE_URL = '/api/eth';
 

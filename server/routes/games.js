@@ -21,7 +21,7 @@ let decryptionMap = {};
 let games = {};
 let gameId = 0;
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 
 // const gameAddress = '0x2a8ed75eda665181910976aa105b2356b49de8c6';
 // const tokenAddress = '';
