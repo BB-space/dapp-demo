@@ -9,7 +9,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/index.js",
-    "testrpc": "ganache-cli -i 6000"
+    "testrpc": "ganache-cli -i 6000 -m \"dead fish racket soul plunger dirty boats cracker mammal nicholas cage\" --db ./chainDB"
   },
   "author": "",
   "license": "ISC",
