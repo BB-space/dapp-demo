@@ -244,7 +244,11 @@ export default class GamePage extends Component {
 			prevBetMoney,
 			prevHashedServerSeed
 		} = this.state;
-
+		const result = prevResult.length === 3 ? prevResult.reduce((a,b)=>{return a+b}) : "not bet"
+		const resultText = result==="not bet" ? "" : result % 2 === 1 ? "odd" :"even"
+		const prevBetSideText = parseInt(prevBetSide) === 1 ? "odd" : parseInt(prevBetSide) === 0 ? "even" : ""
+		const win = result === "not bet" ? "" : result % 2 == parseInt(prevBetSide) ? "win" : "loose"
+		debugger
 		return (
 			<div className="col-md-12">
 				<div className="panel panel-default">
@@ -290,12 +294,12 @@ export default class GamePage extends Component {
 							{ this.getDiceComponent(prevResult) }
 
 							<span style={{fontSize: 32}}>
-								{prevResult.length > 0 ? prevResult.reduce((a,b) => a+b) : ''}
+								{result} ({resultText})
 							</span>
 						</div>
 
 						<div className="text-center">
-							<div style={{fontSize:30}}>Your Bet Side: {prevBetSide}</div>
+							<div style={{fontSize:30}}>Your Bet Side: {prevBetSideText} ({win})</div>
 							<div style={{fontSize:30}}>Your Bet Money: {prevBetMoney}</div>
 							<div>Client Seed: {prevClientSeed}</div>
 							<div>Server Seed: {prevServerSeed}</div>
