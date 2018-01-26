@@ -248,7 +248,6 @@ export default class GamePage extends Component {
 		const resultText = result==="not bet" ? "" : result % 2 === 1 ? "odd" :"even"
 		const prevBetSideText = parseInt(prevBetSide) === 1 ? "odd" : parseInt(prevBetSide) === 0 ? "even" : ""
 		const win = result === "not bet" ? "" : result % 2 == parseInt(prevBetSide) ? "win" : "loose"
-		debugger
 		return (
 			<div className="col-md-12">
 				<div className="panel panel-default">
