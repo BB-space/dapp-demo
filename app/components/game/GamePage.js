@@ -288,18 +288,18 @@ export default class GamePage extends Component {
 						<div className="text-center">
 							<div>Result:</div>
 							{ this.getDiceComponent(prevResult) }
-							
+
 							<span style={{fontSize: 32}}>
 								{prevResult.length > 0 ? prevResult.reduce((a,b) => a+b) : ''}
 							</span>
 						</div>
 
 						<div className="text-center">
+							<div style={{fontSize:30}}>Your Bet Side: {prevBetSide}</div>
+							<div style={{fontSize:30}}>Your Bet Money: {prevBetMoney}</div>
 							<div>Client Seed: {prevClientSeed}</div>
 							<div>Server Seed: {prevServerSeed}</div>
 							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
-							<div>Your Bet Side: {prevBetSide}</div>
-							<div>Your Bet Money: {prevBetMoney}</div>
 						</div>
 
 					</div>
