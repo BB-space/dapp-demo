@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import Web3 from 'web3';
 import { getAccountStatus } from '../../actions/ethStateActions';
 import { fromWei, toWei } from '../../utils/misc';
-import { issuerAddress,
-		 tokenAddress,
-		 gameAddress } from '../../../common/constants/addresses';
+import {
+	tokenAddress,
+	tokenSaleAddress,
+	gameAddress,
+	tokenABI,
+	tokenSaleABI,
+	gameABI
+} from '../../../common/constants/contracts';
 import SignUpPage from '../auth/SignUpPage';
 import GamePage from '../game/GamePage';
 import TokenPurchaseSection from '../token/TokenPurchaseSection';
 import ValidationSection from '../game/ValidationSection';
 
 
-import {abi as tulipABI} from '../../../../build/contracts/Tulip.json';
 
-
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 
 @connect(
 	(state, ownProps) => ({
@@ -42,8 +47,35 @@ export default class MainPage extends Component {
 		};
 
 		this.refreshStatus();
-    }
-
+  }
+	componentDidMount(){
+		this.watchContractOddEven();
+		this.watchContractCrowdSale();
+	}
+	watchContractOddEven(){
+		const oddEven = new web3.eth.Contract(gameABI,gameAddress)
+		oddEven.events.allEvents(
+			(error, result)=>{
+				if(error){
+					console.log("error",error);
+				}else{
+					this.refreshStatus();
+				}
+			}
+		)
+	}
+	watchContractCrowdSale(){
+		const tokenSale = new web3.eth.Contract(tokenSaleABI, tokenSaleAddress)
+		tokenSale.events.allEvents(
+			(error, result)=>{
+				if(error){
+					console.log("error",error);
+				}else{
+					this.refreshStatus();
+				}
+			}
+		)
+	}
 	refreshStatus = () => {
 		this.props.getAccountStatus(tokenAddress);
 	}
@@ -98,7 +130,7 @@ export default class MainPage extends Component {
 				</div>
 
 				{!isAuthenticated && <SignUpPage />}
-				
+
 				<div className="row">
 					<div className="col-md-6">
 						<div className="panel panel-default">
@@ -124,7 +156,7 @@ export default class MainPage extends Component {
 										className="btn btn-sm btn-default"
 										onClick={this.sendTLP}>Send</button>
 										</li>
-									  */}						
+									  */}
 									<button
 										className="btn btn-default pull-right"
 										onClick={this.refreshStatus}>Refresh</button>
@@ -137,7 +169,7 @@ export default class MainPage extends Component {
 						<TokenPurchaseSection />
 					</div>
 				</div>
-				
+
 				<div className="row">
 					<GamePage />
 					<ValidationSection />

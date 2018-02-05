@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Web3 from 'web3';
 import { buyTokens } from '../../actions/ethStateActions';
-import { crowdsaleAddress } from '../../../common/constants/addresses';
+import { crowdsaleAddress } from '../../../common/constants/contracts';
 import { toWei } from '../../utils/misc';
 
 import {abi as tokenSaleABI} from '../../../../build/contracts/TokenSale.json';
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 
 @connect(
 	(state, ownProps) => ({
@@ -30,12 +30,11 @@ export default class TokenPurchaseSection extends Component {
 		};
 	}
 	componentDidMount(){
-		this.watchContractCrowdSale();
+		// this.watchContractCrowdSale();
 	}
 
 	watchContractCrowdSale(){
 		const tokenSale = new web3.eth.Contract(tokenSaleABI,crowdsaleAddress)
-		debugger
 		tokenSale.events.allEvents(
 			(error, result)=>{
 				if(error){

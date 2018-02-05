@@ -1,13 +1,17 @@
 import Router from 'koa-router';
 import Web3 from 'web3';
-import { generateRandomString,
-		 keccak256,
-		 reconstructResult,
-		 stringToBytes32,
-		 toWei } from '../../common/utils';
+import {
+	generateRandomString,
+	keccak256,
+	reconstructResult,
+	stringToBytes32,
+	toWei
+} from '../../common/utils';
 import { makeSignedTransaction } from '../utils';
-import { tokenAddress,
-		 gameAddress } from '../../common/constants/addresses';
+import { 
+	tokenAddress,
+	gameAddress 
+} from '../../common/constants/contracts';
 
 
 const tokenABI = require('../../../build/contracts/Tulip.json').abi;
@@ -22,7 +26,7 @@ let decryptionMap = {};
 let games = {};
 let gameId = 0;
 
-const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8545'));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 
 
 
@@ -62,7 +66,7 @@ router
 		console.log('betmoney:', toWei(betMoney).toString());
 		console.log('gameId:', gameId);
 
-		const playerWin = (betSide.toString() === result.toString());
+		const playerWin = (betSide.toString() === ((result[0] + result[1] + result[2]) % 2).toString());
 
 		const tokenInstance = new web3.eth.Contract(tokenABI, tokenAddress);
 		const txData = tokenInstance

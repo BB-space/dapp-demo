@@ -28,7 +28,7 @@ export function keccak256(hex) {
 	return web3.utils.soliditySha3(hex);
 }
 
-function stringToBytes32(str) {
+export function stringToBytes32(str) {
 	// cuts last 64 bits from hex if longer
 	const hex = web3.utils.asciiToHex(str).substr(2);
 	return '0x' + hex.substr(-64).padStart(64, '0');

@@ -10,11 +10,76 @@ export default class ValidationSection extends Component {
 			clientSeed: '',
 			serverSeed: '',
 			hashedServerSeed: '',
-			result: ''
+			result: []
 		};
 
 		this.handleClientSeedChange = this.handleInputChange.bind(this, 'clientSeed');
 		this.handleServerSeedChange = this.handleInputChange.bind(this, 'serverSeed');
+	}
+
+	getDiceComponent(numbers) {
+		const dices = [
+			(
+				<div className="first-face">
+					<span className="pip" />
+				</div>
+			), (
+				<div className="second-face">
+					<span className="pip" />
+					<span className="pip" />
+				</div>
+			), (
+				<div className="third-face">
+					<span className="pip" />
+					<span className="pip" />
+					<span className="pip" />
+				</div>
+			), (
+				<div className="fourth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			), (
+				<div className="fifth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			), (
+				<div className="sixth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			)
+		];
+
+		return (
+			<div className="dice-box validation">
+				{ numbers.map(e => dices[e-1]) }
+			</div>
+		)
 	}
 	
 	handleInputChange(whichState, evt) {
@@ -67,7 +132,8 @@ export default class ValidationSection extends Component {
 								Server Seed (Hashed): {hashedServerSeed}
 							</li>
 							<li>
-								Result Then: {result}
+								Result Then:
+								{ this.getDiceComponent(result) }
 							</li>
 						</ul>
 					</div>
