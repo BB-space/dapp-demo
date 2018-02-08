@@ -1,36 +1,36 @@
-const Router				= require('koa-router'),
-	  Web3					= require('web3'),
-	  tokenABI				= require('../../../build/contracts/Tulip.json').abi,
-	  tokenSaleABI			= require('../../../build/contracts/TokenSale.json').abi;
+import Router from 'koa-router';
+import {abi as tokenABI} from '../../../build/contracts/Tulip.json';
+import {abi as tokenSaleABI} from '../../../build/contracts/TokenSale.json';
 
 import { makeSignedTransaction } from '../utils';
-import { tokenAddress,
-		 tokenSaleAddress } from '../../common/constants/contracts';
+import {
+	tokenAddress,
+	tokenSaleAddress
+} from '../../common/constants/contracts';
 import { nodeLocation } from '../../common/constants/config';
 
 
 const router = new Router();
 
-const web3 = new Web3(
-	new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545')
-);
-// node location
 
 
 const BASE_URL = '/api/eth';
 
 
 router.get(`${BASE_URL}/balance`, async (ctx) => {
+	if (!ctx.isAuthenticated()) {
+		ctx.body = {
+			success: false,
+			status: 'not logged in'
+		}
+		return false;
+	}
+	
 	const user = ctx.state.user;
 	const {
 		wallet,
 		private_key
 	} = user;
-
-	if (!ctx.isAuthenticated()) {
-		ctx.body = { status: 'not logged in' }
-		return false;
-	}
 
 	const ethBalance = await web3.eth.getBalance(wallet);
 
@@ -41,6 +41,7 @@ router.get(`${BASE_URL}/balance`, async (ctx) => {
 		.call();
 
 	ctx.body = {
+		success: true,
 		ethBalance,
 		tokenBalance
 	};

@@ -1,6 +1,6 @@
 import actionTypes from '../constants/actionTypes';
 import { request } from '../utils/fetch';
-import { toWei } from '../utils/misc';
+import { toWei } from '../../common/utils';
 
 
 
@@ -31,8 +31,11 @@ export function getAccountStatus(tokenAddress='') {
     return async (dispatch, getState) => {
 		const account = getState().auth.wallet;
 		const res = await request.get(url);
-		dispatch(setEthBalance(res.ethBalance));
-		dispatch(setTokenBalance(res.tokenBalance));
+
+		if(res.success) {
+			dispatch(setEthBalance(res.ethBalance));
+			dispatch(setTokenBalance(res.tokenBalance));
+		}
 	};
 }
 

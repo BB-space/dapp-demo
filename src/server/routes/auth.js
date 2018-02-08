@@ -1,11 +1,8 @@
 const Router	= require('koa-router'),
 	  passport	= require('koa-passport'),
-	  Web3		= require('web3'),
 	  queries	= require('../db/queries/users');
 
 const router = new Router();
-const web3 = new Web3();
-
 const BASE_URL = '/api/auth';
 
 

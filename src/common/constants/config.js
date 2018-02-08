@@ -1,1 +1,1 @@
-export const nodeLocation = 'ws://localhost:8545';
+export const nodeUrl = 'ws://localhost:8545';

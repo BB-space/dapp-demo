@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import Web3 from 'web3';
 import { getAccountStatus } from '../../actions/ethStateActions';
-import { fromWei, toWei } from '../../utils/misc';
+import { fromWei, toWei } from '../../../common/utils';
+import web3 from '../../utils/web3';
 import {
 	tokenAddress,
 	tokenSaleAddress,
@@ -18,8 +18,6 @@ import TokenPurchaseSection from '../token/TokenPurchaseSection';
 import ValidationSection from '../game/ValidationSection';
 
 
-
-const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 
 @connect(
 	(state, ownProps) => ({
@@ -47,18 +45,20 @@ export default class MainPage extends Component {
 		};
 
 		this.refreshStatus();
-  }
+	}
+
 	componentDidMount(){
 		this.watchContractOddEven();
 		this.watchContractCrowdSale();
 	}
+	
 	watchContractOddEven(){
 		const oddEven = new web3.eth.Contract(gameABI,gameAddress)
 		oddEven.events.allEvents(
 			(error, result)=>{
 				if(error){
 					console.log("error",error);
-				}else{
+				} else {
 					this.refreshStatus();
 				}
 			}
@@ -70,7 +70,7 @@ export default class MainPage extends Component {
 			(error, result)=>{
 				if(error){
 					console.log("error",error);
-				}else{
+				} else{
 					this.refreshStatus();
 				}
 			}
@@ -143,7 +143,7 @@ export default class MainPage extends Component {
 									<li>내 계좌 주소: {isAuthenticated ? wallet : 'Not Connected'}</li>
 									<li>ETH 잔고: {fromWei(ethBalance).toString() || '0.0'}</li>
 									<li>내 토큰 잔고: {fromWei(tokenBalance).toString() || '0.0'}</li>
-
+									
 									{/* <li>Send {' '}
 										<input value={tlpForTransfer}
 										onChange={this.handleTlpForTransferChange} />

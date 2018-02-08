@@ -1,5 +1,4 @@
 import Router from 'koa-router';
-import Web3 from 'web3';
 import {
 	generateRandomString,
 	keccak256,
@@ -25,8 +24,6 @@ const BASE_URL = '/api/games';
 let decryptionMap = {};
 let games = {};
 let gameId = 0;
-
-const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://10.30.192.28:8545'));
 
 
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Web3 from 'web3';
 import {
 	fetchHashedServerSeed,
 	setClientSeed,
@@ -13,7 +12,8 @@ import {
 	reconstructResult,
 	toWei,
 	asciiToHex
-} from '../../utils/misc';
+} from '../../../common/utils';
+import web3 from '../../utils/web3';
 import {
 	gameAddress,
 	tokenAddress,
@@ -21,13 +21,6 @@ import {
 	tokenABI
 } from '../../../common/constants/contracts';
 
-
-
-const web3 = new Web3(
-	new Web3.providers.WebsocketProvider(
-		'ws://10.30.192.28:8545'
-	)
-);
 
 
 
@@ -68,6 +61,7 @@ export default class GamePage extends Component {
 		// this.watchContractOddEvenPlayGame();
 		this.watchContractOddEven();
 	}
+	
 	watchContractOddEven(){
 		const oddEven = new web3.eth.Contract(gameABI,gameAddress)
 		oddEven.events.allEvents(

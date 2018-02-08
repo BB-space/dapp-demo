@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { keccak256, reconstructResult, stringToBytes32 } from '../../utils/misc'
+import {
+	keccak256,
+	reconstructResult,
+	stringToBytes32
+} from '../../../common/utils';
 
 
 export default class ValidationSection extends Component {

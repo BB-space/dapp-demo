@@ -1,10 +1,5 @@
-const Web3 = require('web3');
-const Tx = require('ethereumjs-tx');
+import Tx from 'ethereumjs-tx';
 
-
-const web3 = new Web3(
-	new Web3.providers.WebsocketProvider('ws://localhost:8545')
-);
 
 export function makeSignedTransaction(
 	wallet,
@@ -19,7 +14,7 @@ export function makeSignedTransaction(
 	const rawTx = {
 		nonce,
 		gasLimit: '0xf4240',  // 1,000,000
-		gasPrice: '0x4a817c800',  // 20gwei
+		gasPrice: '0x4a817c800',  // 20 gwei
 		to: toAddress,
 		value: web3.utils.numberToHex(valueWei), // in hex
 		data: txData

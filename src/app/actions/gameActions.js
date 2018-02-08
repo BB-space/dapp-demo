@@ -1,6 +1,6 @@
 import actionTypes from '../constants/actionTypes';
 import { request } from '../utils/fetch';
-import { stringToBytes32 } from '../utils/misc';
+import { stringToBytes32 } from '../../common/utils';
 
 
 function setHashedServerSeed(hashedServerSeed) {
