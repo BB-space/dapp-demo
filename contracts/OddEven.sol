@@ -32,7 +32,7 @@ contract OddEven {
   
   event PushHashes(bytes32[] hashArray);
   
-  function pushHashes(bytes32[] hashArray) {
+  function pushHashes(bytes32[] hashArray) onlyowner {
 	PushHashes(hashArray);
 
 	for(uint i=0; i<hashArray.length; i++) {
@@ -41,8 +41,32 @@ contract OddEven {
 	}
   }
 
-  function getHashArray() returns(bytes32) {
-	return hashedDealerSeeds[0];
+  function getHashListLength() returns(uint) {
+	return hashedDealerSeeds.length;
+  }
+
+  function getHash(uint idx) returns(bytes32) {
+	return hashedDealerSeeds[idx];
+  }
+
+  function removeHash(uint idx)  returns(uint[]) onlyowner {
+	if (idx >= hashedDealerSeeds.length) return;
+
+	for (uint i=idx; i<hashedDealerSeeds.length-1; i++){
+	  hashedDealerSeeds[i] = hashedDealerSeeds[i+1];
+	}
+	delete hashedDealerSeeds[hashedDealerSeeds.length-1];
+	hashedDealerSeeds.length--;
+	
+	return hashedDealerSeeds;
+  }
+
+  function indexOf(bytes32 hash) returns(uint) {
+    uint i = 0;
+    while (values[i] != value && i < hashedDealerSeeds.length) {
+      i++;
+    }
+    return i;
   }
 
   event InitGame(bytes32 dealerHash,

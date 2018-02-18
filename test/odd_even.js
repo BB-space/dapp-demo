@@ -12,18 +12,18 @@ contract('OddEven', function(accounts) {
 	it('should assert true', async function() {
 		const oddEven = await OddEven.deployed();
 		const gameAddress = oddEven.address;
+		
+		/* await web3.eth.sendTransaction({
+		   from: web3.eth.coinbase,
+		   to: gameAddress,
+		   value: web3.toWei(0.1, 'ether')
+		   });
 
-		await web3.eth.sendTransaction({
-			from: web3.eth.coinbase,
-			to: gameAddress,
-			value: web3.toWei(1, 'ether')
-		});
+		   console.log('ether sent');*/
 
-		console.log('ether sent');
+		/* let gameEthBalance = await web3.eth.getBalance(gameAddress);
 
-		let gameEthBalance = await web3.eth.getBalance(gameAddress);
-
-		assert.equal(web3.fromWei(gameEthBalance, 'ether').toString(), '1');
+		   assert.equal(web3.fromWei(gameEthBalance, 'ether').toString(), '0.1');*/
 
 		const testSeeds = ['a very', 'strong', 'seeds'];
 		
@@ -33,7 +33,10 @@ contract('OddEven', function(accounts) {
 			e => web3.sha3(stringToBytes32(e))
 		));
 
-		const firstHash = await oddEven.getHashArray.call();
+		const length = await oddEven.getHashListLength.call();
+		console.log('length', length.toString());
+
+		const firstHash = await oddEven.getHash.call(1);
 		console.log(firstHash);
 	});
 });
