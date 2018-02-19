@@ -9,6 +9,7 @@ contract OddEven {
     address player;
     bytes32 playerSeed;
     bytes32 dealerSeed;
+	uint startTime;
     uint bet;
 	bool playerWin;
     bool finalized;
@@ -49,7 +50,7 @@ contract OddEven {
 	return hashedDealerSeeds[idx];
   }
 
-  function removeHash(uint idx)  returns(uint[]) onlyowner {
+  function removeHash(uint idx) onlyowner returns(uint[]) {
 	if (idx >= hashedDealerSeeds.length) return;
 
 	for (uint i=idx; i<hashedDealerSeeds.length-1; i++){
@@ -57,15 +58,16 @@ contract OddEven {
 	}
 	delete hashedDealerSeeds[hashedDealerSeeds.length-1];
 	hashedDealerSeeds.length--;
-	
-	return hashedDealerSeeds;
   }
 
   function indexOf(bytes32 hash) returns(uint) {
     uint i = 0;
-    while (values[i] != value && i < hashedDealerSeeds.length) {
+	
+    while (hashedDealerSeeds[i] != hash
+		   && i < hashedDealerSeeds.length) {
       i++;
     }
+	
     return i;
   }
 
@@ -88,22 +90,31 @@ contract OddEven {
 
 	// throw if contract does not have enough money
     /* if(this.balance < msg.value * 3){ */
-	/*    throw; */
+	/*    		revert(); */
 	/* } */
+
+	uint index = indexOf(dealerHash);
+
+	if(index == hashedDealerSeeds.length) {
+	  revert();
+	}
 	
-    if(games[dealerHash].player != address(0)){
-	   throw;
+    if(games[dealerHash].player != address(0)) {
+	  revert();
 	}
 
     games[dealerHash].player = player;
     games[dealerHash].playerSeed = playerSeed;
     games[dealerHash].bet = msg.value;
     games[dealerHash].data = data;
+	games[dealerHash].startTime = now;
+
+	removeHash(index);
 
 	return true;
   }
 
-  function computeHash(bytes32 _bytes32) pure returns(bytes32){
+  function computeHash(bytes32 _bytes32) pure returns(bytes32) {
     return keccak256(_bytes32);
   }
 
@@ -113,7 +124,7 @@ contract OddEven {
 	  bytes32 dealerSeed
   );
 
-  function finalize(bytes32 dealerSeedHash, bytes32 dealerSeed) {
+  function finalize(bytes32 dealerSeedHash, bytes32 dealerSeed) onlyowner {
     /*check if dealerHash == sha3(dealerSeed)*/
     /*check if player has played the game*/
     /*send money to user if modulo == bet*/
@@ -121,14 +132,16 @@ contract OddEven {
 	
     var game = games[dealerSeedHash];
 
+	
     if(game.finalized) {
-      throw;
+      revert();
     }
 	
     /* if(game.dealerHash != keccak256(dealerSeed)){ */
-    /*   throw; */
+    /*   		revert(); */
     /* } */
 
+	game.player.transfer(game.bet);
 	
     /* if(win) { */
 	/*   msg.sender.transfer(game.bet * 2); */

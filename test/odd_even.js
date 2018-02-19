@@ -33,10 +33,26 @@ contract('OddEven', function(accounts) {
 			e => web3.sha3(stringToBytes32(e))
 		));
 
-		const length = await oddEven.getHashListLength.call();
+		let length = await oddEven.getHashListLength.call();
 		console.log('length', length.toString());
 
-		const firstHash = await oddEven.getHash.call(1);
-		console.log(firstHash);
+		let hash1 = await oddEven.getHash.call(1);
+		console.log(hash1);
+
+		await oddEven.initGame(
+			hash1,
+			web3.eth.coinbase,
+			stringToBytes32('myseed'),
+			'abc',
+			{ value: web3.toWei(0.1) }
+		);
+
+		gameEthBalance = await web3.eth.getBalance(web3.eth.coinbase);
+		console.log('after init:', gameEthBalance.toString());
+		
+		await oddEven.finalize(hash1, stringToBytes32('123'))
+
+		gameEthBalance = await web3.eth.getBalance(web3.eth.coinbase);
+		console.log('after finalize:', gameEthBalance.toString());
 	});
 });
