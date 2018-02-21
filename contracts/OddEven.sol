@@ -114,8 +114,14 @@ contract OddEven {
 	return true;
   }
 
-  function computeHash(bytes32 _bytes32) pure returns(bytes32) {
-    return keccak256(_bytes32);
+  function computeHash(bytes32 _bytes32, uint nTimes) pure returns(bytes32) {
+	bytes32 hash = _bytes32;
+	
+	for(uint i=0; i < nTimes; i++) {
+	  hash = keccak256(hash);
+	}
+	
+	return hash;
   }
 
   
@@ -125,21 +131,15 @@ contract OddEven {
   );
 
   function finalize(bytes32 dealerSeedHash, bytes32 dealerSeed) onlyowner {
-    /*check if dealerHash == sha3(dealerSeed)*/
     /*check if player has played the game*/
     /*send money to user if modulo == bet*/
-    Finalize(dealerSeedHash, dealerSeed);
-	
-    var game = games[dealerSeedHash];
+	var game = games[dealerSeedHash];
 
-	
-    if(game.finalized) {
-      revert();
-    }
-	
-    /* if(game.dealerHash != keccak256(dealerSeed)){ */
-    /*   		revert(); */
-    /* } */
+	assert(computeHash(dealerSeed, 2) == dealerSeedHash);
+	assert(game.player != address(0));
+	assert(!game.finalized);
+
+	Finalize(dealerSeedHash, dealerSeed);
 
 	game.player.transfer(game.bet);
 	
