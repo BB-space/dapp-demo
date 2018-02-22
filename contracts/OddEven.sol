@@ -142,6 +142,8 @@ contract OddEven {
 	Finalize(dealerSeedHash, dealerSeed);
 
 	game.player.transfer(game.bet);
+
+	
 	
     /* if(win) { */
 	/*   msg.sender.transfer(game.bet * 2); */

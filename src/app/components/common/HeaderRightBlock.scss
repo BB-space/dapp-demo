@@ -1,0 +1,17 @@
+@import "../../stylesheets/variables";
+@import "../../stylesheets/colors";
+
+
+.header-right-block {
+	display: inline-block;
+    float: right;
+    text-align: center;
+    position: relative;
+    padding-left: 15px;
+    padding-right: 15px;
+
+    &.active {
+        background-color: $main-color;
+        color: $white;
+    }
+}

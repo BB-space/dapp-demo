@@ -12,7 +12,6 @@ import {
 	tokenSaleABI,
 	gameABI
 } from '../../../common/constants/contracts';
-import SignUpPage from '../auth/SignUpPage';
 import GamePage from '../game/GamePage';
 import TokenPurchaseSection from '../token/TokenPurchaseSection';
 import ValidationSection from '../game/ValidationSection';
@@ -125,12 +124,6 @@ export default class MainPage extends Component {
 
 		return (
 			<main>
-				<div className="page-header">
-					<h1>Sample Dapp</h1>
-				</div>
-
-				{!isAuthenticated && <SignUpPage />}
-
 				<div className="row">
 					<div className="col-md-6">
 						<div className="panel panel-default">
