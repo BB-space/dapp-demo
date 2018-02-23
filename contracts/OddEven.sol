@@ -113,8 +113,9 @@ hash related functions
     PushHashes(hashArray);
 
     for(uint i=0; i<hashArray.length; i++) {
-      // TODO: check if hash is historically already useds
-      hashedDealerSeeds.push(hashArray[i]);
+      if(games[hashArray[i]].player == address(0)){
+        hashedDealerSeeds.push(hashArray[i]);
+      }
     }
   }
 
