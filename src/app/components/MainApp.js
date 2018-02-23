@@ -5,7 +5,7 @@ import Header from './common/Header';
 import SignUpModal from './auth/SignUpModal';
 
 import '../stylesheets/style.scss';
-import 'font-awesome/css/font-awesome.min.css';
+import 'font-awesome/css/font-awesome.css';
 
 
 @connect(

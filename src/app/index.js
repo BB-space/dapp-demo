@@ -18,6 +18,6 @@ const store = configureStore(initialState);
 				{ routes }
 			</Router>
 		</Provider>,
-		document.getElementById('root')
+		document.getElementById('app')
 	);
 })();
