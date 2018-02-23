@@ -123,9 +123,9 @@ export default class MainPage extends Component {
 		} = this.state;
 
 		return (
-			<main>
+			<main className="page-container">
 				<div className="row">
-					<div className="col-md-6">
+					<div className="col-md-12">
 						<div className="panel panel-default">
 							<div className="panel-heading">
 								계좌 정보
@@ -137,19 +137,6 @@ export default class MainPage extends Component {
 									<li>ETH 잔고: {fromWei(ethBalance).toString() || '0.0'}</li>
 									<li>내 토큰 잔고: {fromWei(tokenBalance).toString() || '0.0'}</li>
 									
-									{/* <li>Send {' '}
-										<input value={tlpForTransfer}
-										onChange={this.handleTlpForTransferChange} />
-										TLP {' '}
-										to {' '}
-										<input value={tlpRecipient}
-										onChange={this.handleTlpRecipientChange} />
-										{' '}
-										<button
-										className="btn btn-sm btn-default"
-										onClick={this.sendTLP}>Send</button>
-										</li>
-									  */}
 									<button
 										className="btn btn-default pull-right"
 										onClick={this.refreshStatus}>Refresh</button>
@@ -158,9 +145,7 @@ export default class MainPage extends Component {
 						</div>
 					</div>
 
-					<div className="col-md-6">
-						<TokenPurchaseSection />
-					</div>
+
 				</div>
 
 				<div className="row">

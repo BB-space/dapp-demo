@@ -1,0 +1,44 @@
+@import "../../stylesheets/colors";
+@import "../../stylesheets/variables";
+@import "../../stylesheets/mixins";
+@import "../../stylesheets/zindex";
+
+.wrapper {
+    display: none;
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: $modal-wrapper;
+    &.open {
+        display: block;
+        visibility: visible;
+    }
+}
+
+.mask {
+    background-color: $black-opaque;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    cursor: pointer;
+}
+
+.content {
+    @extend %vertical-align;	
+    $addition : $appbar-height / 2;
+	
+    top: calc(50% + #{$addition}); /* to locate at the center of app contents*/
+    margin: auto;
+    z-index: $modal-content;
+    min-width: 320px;
+    max-width: 380px;
+    width:100%;
+    background-color: $content-background-color;
+    overflow-y: auto;
+    position: fixed;
+}
