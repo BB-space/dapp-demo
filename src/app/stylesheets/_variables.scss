@@ -1,0 +1,38 @@
+@import "./colors";
+
+
+/* Bootstrap */
+$screen-xs: 400px;
+$screen-sm: 600px;
+$screen-md: 960px;
+$screen-lg: 1280px;
+$grid-gutter-width: 10px;
+
+
+/* Colors */
+// Navy Blue
+$main-color: $teal;
+// gray
+$app-background-color: $white;
+$title-background-color: $white;
+$content-background-color: $white;
+
+
+/* App Layout */
+$appbar-height: 50px;
+
+$page-vertical-padding-xs: 10px;
+$page-vertical-padding-sm: 10px;
+
+/*common element properties */
+$radio-button-height: 20px;
+
+$map-height: 430px;
+
+$menu-card-width: 220px;
+$menu-card-height: 220px;
+
+
+/* Search Page */
+$subnav-height: 46px;
+$filter-box-height: 50px;

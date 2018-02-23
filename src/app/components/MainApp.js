@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { checkAuth } from '../actions/authActions';
+import Header from './common/Header';
 
-import 'bootstrap-loader';
 import '../stylesheets/style.scss';
+import 'font-awesome/css/font-awesome.min.css';
 
 
 @connect(
@@ -22,7 +23,8 @@ export default class MainApp extends Component {
         const { isAuthenticated } = this.props;
 
         return (
-            <div className="container">
+            <div className="app-container">
+				<Header />
 				{ this.props.children }
             </div>
         );

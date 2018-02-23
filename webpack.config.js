@@ -90,7 +90,9 @@ module.exports = {
 							sourceMap: true,
                             includePaths: [
                                 path.resolve(__dirname, 'src', 'app', 'stylesheets'),
-								path.resolve(__dirname, './node_modules/compass-mixins/lib')
+								path.resolve(__dirname, './node_modules'),
+								path.resolve(__dirname, './node_modules/compass-mixins/lib'),
+								path.resolve(__dirname, './node_modules/bootstrap-sass/assets/stylesheets')
                             ]
                         }
                     }

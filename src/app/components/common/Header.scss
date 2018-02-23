@@ -1,0 +1,40 @@
+@import "../../stylesheets/variables";
+@import "../../stylesheets/zindex";
+
+
+.app-bar {
+    position: fixed;
+    z-index: $app-bar;
+    top: 0;
+    left: 0;
+    right: 0;
+    border-bottom:1px solid $mercury;
+    width: 100%;
+    height: $appbar-height;
+
+    padding-left: 15px;
+    padding-right: 0;
+
+	background-color: $white;
+    line-height: ($appbar-height);
+}
+
+.bars-btn {
+    @media screen and (max-width:$screen-sm - 1px){
+        color: $black;
+        font-size: 12px;
+        cursor: pointer;
+    }
+    @media screen and (min-width:$screen-sm){
+        display:none;
+    }
+}
+
+.logo {
+    margin-left: 13.5px;
+
+    img {
+        vertical-align: text-top;
+        height: 16px;
+    }
+}
