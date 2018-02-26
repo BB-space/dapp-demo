@@ -44,15 +44,15 @@ if (!isBuildEnv) {
     runDevServer(frontApp);
 }
 
-/* render(frontApp, {
- *     root: isBuildEnv? buildPath : templatesPath,
- *     layout: false,
- *     viewExt: 'html',
- *     cache: false,
- *     debug: true
- * });*/
+render(frontApp, {
+    root: isBuildEnv? buildPath : templatesPath,
+    layout: false,
+    viewExt: 'html',
+    cache: false,
+    debug: true
+});
 
-// frontApp.use(renderApp);
+frontApp.use(renderApp);
 
 
 // sessions
@@ -91,18 +91,18 @@ backApp.use(gameRoutes.routes())
  *     }
  * });*/
 
-/* frontApp.listen(port, () => {
- *     console.log({
- *         port,
- *         env: process.env.NODE_ENV,
- *         pid: process.pid
- *     }, 'Front Server is listening');
- * });*/
+frontApp.listen(port, () => {
+    console.log({
+        port,
+        env: process.env.NODE_ENV,
+        pid: process.pid
+    }, 'Front Server is listening');
+});
 
 
 backApp.listen(port + 1, () => {
     console.log({
-        port: port,
+        port: port + 1,
         env: process.env.NODE_ENV,
         pid: process.pid
     }, 'Back Server is listening');

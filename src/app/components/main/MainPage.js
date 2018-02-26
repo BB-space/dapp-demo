@@ -47,34 +47,34 @@ export default class MainPage extends Component {
 	}
 
 	componentDidMount(){
-		this.watchContractOddEven();
-		this.watchContractCrowdSale();
+		//this.watchContractOddEven();
+		//this.watchContractCrowdSale();
 	}
 	
-	watchContractOddEven(){
-		const oddEven = new web3.eth.Contract(gameABI,gameAddress)
-		oddEven.events.allEvents(
-			(error, result)=>{
-				if(error){
-					console.log("error",error);
-				} else {
-					this.refreshStatus();
-				}
-			}
-		)
-	}
-	watchContractCrowdSale(){
-		const tokenSale = new web3.eth.Contract(tokenSaleABI, tokenSaleAddress)
-		tokenSale.events.allEvents(
-			(error, result)=>{
-				if(error){
-					console.log("error",error);
-				} else{
-					this.refreshStatus();
-				}
-			}
-		)
-	}
+	/* watchContractOddEven(){
+	   const oddEven = new web3.eth.Contract(gameABI,gameAddress)
+	   oddEven.events.allEvents(
+	   (error, result)=>{
+	   if(error){
+	   console.log("error",error);
+	   } else {
+	   this.refreshStatus();
+	   }
+	   }
+	   )
+	   }
+	   watchContractCrowdSale(){
+	   const tokenSale = new web3.eth.Contract(tokenSaleABI, tokenSaleAddress)
+	   tokenSale.events.allEvents(
+	   (error, result)=>{
+	   if(error){
+	   console.log("error",error);
+	   } else{
+	   this.refreshStatus();
+	   }
+	   }
+	   )
+	   }*/
 	refreshStatus = () => {
 		this.props.getAccountStatus(tokenAddress);
 	}
