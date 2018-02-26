@@ -44,15 +44,15 @@ if (!isBuildEnv) {
     runDevServer(frontApp);
 }
 
-render(frontApp, {
-    root: isBuildEnv? buildPath : templatesPath,
-    layout: false,
-    viewExt: 'html',
-    cache: false,
-    debug: true
-});
+/* render(frontApp, {
+ *     root: isBuildEnv? buildPath : templatesPath,
+ *     layout: false,
+ *     viewExt: 'html',
+ *     cache: false,
+ *     debug: true
+ * });*/
 
-frontApp.use(renderApp);
+// frontApp.use(renderApp);
 
 
 // sessions
@@ -65,7 +65,7 @@ backApp.use(bodyParser());
 // authentication
 require('./auth');
 backApp.use(passport.initialize())
-   .use(passport.session());
+	   .use(passport.session());
 
 
 // routes
@@ -76,33 +76,33 @@ backApp.use(gameRoutes.routes())
 
 
 
-frontApp.on('error', function(err) {
-    if (typeof err === 'object') {
-        if (err.message) {
-            console.log('\nError: ' + err.message);
-        }
-        if (err.stack) {
-            console.log('\nStacktrace:');
-            console.log('====================');
-            console.log(err.stack);
-        }
-    } else {
-        console.log('dumpError :: argument is not an object');
-    }
-});
+/* frontApp.on('error', function(err) {
+ *     if (typeof err === 'object') {
+ *         if (err.message) {
+ *             console.log('\nError: ' + err.message);
+ *         }
+ *         if (err.stack) {
+ *             console.log('\nStacktrace:');
+ *             console.log('====================');
+ *             console.log(err.stack);
+ *         }
+ *     } else {
+ *         console.log('dumpError :: argument is not an object');
+ *     }
+ * });*/
 
-frontApp.listen(port, () => {
-    console.log({
-        port,
-        env: process.env.NODE_ENV,
-        pid: process.pid
-    }, 'Front Server is listening');
-});
+/* frontApp.listen(port, () => {
+ *     console.log({
+ *         port,
+ *         env: process.env.NODE_ENV,
+ *         pid: process.pid
+ *     }, 'Front Server is listening');
+ * });*/
 
 
 backApp.listen(port + 1, () => {
     console.log({
-        port: port + 1,
+        port: port,
         env: process.env.NODE_ENV,
         pid: process.pid
     }, 'Back Server is listening');

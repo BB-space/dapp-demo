@@ -60,7 +60,7 @@ module.exports = {
             comments: false
         }),
         new HtmlWebpackPlugin({
-            template: '!!html-loader!templates/index.html',
+            template: '!!html-loader!src/templates/index.html',
             filename: 'index.html'
         })
     ],
@@ -119,6 +119,26 @@ module.exports = {
                         }
                     ]
                 })
+            },
+			{
+                test: /\.css$/,
+                use: [
+                    'style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true
+                        }
+                    },
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            plugins: function () {
+                                return [ require('autoprefixer') ];
+                            }
+                        }
+                    }
+                ]
             },
             {
                 test: /\.png$/,
