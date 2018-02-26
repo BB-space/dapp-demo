@@ -50,7 +50,7 @@ states
   mapping(bytes32 => Game) games;
   // maps player and playing games (not played)
   mapping(address => bytes32[]) playingGames;
-  mapping(uint => uint) betTable;
+  uint[] betTable;
   // c-level autority modifiers
   modifier onlyCeo {
     require(ceo == msg.sender);
@@ -63,7 +63,7 @@ states
 /*
 contract constructor
 */
-  function OddEven() public{
+  function OddEven() public {
     //set c-level accounts
     ceo = msg.sender;
     coo = msg.sender;
@@ -73,9 +73,10 @@ contract constructor
     setDepositConstant(3);
     setDiceFaces(8);
     setEdge(100);
+    betTable = [2,2];
   }
   /* make contract payable */
-  function() payable public{
+  function() public payable{
 
   }
 /*
@@ -92,7 +93,7 @@ autority related functions
     diceNum = _diceNum;
   }
   function setHashNum(uint _maxHashNum) public onlyCoo{
-    assert(_maxHashNum < diceNum + 1);
+    //assert(_maxHashNum > diceNum + 1);
     maxHashNum = _maxHashNum;
   }
   function setDepositConstant(uint _depositConstant) public onlyCoo{
@@ -126,6 +127,10 @@ hash related functions
   function getHash(uint idx) public constant returns(bytes32) {
     return hashedDealerSeeds[idx];
   }
+
+  function encryptSeeds(bytes32 _string) public view returns(bytes32){
+    return computeMultipleHash(_string, maxHashNum);
+  }
 /*
 betting related functions
 */
@@ -135,6 +140,10 @@ betting related functions
     address player,
     bytes32 playerSeed,
     uint[] betData
+  );
+
+  event Log(
+    uint flag
   );
   //betting function
     //input definition is exactly same as attributes of Game struct
@@ -180,6 +189,7 @@ betting related functions
   //update deposit
     deposit += depositForBet;
     removeHashFromHashedDealerSeeds(dealerHashIdx);
+    playingGames[player].push(dealerHash);
     return true;
   }
   // function for compute Deposit for each bet
@@ -196,16 +206,19 @@ betting related functions
     bytes32 hashedDealerSeed,
     bytes32 dealerSeed
   );
-
-  function finalize(bytes32 hashedDealerSeed, bytes32 dealerSeed) public onlyCoo {
+  function finalize(bytes32 hashedDealerSeed, bytes32 dealerSeed) public onlyCoo{
     //check if has played the game
     //send money to user if modulo == bet
     var game = games[hashedDealerSeed];
-
-    assert(computeMultipleHash(dealerSeed, maxHashNum) == hashedDealerSeed);
-    assert(game.player != address(0));
-    assert(!game.finalized);
-
+    if(encryptSeeds(dealerSeed) != hashedDealerSeed){
+      revert();
+    }
+    if(game.player == address(0)){
+      revert();
+    }
+    if(game.finalized){
+      revert();
+    }
     Finalize(hashedDealerSeed, dealerSeed);
     game.dealerSeed = dealerSeed;
     setResult(
@@ -227,7 +240,7 @@ betting related functions
         computeMultipleHash(dealerSeed, maxHashNum - 1 - i),
         playerSeed
       );
-      gameResult.push(uint(serverDiceHash) % diceNum);
+      gameResult.push(uint(serverDiceHash) % diceFaces);
     }
   }
 
@@ -235,8 +248,9 @@ betting related functions
     uint reward = 0;
     uint betWeightSum = 0;
     for(uint i = 0 ; i < betData.length/2; i++){
+      uint betSide = betData[2*i];
       uint betWeight = betData[2*i+1];
-      reward += betTable[i] * betWeight;
+      reward += betTable[betSide] * betWeight;
       betWeightSum += betWeight;
     }
     return reward / betWeightSum;
@@ -265,7 +279,7 @@ betting related functions
     return reward / betWeightSum * (10000 - edge)/10000;
   }
 
-  function removePlayedGame(uint reward, address player, bytes32 serverSeedHash) private {
+  function removePlayedGame(uint reward, address player, bytes32 serverSeedHash) private{
     player.transfer(reward);
     deposit -= reward;
     games[serverSeedHash].finalized = true;
@@ -286,6 +300,46 @@ prevention of avoiding finalization related functions
         removePlayedGame(prevDeposit, player, _hash);
       }
     }
+  }
+/*
+logging
+*/
+  function getGame(bytes32 _hash) public view returns(
+    address player,
+    bytes32 playerSeed,
+    bytes32 dealerSeed,
+    uint bet,
+    uint betBlockHeight,
+    uint depositForBet,
+    bool playerWin,
+    bool finalized
+  ){
+    var game = games[_hash];
+    player = game.player;
+    playerSeed = game.playerSeed;
+    dealerSeed = game.dealerSeed;
+    bet = game.bet;
+    betBlockHeight = game.betBlockHeight;
+    depositForBet = game.depositForBet;
+    playerWin = game.playerWin;
+    finalized = game.finalized;
+  }
+  function getBetData(bytes32 _hash) public view returns(
+    uint[] betData
+  ){
+    var game = games[_hash];
+    betData = game.betData;
+  }
+  function getGameResult(bytes32 _hash) public view returns(
+    uint[] gameResult
+  ){
+    var game = games[_hash];
+    gameResult = game.gameResult;
+  }
+  function getPlayingGames(address _player) public view returns(
+    bytes32[] _playingGames
+  ){
+    _playingGames = playingGames[_player];
   }
 /*
 utilities

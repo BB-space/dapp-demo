@@ -2,11 +2,9 @@ pragma solidity ^0.4.18;
 
 import '../math/SafeMath.sol';
 
-
-
 contract ERC20 {
   using SafeMath for uint256;
-  
+
   uint256 public totalSupply;
   mapping(address => uint256) balances;
   mapping (address => mapping (address => uint256)) internal allowed;
@@ -33,7 +31,7 @@ contract ERC20 {
   function allowance(address _owner, address _spender) public view returns (uint256) {
     return allowed[_owner][_spender];
   }
-  
+
   function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
     require(_to != address(0));
     require(_value <= balances[_from]);

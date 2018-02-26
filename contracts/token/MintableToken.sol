@@ -3,7 +3,6 @@ pragma solidity ^0.4.18;
 import './ERC20.sol';
 import '../ownership/Ownable.sol';
 
-
 /**
  * @title Mintable token
  * @dev Simple ERC20 Token example, with mintable token creation

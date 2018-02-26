@@ -3,7 +3,6 @@ pragma solidity ^0.4.13;
 import './ERC20.sol';
 import '../game/Gamble.sol';
 
-
 contract GambleToken is ERC20 {
   /* function makeGame(address contractAddress, */
   /* 					uint256 value, */
@@ -20,7 +19,7 @@ contract GambleToken is ERC20 {
   /* 				value, */
   /* 				data); */
   /* } */
-  
+
   function makeOneTimeGame(address contractAddress,
 						   uint256 value,
 						   uint gameId,
