@@ -8,7 +8,7 @@
   },
   "scripts": {
     "babel-cli": "./node_modules/babel-cli/bin/babel-node.js",
-    "testrpc": "ganache-cli -i 6000 -m \"dead fish racket soul plunger dirty boats cracker mammal nicholas cage\" --db ./chainDB",
+    "testrpc": "ganache-cli -i 6000 -e 10000 -m \"dead fish racket soul plunger dirty boats cracker mammal nicholas cage\" --db ./chainDB",
     "start": "npm run dev:private",
     "dev": "nodemon --exec npm run babel-cli -- src/server/index.js",
     "dev:private": "ETH_ENV=private npm run dev",

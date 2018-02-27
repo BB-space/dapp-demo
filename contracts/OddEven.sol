@@ -28,7 +28,28 @@ contract Utilities{
   }
 }
 
-contract OddEven is DSSafeAddSub, Utilities{
+contract CLevelAuth{
+  // address of c-level accounts
+  address ceo;
+  address coo;
+
+  modifier onlyCeo {
+    require(ceo == msg.sender);
+    _;
+  }
+  modifier onlyCoo {
+    require(coo == msg.sender);
+    _;
+  }
+  function changeCeo(address _ceo) public onlyCeo {
+    ceo = _ceo;
+  }
+  function changeCoo(address _coo) public onlyCoo {
+    coo = _coo;
+  }
+}
+
+contract OddEven is DSSafeAddSub, Utilities, CLevelAuth{
 /*
 states
 */
@@ -38,7 +59,7 @@ states
     // dealerSeed : a seed that is provided from dealer
     // bet : bet amount in Wei (ether * 10^-18)
     // betBlockHeight : the betBlockHeight
-    // playerWin : flag, whether the player has won or not
+    // reward : flag, unit Reward for the bet
     // finalized : flag, whether the dealer finalized user according to the game result
     // betData : all the information of bet (exclude bet amount)
   struct Game {
@@ -48,7 +69,7 @@ states
     uint bet;
     uint betBlockHeight;
     uint depositForBet;
-    bool playerWin;
+    uint reward;
     bool finalized;
     uint[] betData;
     uint[] gameResult;
@@ -68,9 +89,9 @@ states
   uint blockTerm;
   uint diceFaces;
   uint edge;
-  // address of c-level accounts
+  /* // address of c-level accounts
   address ceo;
-  address coo;
+  address coo; */
   // array of hashedDealerSeeds, player can bet only through a hash from the array
   bytes32[] hashedDealerSeeds;
   // use serverSeedHash as key of each games
@@ -79,14 +100,14 @@ states
   mapping(address => bytes32[]) playingGames;
   uint[] betTable;
   // c-level autority modifiers
-  modifier onlyCeo {
+  /* modifier onlyCeo {
     require(ceo == msg.sender);
     _;
   }
   modifier onlyCoo {
     require(coo == msg.sender);
     _;
-  }
+  } */
 /*
 contract constructor
 */
@@ -95,12 +116,12 @@ contract constructor
     ceo = msg.sender;
     coo = msg.sender;
     //set default contract variables
-    setDiceNum(3);
-    setHashNum(40);
+    setDiceNum(2);
+    setHashNum(3);
     setDepositConstant(3);
     setDiceFaces(8);
     setEdge(100);
-    betTable = [3,3];
+    betTable = [2,2];
     deposit = 0;
   }
   /* make contract payable */
@@ -111,12 +132,12 @@ contract constructor
 /*
 autority related functions
 */
-  function changeCeo(address _ceo) public onlyCeo {
+  /* function changeCeo(address _ceo) public onlyCeo {
     ceo = _ceo;
   }
   function changeCoo(address _coo) public onlyCoo {
     coo = _coo;
-  }
+  } */
   function setDiceNum(uint _diceNum) public onlyCoo{
     diceNum = _diceNum;
   }
@@ -217,12 +238,6 @@ betting related functions
     playingGames[player].push(dealerHash);
     return true;
   }
-  // function for compute Deposit for each bet
-  function computeDeposit(uint betAmount, uint[] betData) public view returns(uint){
-    // TODO: calculate maxbet for each bet
-    return betAmount * computeUnitReward(betData);
-  }
-
 
   /*
   finalize related functions
@@ -251,11 +266,13 @@ betting related functions
       dealerSeed,
       game.playerSeed
     );
-    uint unitReward = computeUnitReward(
+    uint reward = computeReward(
+      game.bet,
       game.betData,
       hashedDealerSeed
     );
-    removePlayedGame(unitReward * game.bet, game.player, hashedDealerSeed);
+    game.reward = reward;
+    removePlayedGame(reward, game.player, hashedDealerSeed);
   }
 
   function setResult(bytes32 hashedDealerSeed, bytes32 dealerSeed, bytes32 playerSeed) private onlyCoo{
@@ -269,19 +286,19 @@ betting related functions
     }
   }
 
-  function computeUnitReward(uint[] betData) public view returns(uint){
+  function computeDeposit(uint betAmount, uint[] betData) public view returns(uint){
     uint reward = 0;
     uint betWeightSum = 0;
     for(uint i = 0 ; i < betData.length/2; i++){
       uint betSide = betData[2*i];
       uint betWeight = betData[2*i+1];
-      reward = safeAdd(reward,betTable[betSide] * betWeight);
+      reward = safeAdd(reward, betTable[betSide] * betWeight);
       betWeightSum = safeAdd(betWeightSum, betWeight);
     }
-    return reward / betWeightSum;
+    return betAmount * reward / betWeightSum;
   }
 
-  function computeUnitReward(uint[] betData, bytes32 hashedDealerSeed) public view returns(uint){
+  function computeReward(uint betAmount, uint[] betData, bytes32 hashedDealerSeed) public view returns(uint){
     var gameResult = games[hashedDealerSeed].gameResult;
     uint reward = 0;
     uint betWeightSum = 0;
@@ -301,7 +318,7 @@ betting related functions
         reward = safeAdd(reward, betTable[1] * betWeight);
       }
     }
-    return reward / betWeightSum * (10000 - edge)/10000;
+    return betAmount * reward / betWeightSum * (10000 - edge)/10000;
   }
 
   function removePlayedGame(uint reward, address player, bytes32 serverSeedHash) private{
@@ -336,7 +353,7 @@ logging
     uint bet,
     uint betBlockHeight,
     uint depositForBet,
-    bool playerWin,
+    uint reward,
     bool finalized
   ){
     var game = games[_hash];
@@ -346,7 +363,7 @@ logging
     bet = game.bet;
     betBlockHeight = game.betBlockHeight;
     depositForBet = game.depositForBet;
-    playerWin = game.playerWin;
+    reward = game.reward;
     finalized = game.finalized;
   }
   function getBetData(bytes32 _hash) public view returns(

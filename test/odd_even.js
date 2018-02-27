@@ -10,19 +10,26 @@ function stringToBytes32(str) {
 const testSeeds = ['a very', 'strong', 'seeds'];
 let hashes = [];
 contract('OddEven', function(accounts) {
+	it('send ether', async function(){
+		await web3.eth.sendTransaction({
+			from : accounts[1],
+			to : accounts[0],
+			value: web3.toWei(1,"ether")
+		})
+	});
 	it('check get Ether', async function(){
 		const oddEven = await OddEven.deployed();
 		const gameAddress = oddEven.address;
-		console.log('value',web3.toWei(0.01,"ether"));
+		console.log('value',web3.toWei(1,"ether"));
 		var send = await web3.eth.sendTransaction({
 			from : accounts[0],
 			to: gameAddress,
-			value: web3.toWei(0.01, "ether")
+			value: web3.toWei(1, "ether")
 		});
 		gameContractBalance = await web3.eth.getBalance(gameAddress);
 		assert.equal(
 			web3.fromWei(gameContractBalance, 'ether').toString(),
-			'0.01'
+			'1'
 		)
 	});
 	it('push hashes', async function(){
@@ -51,7 +58,7 @@ contract('OddEven', function(accounts) {
 			hashes[1],
 			stringToBytes32('myseed'),
 			[1,2],
-			{ value: web3.toWei(0.01) }
+			{ value: web3.toWei(1) }
 		);
 		console.log(
 			'after init:',
@@ -79,7 +86,8 @@ contract('OddEven', function(accounts) {
 		const oddEven = await OddEven.deployed();
 		const gameAddress = oddEven.address;
 		const hashes = await oddEven.getPlayingGames(accounts[0])
-		const _hash1 = hashes[0]
+		const _hash1 = hashes[0];
+		console.log(_hash1, stringToBytes32(testSeeds[1]));
 		await oddEven.finalize(_hash1, stringToBytes32(testSeeds[1]));
 		console.log(
 			'after finalize:',
@@ -92,5 +100,78 @@ contract('OddEven', function(accounts) {
 			'playingGames',
 			await oddEven.getPlayingGames(accounts[0])
 		);
+		const afterPlayerBalance = await web3.eth.getBalance(accounts[0]);
+		const afterGameBalance = await web3.eth.getBalance(gameAddress);
+		console.log('nextPlayerBalance', afterPlayerBalance);
+		console.log('nextGameBalance', afterGameBalance);
+	})
+	it('changeCoo', async function(){
+		const oddEven = await OddEven.deployed();
+		const gameAddress = oddEven.address;
+		await oddEven.changeCoo(accounts[1]);
+	});
+	it('check get Ether', async function(){
+		const oddEven = await OddEven.deployed();
+		const gameAddress = oddEven.address;
+		console.log('value',web3.toWei(1,"ether"));
+		var send = await web3.eth.sendTransaction({
+			from : accounts[0],
+			to: gameAddress,
+			value: web3.toWei(1, "ether")
+		});
+		gameContractBalance = await web3.eth.getBalance(gameAddress);
+		assert.equal(
+			web3.fromWei(gameContractBalance, 'ether').toString(),
+			'1.02'
+		)
+	});
+	it('init with first hash', async function(){
+		const oddEven = await OddEven.deployed();
+		const gameAddress = oddEven.address;
+		const prevPlayerBalance = await web3.eth.getBalance(accounts[0]);
+		const prevGameBalance = await web3.eth.getBalance(gameAddress);
+		let _hash1 = await oddEven.getHash.call(0);
+		console.log('prevPlayerBalance', prevPlayerBalance);
+		console.log('prevGameBalance', prevGameBalance);
+		await oddEven.initGame(
+			hashes[0],
+			stringToBytes32('myseed'),
+			[0,2],
+			{ value: web3.toWei(1) }
+		);
+		console.log(
+			'after init:',
+			'data',
+			await oddEven.getGame(_hash1),
+			'betData',
+			await oddEven.getBetData(_hash1),
+			'gameResult',
+			await oddEven.getGameResult(_hash1),
+			'playingGames',
+			await oddEven.getPlayingGames(accounts[0])
+		);
+	});
+	it('should be reverted', async function(){
+		const oddEven = await OddEven.deployed();
+		const gameAddress = oddEven.address;
+		const hashes = await oddEven.getPlayingGames(accounts[0])
+		const _hash1 = hashes[0];
+		console.log(_hash1, stringToBytes32(testSeeds[1]));
+		await oddEven.finalize(_hash1, stringToBytes32(testSeeds[1]));
+		console.log(
+			'after finalize:',
+			'data',
+			await oddEven.getGame(_hash1),
+			'betData',
+			await oddEven.getBetData(_hash1),
+			'gameResult',
+			await oddEven.getGameResult(_hash1),
+			'playingGames',
+			await oddEven.getPlayingGames(accounts[0])
+		);
+		const afterPlayerBalance = await web3.eth.getBalance(accounts[0]);
+		const afterGameBalance = await web3.eth.getBalance(gameAddress);
+		console.log('nextPlayerBalance', afterPlayerBalance);
+		console.log('nextGameBalance', afterGameBalance);
 	})
 });
