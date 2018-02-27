@@ -1,7 +1,34 @@
 pragma solidity ^0.4.13;
 
 
-contract OddEven {
+contract DSSafeAddSub{
+  function safeToAdd(uint a, uint b) internal pure returns(bool){
+    return( a + b >= a);
+  }
+  function safeAdd(uint a, uint b) internal pure returns(uint){
+    if(!safeToAdd(a,b)) revert();
+    return a + b;
+  }
+  function safeToSubtract(uint a, uint b) internal pure returns(bool){
+    return ( b <= a );
+  }
+  function safeSub(uint a, uint b) internal pure returns(uint){
+    if(!safeToSubtract(a,b)) revert();
+    return a - b;
+  }
+}
+
+contract Utilities{
+  function computeMultipleHash(bytes32 _bytes32, uint nTimes) public pure returns(bytes32) {
+    bytes32 hash = _bytes32;
+    for(uint i=0; i < nTimes; i++) {
+      hash = keccak256(hash);
+    }
+    return hash;
+  }
+}
+
+contract OddEven is DSSafeAddSub, Utilities{
 /*
 states
 */
@@ -73,7 +100,8 @@ contract constructor
     setDepositConstant(3);
     setDiceFaces(8);
     setEdge(100);
-    betTable = [2,2];
+    betTable = [3,3];
+    deposit = 0;
   }
   /* make contract payable */
   function() public payable{
@@ -142,9 +170,6 @@ betting related functions
     uint[] betData
   );
 
-  event Log(
-    uint flag
-  );
   //betting function
     //input definition is exactly same as attributes of Game struct
   function initGame(
@@ -167,7 +192,7 @@ betting related functions
     }
     //exception3
     uint depositForBet = computeDeposit(msg.value, betData);
-    if(this.balance - deposit < depositForBet){
+    if(this.balance < safeAdd(depositForBet, deposit)){
       revert();
     }
 
@@ -187,7 +212,7 @@ betting related functions
     games[dealerHash].betBlockHeight = block.number - 1;
     games[dealerHash].depositForBet = depositForBet;
   //update deposit
-    deposit += depositForBet;
+    deposit = safeAdd(deposit,depositForBet);
     removeHashFromHashedDealerSeeds(dealerHashIdx);
     playingGames[player].push(dealerHash);
     return true;
@@ -250,8 +275,8 @@ betting related functions
     for(uint i = 0 ; i < betData.length/2; i++){
       uint betSide = betData[2*i];
       uint betWeight = betData[2*i+1];
-      reward += betTable[betSide] * betWeight;
-      betWeightSum += betWeight;
+      reward = safeAdd(reward,betTable[betSide] * betWeight);
+      betWeightSum = safeAdd(betWeightSum, betWeight);
     }
     return reward / betWeightSum;
   }
@@ -262,18 +287,18 @@ betting related functions
     uint betWeightSum = 0;
     uint sumOfDice = 0;
     for(uint i = 0; i < gameResult.length; i++){
-      sumOfDice += gameResult[i];
+      sumOfDice = safeAdd(sumOfDice, gameResult[i]);
     }
     for(uint j = 0; j < betData.length/2; j++){
       uint betSide = betData[2*j];
       uint betWeight = betData[2*j+1];
-      betWeightSum += betWeight;
+      betWeightSum = safeAdd(betWeightSum, betWeight);
       // if even
       if( betSide == 0 && sumOfDice % 2 == 0){
-        reward += betTable[0] * betWeight;
+        reward = safeAdd(reward, betTable[0] * betWeight);
       // if odd
       }else if( betSide == 1 && sumOfDice % 2 == 1){
-        reward += betTable[1] * betWeight;
+        reward = safeAdd(reward, betTable[1] * betWeight);
       }
     }
     return reward / betWeightSum * (10000 - edge)/10000;
@@ -281,7 +306,7 @@ betting related functions
 
   function removePlayedGame(uint reward, address player, bytes32 serverSeedHash) private{
     player.transfer(reward);
-    deposit -= reward;
+    deposit = safeSub(deposit, reward);
     games[serverSeedHash].finalized = true;
     uint idx = indexOfPlayingGame(serverSeedHash, player);
     removeHashFromPlayingGames(idx, player);
@@ -382,12 +407,5 @@ utilities
       delete playingGames[player][playingGames[player].length - 1];
       playingGames[player].length--;
     }
-  }
-  function computeMultipleHash(bytes32 _bytes32, uint nTimes) public pure returns(bytes32) {
-    bytes32 hash = _bytes32;
-    for(uint i=0; i < nTimes; i++) {
-      hash = keccak256(hash);
-    }
-    return hash;
   }
 }
