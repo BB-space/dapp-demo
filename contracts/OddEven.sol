@@ -51,6 +51,7 @@ contract CLevelAuth{
 
 contract GRC is DSSafeAddSub{
   //TODO add betTable push function
+  //betTable in BP
   uint[] betTable = [
     // odd Even : 0 to 1
     20000,20000,
