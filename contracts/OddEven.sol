@@ -49,7 +49,46 @@ contract CLevelAuth{
   }
 }
 
-contract OddEven is DSSafeAddSub, Utilities, CLevelAuth{
+contract GRC is DSSafeAddSub{
+  //TODO add betTable push function
+  uint[] betTable = [
+    // odd Even : 0 to 1
+    20000,20000,
+    // tripple : 2 to 7
+    1800000,1800000,1800000,1800000,1800000,1800000,
+    // oneNumber : 8 to 13
+    23700,23700,23700,23700,23700,23700,
+    // small Big
+    20000,20000
+  ];
+  function determineResult(uint betSide, uint[] gameResult) internal pure returns(bool){
+    bool win = false;
+    uint k;
+    uint sumOfDice = 0;
+    for(uint i = 0; i < gameResult.length; i++){
+      sumOfDice = safeAdd(sumOfDice, gameResult[i]);
+    }
+    if( 0 <= betSide && betSide <= 1){ //if even or odd
+      win = sumOfDice % 2 == betSide;
+    }else if (2 <= betSide && betSide <= 7){// if tripple
+      win = true;
+      for(k = 0; k < gameResult.length; k++){
+        win = win && gameResult[k] == betSide - 2;
+      }
+    }else if (8 <= betSide && betSide <= 13){// if one number occurs
+      for(k = 0; k < gameResult.length; k++){
+        win = win || gameResult[k] == betSide - 8;
+      }
+    }else if (14 == betSide){// if low
+      win = sumOfDice <= 7;
+    }else if (15 == betSide){// if High
+      win = sumOfDice > 7;
+    }
+    return win;
+  }
+}
+
+contract OddEven is DSSafeAddSub, Utilities, CLevelAuth, GRC{
 /*
 states
 */
@@ -98,7 +137,6 @@ states
   mapping(bytes32 => Game) games;
   // maps player and playing games (not played)
   mapping(address => bytes32[]) playingGames;
-  uint[] betTable;
   // c-level autority modifiers
   /* modifier onlyCeo {
     require(ceo == msg.sender);
@@ -116,12 +154,15 @@ contract constructor
     ceo = msg.sender;
     coo = msg.sender;
     //set default contract variables
-    setDiceNum(2);
-    setHashNum(3);
+    setDiceNum(3);
+    setHashNum(4);
     setDepositConstant(3);
     setDiceFaces(8);
     setEdge(100);
-    betTable = [2,2];
+    //odd, even
+    //tripple 1, tripple 2, tripple 3, tripple 4, tripple 5, tripple 6
+    //1,2,3,4,5,6
+    //3 to 10, 11 to 18
     deposit = 0;
   }
   /* make contract payable */
@@ -287,38 +328,36 @@ betting related functions
   }
 
   function computeDeposit(uint betAmount, uint[] betData) public view returns(uint){
-    uint reward = 0;
+    uint rewardInBp = 0;
     uint betWeightSum = 0;
     for(uint i = 0 ; i < betData.length/2; i++){
       uint betSide = betData[2*i];
       uint betWeight = betData[2*i+1];
-      reward = safeAdd(reward, betTable[betSide] * betWeight);
+      rewardInBp = safeAdd(rewardInBp, betTable[betSide] * betWeight);
       betWeightSum = safeAdd(betWeightSum, betWeight);
     }
-    return betAmount * reward / betWeightSum;
+    return betAmount * rewardInBp / 10000 / betWeightSum;
   }
-
   function computeReward(uint betAmount, uint[] betData, bytes32 hashedDealerSeed) public view returns(uint){
-    var gameResult = games[hashedDealerSeed].gameResult;
-    uint reward = 0;
+    uint rewardInBp = 0;
     uint betWeightSum = 0;
-    uint sumOfDice = 0;
-    for(uint i = 0; i < gameResult.length; i++){
-      sumOfDice = safeAdd(sumOfDice, gameResult[i]);
-    }
+    bool win = false;
     for(uint j = 0; j < betData.length/2; j++){
-      uint betSide = betData[2*j];
-      uint betWeight = betData[2*j+1];
-      betWeightSum = safeAdd(betWeightSum, betWeight);
+      //odd, even
+      //tripple 1, tripple 2, tripple 3, tripple 4, tripple 5, tripple 6
+      //1,2,3,4,5,6
+      //3 to 10, 11 to 18
       // if even
-      if( betSide == 0 && sumOfDice % 2 == 0){
-        reward = safeAdd(reward, betTable[0] * betWeight);
-      // if odd
-      }else if( betSide == 1 && sumOfDice % 2 == 1){
-        reward = safeAdd(reward, betTable[1] * betWeight);
+      // max stack overflow : not able to add a local variable
+      //betData [2*j] = betSide
+      //betData [2*j + 1] = betWeight
+      win = determineResult(betData[2*j], games[hashedDealerSeed].gameResult);
+      if(win){
+        rewardInBp = safeAdd(rewardInBp, betTable[betData[2*j]] * betData[2*j+1]);
       }
+      betWeightSum = safeAdd(betWeightSum, betData[2*j+1]);
     }
-    return betAmount * reward / betWeightSum * (10000 - edge)/10000;
+    return betAmount * rewardInBp / 10000 / betWeightSum * (10000 - edge)/10000;
   }
 
   function removePlayedGame(uint reward, address player, bytes32 serverSeedHash) private{

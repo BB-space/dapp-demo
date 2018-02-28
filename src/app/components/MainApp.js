@@ -18,7 +18,7 @@ export default class MainApp extends Component {
 	componentDidMount() {
 		this.props.checkAuth();
 	}
-	
+
 	render() {
         const { isAuthenticated } = this.props;
 
