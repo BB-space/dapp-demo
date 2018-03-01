@@ -20,6 +20,7 @@ import {
 	gameABI,
 	tokenABI
 } from '../../../common/constants/contracts';
+import BetBoard from './BetBoard';
 
 
 
@@ -301,6 +302,8 @@ export default class GamePage extends Component {
 							<div>Server Seed: {prevServerSeed}</div>
 							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						</div>
+
+						<BetBoard />
 
 					</div>
 				</div>

@@ -25,7 +25,7 @@ function setTokenBalance(balance) {
 	};
 }
 
-export function getAccountStatus(tokenAddress='') {
+export function getAccountStatus() {
 	const url = '/api/eth/balance';
 	
     return async (dispatch, getState) => {
@@ -34,7 +34,6 @@ export function getAccountStatus(tokenAddress='') {
 
 		if(res.success) {
 			dispatch(setEthBalance(res.ethBalance));
-			dispatch(setTokenBalance(res.tokenBalance));
 		}
 	};
 }

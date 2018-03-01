@@ -1,8 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom';
 
+import MainApp from './components/MainApp';
 import configureStore from './store/configureStore';
 import routes from './routes';
 
@@ -15,7 +16,7 @@ const store = configureStore(initialState);
 	render(
 		<Provider store={store}>
 			<Router>
-				{ routes }
+				<MainApp />
 			</Router>
 		</Provider>,
 		document.getElementById('app')

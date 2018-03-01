@@ -8,7 +8,8 @@ export default async function renderApp(ctx) {
         reactHtml: '',
         stateString: '{}',
         isBuildEnv,
-        helmet: false
+        helmet: false,
+		ethEnv: process.env.ETH_ENV
     };
     
     await ctx.render('index', renderData);
