@@ -178,4 +178,12 @@ contract('OddEven', function(accounts) {
 		console.log('nextPlayerBalance', afterPlayerBalance);
 		console.log('nextGameBalance', afterGameBalance);
 	})
+	it('test sha3', async function(){
+		const oddEven = await OddEven.deployed();
+		const test = await oddEven._setResult(
+			stringToBytes32('strong'),
+			stringToBytes32('myseed')
+		);
+		console.log('sha3 test',test)
+	})
 });
