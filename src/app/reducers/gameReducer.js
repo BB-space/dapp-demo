@@ -4,11 +4,15 @@ import actionTypes from '../constants/actionTypes';
 const {
 	GAME_SET_HASHED_SERVER_SEED,
 	GAME_SET_CLIENT_SEED,
-	GAME_SET_BET_MONEY,
-	GAME_SET_BET_SIDE
+	GAME_SET_CHIP_INDEX,
+	GAME_ADD_TO_BET,
+	GAME_RESET_BET
 } = actionTypes;
 
 const initialState = {
+	betState: {},
+	currentChipIdx: 0,
+	
 	hashedServerSeed: '',
 	clientSeed: '',
 	clientSeedBytes32: '',
@@ -29,16 +33,34 @@ export default function gameReducer(state=initialState, action) {
 				clientSeedBytes32: action.newSeedBytes32
 			});
 
-		case GAME_SET_BET_MONEY:
+		case GAME_SET_CHIP_INDEX:
 			return Object.assign({}, state, {
-				betMoney: action.betMoney
+				currentChipIdx: action.chipIdx
 			});
 
-		case GAME_SET_BET_SIDE:
-			return Object.assign({}, state, {
-				betSide: action.side
-			});
+		case GAME_ADD_TO_BET: {
+			const {
+				betSide,
+				addition
+			} = action;
 
+			return Object.assign({}, state, {
+				betState: Object.assign(
+					state.betState, {
+						[betSide]: parseFloat((
+							(state.betState[betSide] || 0)
+							+ action.addition
+						).toFixed(2))
+					}
+				)
+			});
+		}
+
+		case GAME_RESET_BET:
+			return Object.assign({}, state, {
+				betState: {}
+			});
+			
         default:
             return state;
     }
