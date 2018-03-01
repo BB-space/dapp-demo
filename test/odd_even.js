@@ -24,7 +24,7 @@ contract('OddEven', function(accounts) {
 		var send = await web3.eth.sendTransaction({
 			from : accounts[0],
 			to: gameAddress,
-			value: web3.toWei(3, "ether")
+			value: web3.toWei(1000, "ether")
 		});
 		gameContractBalance = await web3.eth.getBalance(gameAddress);
 		assert.equal(
@@ -58,10 +58,11 @@ contract('OddEven', function(accounts) {
 			hashes[1],
 			stringToBytes32('myseed'),
 			[
-				1,2,
-				2,1
+				1,10,
+				4,10,
+				12,5
 			],
-			{ value: web3.toWei(0.01) }
+			{ value: web3.toWei(0.25) }
 		);
 		console.log(
 			'after init:',

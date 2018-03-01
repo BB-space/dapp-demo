@@ -7,6 +7,7 @@ import MainPage from './main/MainPage';
 import FaqPage from './faq/FaqPage';
 import AccountPage from './account/AccountPage';
 import SignUpModal from './auth/SignUpModal';
+import TestPage from './test/MainPage'
 
 import '../stylesheets/style.scss';
 import 'font-awesome/css/font-awesome.css';
@@ -41,6 +42,8 @@ export default class MainApp extends Component {
 						   component={FaqPage} />
 					<Route path="/account"
 						   component={AccountPage} />
+					<Route path="/test"
+							 component={TestPage}/>
 				</Switch>
 				<SignUpModal />
             </div>

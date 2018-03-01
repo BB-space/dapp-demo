@@ -4,7 +4,7 @@ import './game/Gamble.sol';
 import './token/GambleToken.sol';
 
 
-contract OddEven is Gamble {
+contract OddEvenWithToken is Gamble {
   address owner;
   GambleToken public token;
 

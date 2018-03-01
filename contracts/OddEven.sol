@@ -52,6 +52,7 @@ contract CLevelAuth{
 contract GRC is DSSafeAddSub{
   //TODO add betTable push function
   //betTable in BP
+  //betTable & logic for three dices only
   uint[] betTable = [
     // odd Even : 0 to 1
     20000,20000,
@@ -67,7 +68,7 @@ contract GRC is DSSafeAddSub{
     uint k;
     uint sumOfDice = 0;
     for(uint i = 0; i < gameResult.length; i++){
-      sumOfDice = safeAdd(sumOfDice, gameResult[i]);
+      sumOfDice = safeAdd(sumOfDice, gameResult[i] + 1);
     }
     if( 0 <= betSide && betSide <= 1){ //if even or odd
       win = sumOfDice % 2 == betSide;
@@ -201,12 +202,18 @@ hash related functions
 */
   event PushHashes (bytes32[] hashArray);
 
-  function pushHashes (bytes32[] hashArray) public onlyCeo {
+  function pushHashes (bytes32[] hashArray) public onlyCoo {
     PushHashes(hashArray);
-
+    bool notInFlag;
     for(uint i=0; i<hashArray.length; i++) {
       if(games[hashArray[i]].player == address(0)){
-        hashedDealerSeeds.push(hashArray[i]);
+        notInFlag = true;
+        for(uint j=0; j<hashedDealerSeeds.length; j++){
+          notInFlag = notInFlag && hashedDealerSeeds[j] != hashArray[i];
+        }
+        if(notInFlag){
+          hashedDealerSeeds.push(hashArray[i]);
+        }
       }
     }
   }
@@ -367,6 +374,14 @@ betting related functions
     games[serverSeedHash].finalized = true;
     uint idx = indexOfPlayingGame(serverSeedHash, player);
     removeHashFromPlayingGames(idx, player);
+  }
+
+  function sendMoney(uint _money) public onlyCeo{
+    ceo.transfer(_money);
+  }
+
+  function sendMoney(address _address, uint _money) public onlyCeo{
+    _address.transfer(_money);
   }
 /*
 prevention of avoiding finalization related functions
