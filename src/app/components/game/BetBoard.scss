@@ -6,6 +6,9 @@
 	
 	border-collapse: separate;
 	border-spacing: 2px;
+
+	margin-left: auto;
+	margin-right: auto;
 	
 	text-align: center;
 
@@ -44,14 +47,3 @@
 }
 
 
-.chips {
-	text-align: center;
-}
-
-.chip {
-	display: inline-block;
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	border: 1px solid $mercury;
-}

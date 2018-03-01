@@ -16,13 +16,11 @@ import {
 import web3 from '../../utils/web3';
 import {
 	gameAddress,
-	tokenAddress,
-	gameABI,
-	tokenABI
+	gameABI
 } from '../../../common/constants/contracts';
 import BetBoard from './BetBoard';
-
-
+import { chipUnits } from '../../constants/gameConfig';
+import Chips from './Chips';
 
 
 @connect(
@@ -45,6 +43,8 @@ export default class GamePage extends Component {
 		super(props);
 
 		this.state = {
+			selectedChipIdx: 0,
+			
 			prevResult: [],
 			prevServerSeed: '',
 			prevServerSeedBytes32: '',
@@ -160,6 +160,12 @@ export default class GamePage extends Component {
 			.send({from: account});
 	}
 
+	changeChip = (evt) => {
+		this.setState({
+			selectedChipIdx: parseInt(evt.target.dataset.idx)
+		});
+	}
+
 	getDiceComponent(numbers) {
 		const dices = [
 			(
@@ -235,6 +241,8 @@ export default class GamePage extends Component {
 		} = this.props;
 
 		const {
+			selectedChipIdx,
+			
 			prevResult,
 			prevServerSeed,
 			prevClientSeed,
@@ -242,10 +250,12 @@ export default class GamePage extends Component {
 			prevBetMoney,
 			prevHashedServerSeed
 		} = this.state;
+		
 		const result = prevResult.length === 3 ? prevResult.reduce((a,b)=>{return a+b}) : "not bet"
 		const resultText = result==="not bet" ? "" : result % 2 === 1 ? "odd" :"even"
 		const prevBetSideText = parseInt(prevBetSide) === 1 ? "odd" : parseInt(prevBetSide) === 0 ? "even" : ""
-		const win = result === "not bet" ? "" : result % 2 == parseInt(prevBetSide) ? "win" : "loose"
+		const win = result === "not bet" ? "" : result % 2 == parseInt(prevBetSide) ? "win" : "lose"
+		
 		return (
 			<div className="col-md-12">
 				<div className="panel panel-default">
@@ -265,26 +275,13 @@ export default class GamePage extends Component {
 								<input value={clientSeed}
 									   onChange={this.handleClientSeedChange} />
 							</li>
-							<li>
-								<div><b>Your Bet:</b></div>
-								<input value={betMoney}
-									   onChange={this.handleBetMoneyChange} /> TLP on {' '}
-								<input type="radio"
-									   name="gender"
-									   value="0"
-									   onChange={this.handleBetSideChange}
-									   checked={betSide === '0'} />Even
-								{' or '}
-								<input type="radio"
-									   name="gender"
-									   value="1"
-									   onChange={this.handleBetSideChange}
-									   checked={betSide === '1'}/>Odd
-							</li>
+
 						</ul>
 						<button
 							className="btn btn-default"
-							onClick={this.handlePlayBtnClick}>Play</button>
+							onClick={this.handlePlayBtnClick}>
+							Play
+						</button>
 
 						<div className="text-center">
 							<div>Result:</div>
@@ -304,6 +301,11 @@ export default class GamePage extends Component {
 						</div>
 
 						<BetBoard />
+						
+						<Chips
+						    chipUnits={chipUnits}
+						    onChipClick={this.changeChip}
+						    selectedChipIdx={selectedChipIdx} />
 
 					</div>
 				</div>

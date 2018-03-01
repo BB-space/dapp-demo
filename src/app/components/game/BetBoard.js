@@ -6,10 +6,6 @@ import styles from './BetBoard.scss';
 export default class BetBoard extends Component {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			selectedChipIdx: 0
-		};
 	}
 
 	render() {
@@ -96,18 +92,8 @@ export default class BetBoard extends Component {
 						</tr>
 
 
-
 					</tbody>
 				</table>
-
-				<div className={styles.chips}>
-					<div className={styles.chip}>0.01</div>
-					<div className={styles.chip}>0.05</div>
-					<div className={styles.chip}>0.1</div>
-					<div className={styles.chip}>0.5</div>
-					<div className={styles.chip}>1.0</div>
-				</div>
-				
 			</div>
 		);
 	}

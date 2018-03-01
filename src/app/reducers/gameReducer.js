@@ -9,6 +9,8 @@ const {
 } = actionTypes;
 
 const initialState = {
+	betState: {},
+	
 	hashedServerSeed: '',
 	clientSeed: '',
 	clientSeedBytes32: '',
