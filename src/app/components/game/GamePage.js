@@ -59,23 +59,23 @@ export default class GamePage extends Component {
 		this.props.fetchHashedServerSeed();
 		this.props.setClientSeed(generateRandomString());
 		// this.watchContractOddEvenPlayGame();
-		this.watchContractOddEven();
+		// this.watchContractOddEven();
 	}
 	
 	watchContractOddEven(){
-		const oddEven = new web3.eth.Contract(gameABI,gameAddress)
-		oddEven.events.allEvents(
-			(error, result)=>{
-				if(error){
-					console.log("error",error);
-				}else{
-					console.log("=======================")
-					console.log("event",result.event)
-					console.log("returnValues",result.returnValues)
-					console.log("=======================")
-				}
-			}
-		)
+		/* const oddEven = new web3.eth.Contract(gameABI,gameAddress)
+		   oddEven.events.allEvents(
+		   (error, result)=>{
+		   if(error){
+		   console.log("error",error);
+		   }else{
+		   console.log("=======================")
+		   console.log("event",result.event)
+		   console.log("returnValues",result.returnValues)
+		   console.log("=======================")
+		   }
+		   }
+		   )*/
 	}
 
 	// watchContractOddEvenPlayGame(){

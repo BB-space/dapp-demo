@@ -1,11 +1,16 @@
 const path = require('path');
 
-const BASE_PATH = path.join(__dirname, 'server', 'db');
+const BASE_PATH = path.join(__dirname, 'src', 'server', 'db');
 
 module.exports = {
 	development: {
 		client: 'pg',
-		connection: 'postgres://localhost:5432/gamble_dev',
+	        connection: {
+		    host: 'localhost',
+		    user: 'developer',
+		    password: 'password',
+		    database: 'gamble_dev'
+		},
 		migrations: {
 			directory: path.join(BASE_PATH, 'migrations')
 		},

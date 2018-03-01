@@ -2,11 +2,16 @@
 
 
 .wrapper {
+	display: inline-block;
+	
 	input {
-		line-height: 30px;
+		line-height: 26px;
+		height: 30px;
 	}
 	button {
-		height: 36px;
+		padding-top: 7px;
+		padding-bottom: 7px;
+		height: 30px;
 		font-size: 12px;
 	}
 }

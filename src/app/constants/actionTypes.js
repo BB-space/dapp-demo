@@ -1,6 +1,9 @@
 import keymirror from 'keymirror';
 
 export default keymirror({
+	// global
+	GLOBAL_SET_SIGNUP_MODAL: null,
+	
 	// eth state
 	ETH_SET_CURRENT_ACCOUNT: null,
 	ETH_SET_ETH_BALANCE: null,
@@ -13,6 +16,7 @@ export default keymirror({
     AUTH_SET_USER: null,
 	AUTH_SET_ETH_BALANCE: null,
 	AUTH_SET_TOKEN_BALANCE: null,
+	AUTH_SET_METAMASK_USE: null,
 
 	// game
 	GAME_SET_HASHED_SERVER_SEED: null,

@@ -6,10 +6,12 @@ const {
     AUTH_SET_AUTHENTICATED,
     AUTH_SET_USER,
 	AUTH_SET_ETH_BALANCE,
-	AUTH_SET_TOKEN_BALANCE
+	AUTH_SET_TOKEN_BALANCE,
+	AUTH_SET_METAMASK_USE
 } = actionTypes;
 
 const initialState = {
+	usingMetamask: false,
     email: '',
 	wallet: '',
 	ethBalance: 0,
@@ -17,6 +19,7 @@ const initialState = {
     isAuthenticating: false,
     isAuthenticated: false
 };
+
 
 export default function search(state=initialState, action) {
     switch(action.type) {
@@ -44,6 +47,11 @@ export default function search(state=initialState, action) {
 		case AUTH_SET_TOKEN_BALANCE:
 			return Object.assign({}, state, {
 				tokenBalance: action.balance
+			});
+
+		case AUTH_SET_METAMASK_USE:
+			return Object.assign({}, state, {
+				usingMetamask: action.toUseMetamask
 			});
 
         default:

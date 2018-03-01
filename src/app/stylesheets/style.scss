@@ -15,12 +15,12 @@
     @import "bootstrap/scaffolding";
     @import "bootstrap/grid";
     @import "bootstrap/responsive-utilities";
-
 	
 	body, h1, h2, h3, h4, h5, h6 {
 		font-family: AppleSDGothicNeo, "Helvetica Neue", Helvetica, Arial, sans-serif;
         color: $black;
 	}
+	
     body {
         background-color: $app-background-color;
         word-break: keep-all;
@@ -73,7 +73,7 @@
     }
 
 
-	    // Helper Classes
+	// Helper Classes
     .pull-left {
         float: left !important;
     }

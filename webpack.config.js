@@ -1,6 +1,11 @@
 const path              = require('path'),
-      webpack           = require('webpack'),
-      HtmlWebpackPlugin = require('html-webpack-plugin');
+      webpack           = require('webpack');
+
+
+const PORT      = process.env.PORT || 3000,
+      buildPath = path.resolve(__dirname, 'dist'),
+      mainPath  = path.resolve(__dirname, 'src', 'app', 'index.js');
+
 
 
 module.exports = {
@@ -10,13 +15,13 @@ module.exports = {
         'webpack/hot/only-dev-server',
 		'babel-polyfill',
         'whatwg-fetch',
-		'./src/app/index.js',
+		mainPath
 	],
     target: 'web',
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: buildPath,
         filename: 'bundle.js',
-        publicPath: '/'
+        publicPath: '/dist/'
     },
     resolve: {
         alias: {},
@@ -33,11 +38,7 @@ module.exports = {
             jQuery: 'jquery',
             _: 'lodash'
         }),
-        new webpack.NoEmitOnErrorsPlugin(),
-		new HtmlWebpackPlugin({
-            template: './src/app/index.html',
-            filename: 'index.html'
-		})
+        new webpack.NoEmitOnErrorsPlugin()
 	],
     module: {
         rules: [

@@ -110,3 +110,10 @@ function setTokenBalance(balance) {
 		balance
 	};
 }
+
+export function setMetamaskUse(toUseMetamask) {
+	return {
+		type: actionTypes.AUTH_SET_METAMASK_USE,
+		toUseMetamask
+	};
+}

@@ -9,9 +9,39 @@
     position: relative;
     padding-left: 15px;
     padding-right: 15px;
-
-    &.active {
-        background-color: $main-color;
-        color: $white;
-    }
 }
+
+.btn-signup {
+	border-right: 0;
+	margin-left: 20px;
+	border-right: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.btn-conversion {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+
+	&:first-of-type {
+		margin-left: 20px;
+	}
+}
+
+.member-info {
+	$padding: 5px;
+	display: inline-block;
+	padding-top: $padding;
+	padding-bottom: $padding;
+	
+	div {
+		line-height: ($appbar-height - 2 * $padding) / 2;
+	}
+}
+
+
+.btn-logout {
+	vertical-align: text-bottom;
+	margin-left: 20px;
+}
+
