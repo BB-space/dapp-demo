@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { setMetamaskUse, attemptLogout } from '../../actions/authActions';
 import { setSignUpModal } from '../../actions/globalActions';
@@ -20,6 +21,7 @@ import styles from './HeaderRightBlock.scss';
 		setSignUpModal
 	}
 )
+@withRouter
 export default class HeaderRightBlock extends Component {
     constructor(props) {
         super(props);
@@ -51,11 +53,11 @@ export default class HeaderRightBlock extends Component {
 				<button
 					className={classNames([
 							'btn',
-							'btn-secondary',
+							'btn-primary',
 							styles.btnConversion
 					])}
 					onClick={this.handleMembershipClick}>
-					Metamask 없이 플레이
+					Play without Metamask
 				</button>
 			</div>
 		);
@@ -71,7 +73,7 @@ export default class HeaderRightBlock extends Component {
 					])}
 					onClick={this.handleSignUpClick}
 				>
-					회원가입
+					Sign Up
 				</button>
 				<button
 					className={classNames([
@@ -81,13 +83,15 @@ export default class HeaderRightBlock extends Component {
 					])}
 					onClick={this.handleMetamaskClick}
 				>
-					Metamask로 플레이
+					Use Metamask
 				</button>
 			</div>
 		);
 
 		const caseAuthedElem = (
-			<div className={styles.wrapperAuthed}>
+			<div
+				onClick={()=>{this.props.history.push('/account');}}
+				className={styles.wrapperAuthed}>
 				<div className={styles.memberInfo}>
 					<div>{email}</div>
 					<div>wallet: {wallet}</div>
@@ -101,7 +105,7 @@ export default class HeaderRightBlock extends Component {
 					])}
 					onClick={this.props.attemptLogout}
 				>
-					로그 아웃
+					Sign Out
 				</button>
 			</div>
 		);

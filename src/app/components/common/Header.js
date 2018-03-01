@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link, IndexLink } from 'react-router';
+import { Link } from 'react-router-dom';
+import HeaderNavBlock from './HeaderNavBlock';
 import HeaderRightBlock from './HeaderRightBlock';
 
 import styles from './Header.scss';
@@ -13,15 +14,14 @@ export default class Header extends Component {
     render() {
         return(
 			<header className={styles.appBar}>
-				<button className="btn-unstyled">
-					<i className="fa fa-bars" />
-				</button>
-				<span className={styles.logo}>
-					Dice Roll
-				</span>
-
-				<HeaderRightBlock />
+				<div className={styles.logoBlock}>
+					<span className={styles.logo}>
+						<Link to="/">Dice Roll</Link>
+					</span>
+				</div>
+				<HeaderNavBlock />
 				
+				<HeaderRightBlock />
 			</header>
         );
     }
