@@ -1,25 +1,33 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { setChipIndex } from '../../actions/gameActions';
+import { chipUnits } from '../../constants/gameConfig';
 
 import styles from './Chips.scss';
 
 
+@connect(
+	(state, ownProps) => ({
+		selectedChipIdx: state.game.currentChipIdx
+	}),	{
+		setChipIndex
+	}
+)
 export default class Chips extends Component {
-	static propTypes = {
-		chipUnits: PropTypes.array,
-		onChipClick: PropTypes.func,
-		selectedChipIdx: PropTypes.number
-	};
-	
 	constructor(props) {
 		super(props);
 	}
 
+	handleChipClick = (evt) => {
+		this.props.setChipIndex(
+			parseInt(evt.target.dataset.idx)
+		);
+	}
+
 	render() {
 		const {
-			chipUnits,
-			onChipClick,
 			selectedChipIdx
 		} = this.props;
 
@@ -32,7 +40,7 @@ export default class Chips extends Component {
 								[styles.active]: idx === selectedChipIdx
 						})}
 						data-idx={idx}
-						onClick={onChipClick}
+						onClick={this.handleChipClick}
 						key={chipUnit}>
 						{ chipUnit }
 					</div>

@@ -18,17 +18,24 @@ export function setClientSeed(newSeed) {
 	};
 }
 
-export function setBetMoney(betMoney) {
+export function setChipIndex(chipIdx) {
 	return {
-		type: actionTypes.GAME_SET_BET_MONEY,
-		betMoney
+		type: actionTypes.GAME_SET_CHIP_INDEX,
+		chipIdx
 	};
 }
 
-export function setBetSide(side) {
+export function addToBet(betSide, addition) {
 	return {
-		type: actionTypes.GAME_SET_BET_SIDE,
-		side
+		type: actionTypes.GAME_ADD_TO_BET,
+		betSide,
+		addition
+	};
+}
+
+export function resetBet() {
+	return {
+		type: actionTypes.GAME_RESET_BET
 	};
 }
 

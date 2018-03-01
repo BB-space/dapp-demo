@@ -3,9 +3,8 @@ import { connect } from 'react-redux';
 import {
 	fetchHashedServerSeed,
 	setClientSeed,
-	setBetMoney,
-	setBetSide,
-	getGameResult
+	getGameResult,
+	resetBet
 } from '../../actions/gameActions';
 import {
 	generateRandomString,
@@ -19,7 +18,6 @@ import {
 	gameABI
 } from '../../../common/constants/contracts';
 import BetBoard from './BetBoard';
-import { chipUnits } from '../../constants/gameConfig';
 import Chips from './Chips';
 
 
@@ -33,8 +31,7 @@ import Chips from './Chips';
 	}),	{
 		fetchHashedServerSeed,
 		setClientSeed,
-		setBetMoney,
-		setBetSide,
+		resetBet,
 		getGameResult
 	}
 )
@@ -43,8 +40,6 @@ export default class GamePage extends Component {
 		super(props);
 
 		this.state = {
-			selectedChipIdx: 0,
-			
 			prevResult: [],
 			prevServerSeed: '',
 			prevServerSeedBytes32: '',
@@ -61,6 +56,10 @@ export default class GamePage extends Component {
 		this.props.setClientSeed(generateRandomString());
 		// this.watchContractOddEvenPlayGame();
 		// this.watchContractOddEven();
+	}
+
+	handleBetReset = () => {
+		this.props.resetBet();
 	}
 	
 	watchContractOddEven(){
@@ -158,12 +157,6 @@ export default class GamePage extends Component {
 				win
 			)
 			.send({from: account});
-	}
-
-	changeChip = (evt) => {
-		this.setState({
-			selectedChipIdx: parseInt(evt.target.dataset.idx)
-		});
 	}
 
 	getDiceComponent(numbers) {
@@ -302,10 +295,9 @@ export default class GamePage extends Component {
 
 						<BetBoard />
 						
-						<Chips
-						    chipUnits={chipUnits}
-						    onChipClick={this.changeChip}
-						    selectedChipIdx={selectedChipIdx} />
+						<Chips />
+
+						<button onClick={this.handleBetReset}>reset</button>
 
 					</div>
 				</div>
