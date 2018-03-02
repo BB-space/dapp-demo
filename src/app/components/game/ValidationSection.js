@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {
 	keccak256,
 	reconstructResult,
-	stringToBytes32
+	stringToBytes32,
+	computeMultipleHash
 } from '../../../common/utils';
 
 
@@ -85,10 +86,9 @@ export default class ValidationSection extends Component {
 			</div>
 		)
 	}
-	
+
 	handleInputChange(whichState, evt) {
 		const newVal = evt.target.value;
-
 		this.setState({ [whichState]: newVal }, this.setNewHashAndResult);
 	}
 
@@ -97,13 +97,12 @@ export default class ValidationSection extends Component {
 			clientSeed,
 			serverSeed
 		} = this.state;
-
 		this.setState({
-			hashedServerSeed: keccak256(stringToBytes32(serverSeed)),
+			hashedServerSeed: computeMultipleHash(stringToBytes32(serverSeed),4),
 			result: reconstructResult(serverSeed, clientSeed)
 		});
 	}
-	
+
 	render() {
 		const {
 			clientSeed,
@@ -111,7 +110,7 @@ export default class ValidationSection extends Component {
 			hashedServerSeed,
 			result
 		} = this.state;
-		
+
 		return (
 			<div className="col-md-12">
 				<div className="panel panel-default">

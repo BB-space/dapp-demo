@@ -159,7 +159,7 @@ contract constructor
     setDiceNum(3);
     setHashNum(4);
     setDepositConstant(3);
-    setDiceFaces(8);
+    setDiceFaces(6);
     setEdge(100);
     //odd, even
     //tripple 1, tripple 2, tripple 3, tripple 4, tripple 5, tripple 6
@@ -437,6 +437,41 @@ logging
     bytes32[] _playingGames
   ){
     _playingGames = playingGames[_player];
+  }
+  //test sha3
+  function _setResult(bytes32 dealerSeed, bytes32 playerSeed) public view returns(
+    bytes32 dice1hash,
+    bytes32 dice2hash,
+    bytes32 dice3hash,
+    uint _maxHashNum,
+    uint _diceFaces,
+    uint dice1raw,
+    uint dice2raw,
+    uint dice3raw,
+    uint dice1,
+    uint dice2,
+    uint dice3
+  ){
+    dice1hash = keccak256(
+      computeMultipleHash(dealerSeed,1),
+      playerSeed
+    );
+    dice2hash = keccak256(
+      computeMultipleHash(dealerSeed,2),
+      playerSeed
+    );
+    dice3hash = keccak256(
+      computeMultipleHash(dealerSeed,3),
+      playerSeed
+    );
+    _maxHashNum = maxHashNum;
+    _diceFaces = diceFaces;
+    dice1raw = uint(dice1hash);
+    dice2raw = uint(dice2hash);
+    dice3raw = uint(dice3hash);
+    dice1 = dice1raw % diceFaces;
+    dice2 = dice2raw % diceFaces;
+    dice3 = dice3raw % diceFaces;
   }
 /*
 utilities
