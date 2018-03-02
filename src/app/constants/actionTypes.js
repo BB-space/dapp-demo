@@ -17,6 +17,7 @@ export default keymirror({
 	AUTH_SET_ETH_BALANCE: null,
 	AUTH_SET_TOKEN_BALANCE: null,
 	AUTH_SET_METAMASK_USE: null,
+	AUTH_SET_IF_WEB3_INJECTED: null,
 
 	// game
 	GAME_SET_HASHED_SERVER_SEED: null,

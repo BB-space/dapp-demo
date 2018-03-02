@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
-import MersenneTwister from 'mersennetwister';
+import _ from 'lodash';
 import Web3 from 'web3';
+import { betDefMap } from '../constants/interfaces';
 
 const web3 = new Web3();
 
@@ -56,4 +57,18 @@ export function reconstructResult(serverSeed, clientSeed) {
 		Math.floor(mt.random() * 6) + 1,
 		Math.floor(mt.random() * 6) + 1
 	];
+}
+
+export function generateBettingInput(betState) {
+	const totalEther = _.values(betState).reduce((a, b) => a + b);
+	let contractInput = [];
+	
+	for(let key in betState) {
+		if(key in betDefMap) {
+			contractInput.push(betDefMap[key]);
+			contractInput.push(parseInt(betState[key] * 1000));
+		}
+	}
+
+	return { contractInput, totalEther };
 }

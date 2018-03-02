@@ -11,7 +11,8 @@ import styles from './HeaderRightBlock.scss';
 
 @connect(
 	(state, ownProps) => ({
-		usingMetamask: state.auth.usingMetamask,
+		metamaskMode: state.auth.metamaskMode,
+		isWeb3Injected: state.auth.isWeb3Injected,
 		isAuthenticated: state.auth.isAuthenticated,
 		email: state.auth.email,
 		wallet: state.auth.wallet
@@ -40,7 +41,8 @@ export default class HeaderRightBlock extends Component {
 
     render() {
 		const {
-			usingMetamask,
+			metamaskMode,
+			isWeb3Injected,
 			isAuthenticated,
 			email,
 			wallet
@@ -49,7 +51,7 @@ export default class HeaderRightBlock extends Component {
 
 		const caseMetamaskElem = (
 			<div>
-				현재 지원하지 않음
+				{ !isWeb3Injected && 'No Metamask has been detected'}
 				<button
 					className={classNames([
 							'btn',
@@ -63,7 +65,7 @@ export default class HeaderRightBlock extends Component {
 		);
 
 		const caseNotAuthedElem = (
-			<div>
+			<div className={styles.notAuthed}>
 				<HeaderSignIn />
 				<button
 					className={classNames([
@@ -110,7 +112,7 @@ export default class HeaderRightBlock extends Component {
 			</div>
 		);
 
-		const content = usingMetamask ?
+		const content = metamaskMode ?
 						caseMetamaskElem : isAuthenticated ?
 						caseAuthedElem : caseNotAuthedElem;
 		

@@ -117,3 +117,10 @@ export function setMetamaskUse(toUseMetamask) {
 		toUseMetamask
 	};
 }
+
+export function setIfWeb3Injected(isInjected) {
+	return {
+		type: actionTypes.AUTH_SET_IF_WEB3_INJECTED,
+		isInjected
+	};
+}

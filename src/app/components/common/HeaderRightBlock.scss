@@ -11,20 +11,22 @@
     padding-right: 15px;
 }
 
-.btn-signup {
-	border-right: 0;
-	margin-left: 20px;
-	border-right: 0;
-	border-top-right-radius: 0;
-	border-bottom-right-radius: 0;
-}
-
-.btn-conversion {
-	border-top-left-radius: 0;
-	border-bottom-left-radius: 0;
-
-	&:first-of-type {
+.not-authed {
+	.btn-signup {
+		border-right: 0;
 		margin-left: 20px;
+		border-right: 0;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	.btn-conversion {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+
+		&:first-of-type {
+			margin-left: 20px;
+		}
 	}
 }
 

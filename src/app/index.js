@@ -5,12 +5,20 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import MainApp from './components/MainApp';
 import configureStore from './store/configureStore';
-import routes from './routes';
+import { setInjectedWeb3 } from './utils/web3';
+import { setIfWeb3Injected } from './actions/authActions';
 
 
-const initialState = window.__INITIAL_STATE__ || {};
+
+let initialState = window.__INITIAL_STATE__ || {};
 const store = configureStore(initialState);
 
+
+if (typeof window.web3 !== 'undefined') {
+    // Save Mist/MetaMask's provider
+    setInjectedWeb3(window.web3.currentProvider);
+	store.dispatch(setIfWeb3Injected(true));
+}
 
 (function renderApp() {
 	render(

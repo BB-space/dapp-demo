@@ -10,9 +10,11 @@ import {
 	generateRandomString,
 	reconstructResult,
 	toWei,
-	asciiToHex
+	asciiToHex,
+	stringToBytes32,
+	generateBettingInput
 } from '../../../common/utils';
-import web3 from '../../utils/web3';
+import { injectedWeb3 } from '../../utils/web3';
 import {
 	gameAddress,
 	gameABI
@@ -23,11 +25,13 @@ import Chips from './Chips';
 
 @connect(
 	(state, ownProps) => ({
+		metamaskMode: state.auth.metamaskMode,
+		isWeb3Injected: state.auth.isWeb3Injected,
+		betState: state.game.betState,
+		
 		account: state.ethState.currentAccount,
 		hashedServerSeed: state.game.hashedServerSeed,
-		clientSeed: state.game.clientSeed,
-		betSide: state.game.betSide,
-		betMoney: state.game.betMoney
+		clientSeed: state.game.clientSeed
 	}),	{
 		fetchHashedServerSeed,
 		setClientSeed,
@@ -61,6 +65,8 @@ export default class GamePage extends Component {
 	handleBetReset = () => {
 		this.props.resetBet();
 	}
+
+
 	
 	watchContractOddEven(){
 		/* const oddEven = new web3.eth.Contract(gameABI,gameAddress)
@@ -92,46 +98,73 @@ export default class GamePage extends Component {
 		this.props.setClientSeed(newVal);
 	}
 
-	handleBetMoneyChange = (evt) => {
-		const newVal = evt.target.value;
-		this.props.setBetMoney(newVal);
-	}
-
-	handleBetSideChange = (evt) => {
-		const newVal = evt.target.value;
-		this.props.setBetSide(newVal);
-	}
 
 	handlePlayBtnClick = async (evt) => {
-		const res = await this.props.getGameResult();
-		const { hashedServerSeed, account } = this.props;
 		const {
-			gameId,
-			serverSeed,
-			clientSeed,
-			clientSeedBytes32,
-			serverSeedBytes32,
-			betSide,
-			betMoney,
-			playerWin
-		} = res;
+			metamaskMode,
+			betState,
+			clientSeed
+		} = this.props;
 
-		const result = reconstructResult(serverSeed, clientSeed);
+		if(metamaskMode && isWeb3Injected) {
+			const gameInstance = new injectedWeb3.eth.Contract(gameABI, gameAddress);
+			let _hash1 = await gameInstance.methods.getHash(0).call();
 
-		this.setState({
-			prevGameId: gameId,
-			prevServerSeed: serverSeed,
-			prevServerSeedBytes32: serverSeedBytes32,
-			prevClientSeed: clientSeed,
-			prevClientSeedBytes32: clientSeedBytes32,
-			prevResult: result,
-			prevBetSide: betSide,
-			prevBetMoney: betMoney,
-			prevHashedServerSeed: this.props.hashedServerSeed
-		});
+			const {
+				contractInput,
+				totalEther
+			} = generateBettingInput(betState);
+			
+			const game = gameInstance
+				.methods
+				.initGame(
+					_hash1,
+					stringToBytes32(clientSeed),
+					contractInput
+				)
+				.send({
+					from: '0xc31Eb6E317054A79bb5E442D686CB9b225670c1D',
+					value: toWei(totalEther)
+				});
 
-		this.props.fetchHashedServerSeed();
-		this.props.setClientSeed(generateRandomString());
+			game.then((a,b) => {debugger;})
+
+			
+		} else {
+
+		}
+
+
+		
+		/* const res = await this.props.getGameResult();
+		   const { hashedServerSeed, account } = this.props;
+		   const {
+		   gameId,
+		   serverSeed,
+		   clientSeed,
+		   clientSeedBytes32,
+		   serverSeedBytes32,
+		   betSide,
+		   betMoney,
+		   playerWin
+		   } = res;
+
+		   const result = reconstructResult(serverSeed, clientSeed);
+
+		   this.setState({
+		   prevGameId: gameId,
+		   prevServerSeed: serverSeed,
+		   prevServerSeedBytes32: serverSeedBytes32,
+		   prevClientSeed: clientSeed,
+		   prevClientSeedBytes32: clientSeedBytes32,
+		   prevResult: result,
+		   prevBetSide: betSide,
+		   prevBetMoney: betMoney,
+		   prevHashedServerSeed: this.props.hashedServerSeed
+		   });
+
+		   this.props.fetchHashedServerSeed();
+		   this.props.setClientSeed(generateRandomString());*/
 	}
 
 	handleClickFinalze = async (evt) => {
@@ -270,11 +303,6 @@ export default class GamePage extends Component {
 							</li>
 
 						</ul>
-						<button
-							className="btn btn-default"
-							onClick={this.handlePlayBtnClick}>
-							Play
-						</button>
 
 						<div className="text-center">
 							<div>Result:</div>
@@ -285,6 +313,15 @@ export default class GamePage extends Component {
 							</span>
 						</div>
 
+
+						<BetBoard />
+						
+						<Chips />
+
+						<button onClick={this.handleBetReset}>reset</button>
+						<button onClick={this.handlePlayBtnClick}>roll</button>
+
+
 						<div className="text-center">
 							<div style={{fontSize:30}}>Your Bet Side: {prevBetSideText} ({win})</div>
 							<div style={{fontSize:30}}>Your Bet Money: {prevBetMoney}</div>
@@ -292,12 +329,6 @@ export default class GamePage extends Component {
 							<div>Server Seed: {prevServerSeed}</div>
 							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						</div>
-
-						<BetBoard />
-						
-						<Chips />
-
-						<button onClick={this.handleBetReset}>reset</button>
 
 					</div>
 				</div>

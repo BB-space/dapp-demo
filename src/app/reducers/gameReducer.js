@@ -15,9 +15,7 @@ const initialState = {
 	
 	hashedServerSeed: '',
 	clientSeed: '',
-	clientSeedBytes32: '',
-	betSide: '0',
-	betMoney: 0
+	clientSeedBytes32: ''
 };
 
 export default function gameReducer(state=initialState, action) {

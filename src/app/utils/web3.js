@@ -1,9 +1,15 @@
 import Web3 from 'web3';
 import { nodeUrl } from '../../common/constants/config';
 
-export const web3 = new Web3(
+export const serviceWeb3 = new Web3(
 	new Web3.providers.HttpProvider(nodeUrl)
 	// new Web3.providers.WebsocketProvider(nodeUrl)
 );
 
-export default web3;
+export let injectedWeb3 = undefined;
+
+export function setInjectedWeb3(provider) {
+	injectedWeb3 = new Web3(provider);
+}
+
+export default serviceWeb3;

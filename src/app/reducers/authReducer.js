@@ -7,15 +7,16 @@ const {
     AUTH_SET_USER,
 	AUTH_SET_ETH_BALANCE,
 	AUTH_SET_TOKEN_BALANCE,
-	AUTH_SET_METAMASK_USE
+	AUTH_SET_METAMASK_USE,
+	AUTH_SET_IF_WEB3_INJECTED
 } = actionTypes;
 
 const initialState = {
-	usingMetamask: false,
+	metamaskMode: false,
+	isWeb3Injected: false,
     email: '',
 	wallet: '',
 	ethBalance: 0,
-	tokenBalance: 0,
     isAuthenticating: false,
     isAuthenticated: false
 };
@@ -51,7 +52,12 @@ export default function search(state=initialState, action) {
 
 		case AUTH_SET_METAMASK_USE:
 			return Object.assign({}, state, {
-				usingMetamask: action.toUseMetamask
+				metamaskMode: action.toUseMetamask
+			});
+
+		case AUTH_SET_IF_WEB3_INJECTED:
+			return Object.assign({}, state, {
+				isWeb3Injected: action.isInjected
 			});
 
         default:
