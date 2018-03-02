@@ -17,8 +17,7 @@ import {
 	gameAddress,
 	gameABI
 } from '../../../common/constants/contracts';
-import BetBoard from './BetBoard';
-import Chips from './Chips';
+import BetTable from './BetTable'
 
 
 @connect(
@@ -61,7 +60,7 @@ export default class GamePage extends Component {
 	handleBetReset = () => {
 		this.props.resetBet();
 	}
-	
+
 	watchContractOddEven(){
 		/* const oddEven = new web3.eth.Contract(gameABI,gameAddress)
 		   oddEven.events.allEvents(
@@ -235,7 +234,7 @@ export default class GamePage extends Component {
 
 		const {
 			selectedChipIdx,
-			
+
 			prevResult,
 			prevServerSeed,
 			prevClientSeed,
@@ -243,12 +242,12 @@ export default class GamePage extends Component {
 			prevBetMoney,
 			prevHashedServerSeed
 		} = this.state;
-		
+
 		const result = prevResult.length === 3 ? prevResult.reduce((a,b)=>{return a+b}) : "not bet"
 		const resultText = result==="not bet" ? "" : result % 2 === 1 ? "odd" :"even"
 		const prevBetSideText = parseInt(prevBetSide) === 1 ? "odd" : parseInt(prevBetSide) === 0 ? "even" : ""
 		const win = result === "not bet" ? "" : result % 2 == parseInt(prevBetSide) ? "win" : "lose"
-		
+
 		return (
 			<div className="col-md-12">
 				<div className="panel panel-default">
@@ -293,9 +292,7 @@ export default class GamePage extends Component {
 							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						</div>
 
-						<BetBoard />
-						
-						<Chips />
+						<BetTable />
 
 						<button onClick={this.handleBetReset}>reset</button>
 

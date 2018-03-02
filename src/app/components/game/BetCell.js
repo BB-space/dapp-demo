@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import onClickOutside from 'react-onclickoutside';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { addToBet } from '../../actions/gameActions';
@@ -18,18 +19,28 @@ import styles from './BetCell.scss';
 	null,
 	{ pure: false }
 )
-export default class BetBoard extends Component {
+class Betcell extends Component {
 	static propTypes = {
 		betSide: PropTypes.string
 	};
-	
+
 	constructor(props) {
 		super(props);
+
+		this.state ={
+			clicked: false
+		};
+	}
+
+	handleClickOutside = (evt)=> {
+		alert("haha");
 	}
 
 	handleBetClick = (evt) => {
 		const betSide = evt.target.dataset.betside;
-
+		this.setState({
+			clicked:true
+		});
 		if(betSide) {
 			const {
 				addToBet,
@@ -52,7 +63,7 @@ export default class BetBoard extends Component {
 			addToBet,
 			...restProps
 		} = this.props;
-		
+
 		const {
 			className
 		} = restProps;
@@ -64,13 +75,13 @@ export default class BetBoard extends Component {
 				{ betMoney }
 			</div>
 		)
-		
+
 		return (
 			<td
-		        {...restProps}
+		      {...restProps}
 			    data-betside={betSide}
 			    onClick={this.handleBetClick}
-				className={classNames([
+					className={classNames([
 						styles.cell,
 						className,
 						{ [styles.active]: (betMoney || 0) > 0 }
@@ -83,3 +94,5 @@ export default class BetBoard extends Component {
 		);
 	}
 }
+
+export default onClickOutside(Betcell);
