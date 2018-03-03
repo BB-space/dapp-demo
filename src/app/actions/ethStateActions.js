@@ -18,13 +18,6 @@ function setEthBalance(balance) {
 	};
 }
 
-function setTokenBalance(balance) {
-	return {
-		type: actionTypes.ETH_SET_TOKEN_BALANCE,
-		balance
-	};
-}
-
 export function getAccountStatus() {
 	const url = '/api/eth/balance';
 	
@@ -36,34 +29,4 @@ export function getAccountStatus() {
 			dispatch(setEthBalance(res.ethBalance));
 		}
 	};
-}
-
-export function buyTokens(amtEth) {
-	const url = '/api/eth/tokenpurchase';
-
-	return (dispatch, getState) => {
-		const account = getState().auth.wallet;
-		
-		return request.post(url, {
-			amtWei: toWei(amtEth).toString(10)
-		});
-	};
-}
-
-export function sendToken() {
-	const {
-		currentAccount,
-		tokenAddress,
-		tlpForTransfer,
-		tlpRecipient
-	} = this.state;
-
-	const tokenInstance = new web3.eth.Contract(tulipABI, tokenAddress);
-
-	return tokenInstance
-		.methods
-		.transfer(tlpRecipient, toWei(tlpForTransfer))
-		.send({ 
-			from: currentAccount
-		});
 }

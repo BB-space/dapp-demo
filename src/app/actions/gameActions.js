@@ -1,6 +1,9 @@
+import _ from 'lodash';
 import actionTypes from '../constants/actionTypes';
 import { request } from '../utils/fetch';
+import { serviceWeb3 } from '../utils/web3';
 import { stringToBytes32 } from '../../common/utils';
+import { gameABI, gameAddress } from '../../common/constants/contracts';
 
 
 function setHashedServerSeed(hashedServerSeed) {
@@ -40,11 +43,19 @@ export function resetBet() {
 }
 
 export function fetchHashedServerSeed() {
-	const url = '/api/games/seedhash'
+	const gameMethods = new serviceWeb3.eth.Contract(gameABI, gameAddress).methods;
 	
 	return async (dispatch, getState) => {
-		const res = await request.get(url);
-		dispatch(setHashedServerSeed(res.hashed_seed));
+		const hashListLength = await gameMethods.getHashListLength().call();
+		const randIdx = _.random(hashListLength);
+
+		const hash = await gameMethods.getHash(randIdx).call();
+
+		new serviceWeb3.eth.Contract(gameABI, gameAddress).events.Finalize((e,r) => {
+			debugger;
+		})
+		
+		dispatch(setHashedServerSeed(hash));
 	};
 }
 

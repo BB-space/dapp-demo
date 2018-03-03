@@ -35,6 +35,16 @@ router.get(`${BASE_URL}/balance`, async (ctx) => {
 	};
 });
 
+
+router.get(`${BASE_URL}/test`, async (ctx) => {
+	const ethBalance = await web3.eth.getBalance('0xc31Eb6E317054A79bb5E442D686CB9b225670c1D');
+
+	ctx.body = {
+		success: true,
+		ethBalance
+	};
+});
+
 /* router.post(`${BASE_URL}/tokenpurchase`, async (ctx) => {
  * 	const user = ctx.state.user;
  * 	const { amtWei } = ctx.request.body;

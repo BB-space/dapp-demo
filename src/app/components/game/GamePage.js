@@ -114,9 +114,6 @@ export default class GamePage extends Component {
 				contractInput,
 				totalEther
 			} = generateBettingInput(betState);
-
-			let x = injectedWeb3;
-			debugger;
 			
 			const game = gameInstance
 				.methods
@@ -130,7 +127,6 @@ export default class GamePage extends Component {
 					value: toWei(totalEther)
 				});
 
-			game.then((a,b) => {debugger;})
 
 			
 		} else {

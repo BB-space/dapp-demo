@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAccountStatus } from '../../actions/ethStateActions';
+import { getAccountStatus } from '../../actions/authActions';
 import { fromWei, toWei } from '../../../common/utils';
 
 
@@ -8,7 +8,7 @@ import { fromWei, toWei } from '../../../common/utils';
 	(state, ownProps) => ({
 		isAuthenticated: state.auth.isAuthenticated,
 		wallet: state.auth.wallet,
-		ethBalance: state.ethState.ethBalance
+		ethBalance: state.auth.ethBalance
 	}),	{
 		getAccountStatus
 	}

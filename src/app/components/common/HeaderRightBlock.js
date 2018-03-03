@@ -49,9 +49,20 @@ export default class HeaderRightBlock extends Component {
 		} = this.props;
 
 
+		const userInfoElem = (
+			<div
+				className={styles.memberInfo}
+				onClick={()=>{this.props.history.push('/account');}}>
+				{!metamaskMode && <div>{ email }</div>}
+				<div>wallet: {wallet}</div>
+			</div>
+		);
+
 		const caseMetamaskElem = (
 			<div>
-				{ !isWeb3Injected && 'No Metamask has been detected'}
+				{ isWeb3Injected ?
+				  userInfoElem :
+				  <span>'No Metamask has been detected'</span>}
 				<button
 					className={classNames([
 							'btn',
@@ -91,14 +102,10 @@ export default class HeaderRightBlock extends Component {
 		);
 
 		const caseAuthedElem = (
-			<div
-				onClick={()=>{this.props.history.push('/account');}}
-				className={styles.wrapperAuthed}>
-				<div className={styles.memberInfo}>
-					<div>{email}</div>
-					<div>wallet: {wallet}</div>
-					
-				</div>
+			<div className={styles.wrapperAuthed}>
+				
+				{ userInfoElem }
+				
 				<button
 					className={classNames([
 						'btn',

@@ -14,6 +14,7 @@ export default keymirror({
 	AUTH_SET_AUTHENTICATING: null,
     AUTH_SET_AUTHENTICATED: null,
     AUTH_SET_USER: null,
+    AUTH_SET_ETH_BALANCE: null,
 	AUTH_SET_ETH_BALANCE: null,
 	AUTH_SET_TOKEN_BALANCE: null,
 	AUTH_SET_METAMASK_USE: null,

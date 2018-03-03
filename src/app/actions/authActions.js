@@ -1,6 +1,8 @@
 import { browserHistory } from 'react-router';
 import { request } from '../utils/fetch';
 import actionTypes from '../constants/actionTypes';
+import { injectedWeb3 } from '../utils/web3';
+import { toWei } from '../../common/utils';
 
 
 export function attemptSignIn(email, password) {
@@ -112,21 +114,35 @@ function setTokenBalance(balance) {
 }
 
 export function setMetamaskUse(toUseMetamask) {
-	return (dispatch, getState) => {
+	return async (dispatch, getState) => {
 		dispatch(setUser({ email: '', wallet: '' }));
         dispatch({
 			type: actionTypes.AUTH_SET_METAMASK_USE,
 			toUseMetamask
 		});
 
+		const wallet = await injectedWeb3.eth.getCoinbase();
+		dispatch(setUser({ wallet }));
+
         return true;
-    }
-	
+    };
 }
 
 export function setIfWeb3Injected(isInjected) {
 	return {
 		type: actionTypes.AUTH_SET_IF_WEB3_INJECTED,
 		isInjected
+	};
+}
+
+export function getAccountStatus() {
+	const url = '/api/eth/balance';
+	
+    return async (dispatch, getState) => {
+		const res = await request.get(url);
+
+		if(res.success) {
+			dispatch(setEthBalance(res.ethBalance));
+		}
 	};
 }

@@ -6,7 +6,7 @@ function stringToBytes32(str) {
 	return '0x' + hex.substr(-64).padStart(64, '0');
 }
 
-const seedsToPush = ['very1', 'strong', 'seeds1'];
+const seedsToPush = ['abc', 'def', 'ghi'];
 
 module.exports = async function(callback){
   const oddEven = await OddEven.deployed();
