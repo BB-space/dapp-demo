@@ -8,7 +8,7 @@ function stringToBytes32(str) {
 
 const accounts = web3.eth.accounts;
 
-var serverSeed = stringToBytes32('strong');
+var serverSeed = stringToBytes32('very1');
 var targetAccount = accounts[0];
 
 module.exports = async function(callback){

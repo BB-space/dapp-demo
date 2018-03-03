@@ -112,10 +112,16 @@ function setTokenBalance(balance) {
 }
 
 export function setMetamaskUse(toUseMetamask) {
-	return {
-		type: actionTypes.AUTH_SET_METAMASK_USE,
-		toUseMetamask
-	};
+	return (dispatch, getState) => {
+		dispatch(setUser({ email: '', wallet: '' }));
+        dispatch({
+			type: actionTypes.AUTH_SET_METAMASK_USE,
+			toUseMetamask
+		});
+
+        return true;
+    }
+	
 }
 
 export function setIfWeb3Injected(isInjected) {

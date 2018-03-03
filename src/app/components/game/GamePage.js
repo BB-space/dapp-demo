@@ -19,6 +19,7 @@ import {
 	gameAddress,
 	gameABI
 } from '../../../common/constants/contracts';
+import BetTable from './BetTable';
 import BetBoard from './BetBoard';
 import Chips from './Chips';
 
@@ -66,8 +67,6 @@ export default class GamePage extends Component {
 		this.props.resetBet();
 	}
 
-
-	
 	watchContractOddEven(){
 		/* const oddEven = new web3.eth.Contract(gameABI,gameAddress)
 		   oddEven.events.allEvents(
@@ -102,6 +101,7 @@ export default class GamePage extends Component {
 	handlePlayBtnClick = async (evt) => {
 		const {
 			metamaskMode,
+			isWeb3Injected,
 			betState,
 			clientSeed
 		} = this.props;
@@ -114,6 +114,9 @@ export default class GamePage extends Component {
 				contractInput,
 				totalEther
 			} = generateBettingInput(betState);
+
+			let x = injectedWeb3;
+			debugger;
 			
 			const game = gameInstance
 				.methods
@@ -123,7 +126,7 @@ export default class GamePage extends Component {
 					contractInput
 				)
 				.send({
-					from: '0xc31Eb6E317054A79bb5E442D686CB9b225670c1D',
+					from: '0x0f8b9f87eb70fe45C460aA50eee4f21957cB4d57',
 					value: toWei(totalEther)
 				});
 
@@ -268,7 +271,7 @@ export default class GamePage extends Component {
 
 		const {
 			selectedChipIdx,
-			
+
 			prevResult,
 			prevServerSeed,
 			prevClientSeed,
@@ -276,12 +279,12 @@ export default class GamePage extends Component {
 			prevBetMoney,
 			prevHashedServerSeed
 		} = this.state;
-		
+
 		const result = prevResult.length === 3 ? prevResult.reduce((a,b)=>{return a+b}) : "not bet"
 		const resultText = result==="not bet" ? "" : result % 2 === 1 ? "odd" :"even"
 		const prevBetSideText = parseInt(prevBetSide) === 1 ? "odd" : parseInt(prevBetSide) === 0 ? "even" : ""
 		const win = result === "not bet" ? "" : result % 2 == parseInt(prevBetSide) ? "win" : "lose"
-		
+
 		return (
 			<div className="col-md-12">
 				<div className="panel panel-default">
@@ -329,6 +332,11 @@ export default class GamePage extends Component {
 							<div>Server Seed: {prevServerSeed}</div>
 							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						</div>
+
+
+						<BetTable />
+
+						<button onClick={this.handleBetReset}>reset</button>
 
 					</div>
 				</div>
