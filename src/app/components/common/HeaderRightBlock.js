@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 import { setMetamaskUse, attemptLogout, setMetamaskAccount, setMetamaskNetwork } from '../../actions/authActions';
+import {getPlayerEtherBalance} from '../../actions/gameActions';
 import { setSignUpModal } from '../../actions/globalActions';
 import HeaderSignIn from '../auth/HeaderSignIn';
 
@@ -23,6 +24,7 @@ import styles from './HeaderRightBlock.scss';
 		setMetamaskUse,
 		setMetamaskAccount,
 		setMetamaskNetwork,
+		getPlayerEtherBalance,
 		setSignUpModal
 	}
 )
@@ -38,6 +40,7 @@ export default class HeaderRightBlock extends Component {
 			if(web3.currentProvider.isMetaMask){
 				this.props.setMetamaskUse(true);
 				this.props.setMetamaskAccount(web3.eth.defaultAccount);
+				this.props.getPlayerEtherBalance();
 				web3.version.getNetwork((err,netId)=>{
 					let network = '';
 					switch (netId) {

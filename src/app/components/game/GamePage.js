@@ -29,7 +29,6 @@ import Chips from './Chips';
 		metamaskMode: state.auth.metamaskMode,
 		isWeb3Injected: state.auth.isWeb3Injected,
 		betState: state.game.betState,
-
 		account: state.ethState.currentAccount,
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed

@@ -41,7 +41,7 @@ export function resetBet() {
 
 export function fetchHashedServerSeed() {
 	const url = '/api/games/seedhash'
-	
+
 	return async (dispatch, getState) => {
 		const res = await request.get(url);
 		dispatch(setHashedServerSeed(res.hashed_seed));
@@ -56,4 +56,26 @@ export function getGameResult() {
 
 		return request.post(url, gameObj);
 	};
+}
+
+export function getPlayerEtherBalance(){
+	return (dispatch, getState) =>{
+		const metamaskAccount = getState().auth.metamaskAccount;
+		web3.eth.getBalance(
+			metamaskAccount,
+			(err,res)=>{
+				const metamaskBalance = web3.fromWei(res).toString();
+				dispatch(setPlayerEtherBalance(
+					metamaskBalance
+				))
+			}
+		);
+	}
+}
+
+export function setPlayerEtherBalance(playerEtherBalance){
+	return {
+		type: actionTypes.GAME_SET_PLAYER_ETHER_BALANCE,
+		playerEtherBalance
+	}
 }

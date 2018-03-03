@@ -121,7 +121,7 @@ export default class BetBoard extends Component {
 								2배 지급
 							</BetCell>
 							<BetCell colSpan="6" rowSpan="2">
-								<b>Tripple</b> <br/>
+								<b>TRIPPLE</b> <br/>
 								모든 주사위 면이 같을 시 216배 지급
 							</BetCell>
 							<BetCell
@@ -199,7 +199,7 @@ export default class BetBoard extends Component {
 						<tr>
 							<BetCell colSpan="12" rowSpan="2">
 								<b>SINGLE</b> <br/>
-								선택한 숫자가 하나라도 나오면 2.37배 제공
+								선택한 숫자가 하나라도 나오면 2.37배 지급
 							</BetCell>
 						</tr>
 						<tr/>

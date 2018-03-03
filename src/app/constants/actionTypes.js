@@ -26,5 +26,6 @@ export default keymirror({
 	GAME_SET_CLIENT_SEED: null,
 	GAME_SET_CHIP_INDEX: null,
 	GAME_ADD_TO_BET: null,
-	GAME_RESET_BET: null
+	GAME_RESET_BET: null,
+	GAME_SET_PLAYER_ETHER_BALANCE: null
 });
