@@ -8,9 +8,12 @@ import styles from './BetTable.scss';
 
 @connect(
 	(state, ownProps) => ({
-		playerEtherBalance: state.game.playerEtherBalance
+		playerEtherBalance: state.game.playerEtherBalance,
+		betState: state.game.betState
 	}),	{
-	}
+	},
+	null,
+	{ pure: false }
 )
 export default class BetTable extends Component {
 
@@ -22,8 +25,13 @@ export default class BetTable extends Component {
 		const {
 			handleBetReset,
 			handlePlayBtnClick,
-			playerEtherBalance
+			playerEtherBalance,
+			betState
 		} = this.props;
+		let betEther = 0;
+		for (let key in betState){
+			betEther += parseFloat(betState[key]);
+		}
 		return (
 			<div className = {styles.betTable}>
 				<BetBoard/>
@@ -40,7 +48,7 @@ export default class BetTable extends Component {
 							<td className ={styles.content}>
 								현재 배팅 금액
 							</td>
-							<td>하하</td>
+							<td>{betEther.toFixed(2)}</td>
 						</tr>
 						<tr>
 							<td>
