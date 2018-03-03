@@ -29,7 +29,7 @@ export default class BetBoard extends Component {
 				addToBet,
 				currentChipIdx
 			} = this.props;
-			
+
 			addToBet(
 				betSide,
 				parseFloat(chipUnits[currentChipIdx])
@@ -37,11 +37,76 @@ export default class BetBoard extends Component {
 		}
 	}
 
+	getDiceComponent(numbers) {
+		const dices = [
+			(
+				<div className="first-face">
+					<span className="pip" />
+				</div>
+			), (
+				<div className="second-face">
+					<span className="pip" />
+					<span className="pip" />
+				</div>
+			), (
+				<div className="third-face">
+					<span className="pip" />
+					<span className="pip" />
+					<span className="pip" />
+				</div>
+			), (
+				<div className="fourth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			), (
+				<div className="fifth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			), (
+				<div className="sixth-face">
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+					<div className="column">
+						<span className="pip" />
+						<span className="pip" />
+						<span className="pip" />
+					</div>
+				</div>
+			)
+		];
+
+		return (
+			<div className="bet-table dice-box">
+				{ numbers.map(e => dices[e-1]) }
+			</div>
+		)
+	}
+
 	render() {
 		const {
-			betState
+			betState,
 		} = this.props;
-		
+
 		return (
 			<div className={styles.wrapper}>
 				<table className={styles.table}>
@@ -49,70 +114,69 @@ export default class BetBoard extends Component {
 						<tr>
 							<BetCell
 								colSpan="3"
-							    rowSpan="2"
+							    rowSpan="4"
 							    betSide="odd">
 								<b>ODD</b> <br/>
-								1 WINS 1 <br/>
-								LOSES IF ANY TRIPPLE APPEARS
+								주사위 합이 홀수일 시 <br/>
+								2배 지급
 							</BetCell>
-							<BetCell colSpan="6">
-								
+							<BetCell colSpan="6" rowSpan="2">
+								<b>Tripple</b> <br/>
+								모든 주사위 면이 같을 시 216배 지급
 							</BetCell>
 							<BetCell
 								colSpan="3"
-							    rowSpan="2"
+							    rowSpan="4"
 							    betSide="even">
-								<b>EVEN</b> <br/>
-								1 WINS 1 <br/>
-								LOSES IF ANY TRIPPLE APPEARS  
+								<b>ODD</b> <br/>
+								주사위 합이 짝수일 시 <br/>
+								2배 지급
 							</BetCell>
 						</tr>
+						<tr/>
 						<tr>
 							<BetCell
 								colSpan="3"
 							    rowSpan="2"
 							    betSide="triple1">
-								111
+								{this.getDiceComponent([1,1,1])}
 							</BetCell>
 							<BetCell
 								colSpan="3"
 								rowSpan="2"
 								betSide="triple4">
-								444
+								{this.getDiceComponent([4,4,4])}
 							</BetCell>
 						</tr>
+						<tr/>
 						<tr>
 							<BetCell
 								colSpan="3"
-								rowSpan="5"
+								rowSpan="4"
 								betSide="small">
 								<b>SMALL</b> <br/>
-								4 TO 10 <br/>
-								1 WINS 1 <br/>
-								LOSES IF ANY TRIPPLE APPEARS  
+								주사위 합이 10이하 일 시 <br/>
+								2배 지급
 							</BetCell>
-							<BetCell
-								colSpan="3"
-								rowSpan="5"
-								betSide="big">
-								<b>BIG</b> <br/>
-								11 TO 17 <br/>
-								1 WINS 1 <br/>
-								LOSES IF ANY TRIPPLE APPEARS  
-							</BetCell>
-						</tr>
-						<tr>
 							<BetCell
 								colSpan="3"
 								rowSpan="2"
 								betSide="triple2">
-								222
+								{this.getDiceComponent([2,2,2])}
 							</BetCell>
 							<BetCell
 								colSpan="3"
 								rowSpan="2"
 								betSide="triple5">
-								555
+								{this.getDiceComponent([5,5,5])}
+							</BetCell>
+							<BetCell
+								colSpan="3"
+								rowSpan="4"
+								betSide="big">
+								<b>BIG</b> <br/>
+								주사위 합이 11이상 일 시 <br/>
+								2배 지급
 							</BetCell>
 						</tr>
 						<tr>
@@ -122,51 +186,55 @@ export default class BetBoard extends Component {
 								colSpan="3"
 								rowSpan="2"
 								betSide="triple3">
-								333
+								{this.getDiceComponent([3,3,3])}
 							</BetCell>
 							<BetCell
 								colSpan="3"
 								rowSpan="2"
 								betSide="triple6">
-								666
+								{this.getDiceComponent([6,6,6])}
 							</BetCell>
 						</tr>
+						<tr/>
 						<tr>
+							<BetCell colSpan="12" rowSpan="2">
+								<b>SINGLE</b> <br/>
+								선택한 숫자가 하나라도 나오면 2.37배 제공
+							</BetCell>
 						</tr>
+						<tr/>
 						<tr>
 							<BetCell
 								colSpan="2"
 								betSide="single1">
-								ONE 1
+								{this.getDiceComponent([1])}
 							</BetCell>
 							<BetCell
 								colSpan="2"
 								betSide="single2">
-								TWO 2
+								{this.getDiceComponent([2])}
 							</BetCell>
 							<BetCell
 								colSpan="2"
 								betSide="single3">
-								THREE 3
+								{this.getDiceComponent([3])}
 							</BetCell>
 							<BetCell
 								colSpan="2"
 								betSide="single4">
-								FOUR 4
+								{this.getDiceComponent([4])}
 							</BetCell>
 							<BetCell
 								colSpan="2"
 								betSide="single5">
-								FIVE 5
+								{this.getDiceComponent([5])}
 							</BetCell>
 							<BetCell
 								colSpan="2"
 								betSide="single6">
-								SIX 6
+								{this.getDiceComponent([6])}
 							</BetCell>
 						</tr>
-
-
 					</tbody>
 				</table>
 			</div>

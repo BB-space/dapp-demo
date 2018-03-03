@@ -84,8 +84,7 @@ export default class HeaderRightBlock extends Component {
 		const caseMetamaskElem = (
 			<div>
 				{ !isWeb3Injected && 'No Metamask has been detected'}
-				Account : {metamaskAccount}
-				({metamaskNetwork} Network)
+				Account : {metamaskAccount} ({metamaskNetwork} Network)
 				<button
 					className={classNames([
 							'btn',

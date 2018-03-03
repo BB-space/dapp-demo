@@ -292,6 +292,12 @@ export default class GamePage extends Component {
 					</div>
 					<div className="panel-body">
 
+
+						<BetTable
+							handleBetReset={this.handleBetReset}
+							handlePlayBtnClick={this.handlePlayBtnClick}
+						/>
+
 						<ul>
 							<li>
 								<b>Hashed Server Seed</b>
@@ -315,15 +321,6 @@ export default class GamePage extends Component {
 							</span>
 						</div>
 
-
-						<BetBoard />
-
-						<Chips />
-
-						<button onClick={this.handleBetReset}>reset</button>
-						<button onClick={this.handlePlayBtnClick}>roll</button>
-
-
 						<div className="text-center">
 							<div style={{fontSize:30}}>Your Bet Side: {prevBetSideText} ({win})</div>
 							<div style={{fontSize:30}}>Your Bet Money: {prevBetMoney}</div>
@@ -332,10 +329,6 @@ export default class GamePage extends Component {
 							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						</div>
 
-
-						<BetTable />
-
-						<button onClick={this.handleBetReset}>reset</button>
 
 					</div>
 				</div>

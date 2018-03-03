@@ -11,11 +11,20 @@ export default class BetTable extends Component {
 	}
 
 	render() {
-
+		const {
+			handleBetReset,
+			handlePlayBtnClick,
+		} = this.props;
 		return (
 			<div className = {styles.betTable}>
-				<BetBoard />
+				<BetBoard/>
 				<Chips />
+				<button onClick = {handlePlayBtnClick}>
+					play
+				</button>
+				<button onClick = {handleBetReset}>
+					reset
+				</button>
 			</div>
 		);
 	}

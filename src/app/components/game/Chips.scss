@@ -9,9 +9,14 @@
 	display: inline-block;
 	width: 60px;
 	height: 60px;
+	line-height: 50px;
 	border-radius: 50%;
-	border: 1px solid $mercury;
+	border: 5px dashed $black;
+	background-color: $white;
+	color: $mercury;
+	cursor: pointer;
 	&.active {
-		border: 1px solid $light-gold;
+		border: 5px dashed $light-gold;
+		color: $black;
 	}
 }
