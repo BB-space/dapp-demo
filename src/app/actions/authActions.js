@@ -99,7 +99,7 @@ function loginSuccess(user) {
 
 function setEthBalance(balance) {
 	return {
-		type: actionTypes.AUTH_SET_ETH_BALANCE,
+	type: actionTypes.AUTH_SET_ETH_BALANCE,
 		balance
 	};
 }
@@ -121,7 +121,21 @@ export function setMetamaskUse(toUseMetamask) {
 
         return true;
     }
-	
+
+}
+
+export function setMetamaskAccount(metamaskAccount) {
+	return {
+    type: actionTypes.AUTH_SET_METAMASK_ACCOUNT,
+    metamaskAccount
+  };
+}
+
+export function setMetamaskNetwork(metamaskNetwork) {
+  return {
+    type: actionTypes.AUTH_SET_METAMASK_NETWORK,
+    metamaskNetwork
+  }
 }
 
 export function setIfWeb3Injected(isInjected) {

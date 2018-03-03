@@ -29,7 +29,7 @@ import Chips from './Chips';
 		metamaskMode: state.auth.metamaskMode,
 		isWeb3Injected: state.auth.isWeb3Injected,
 		betState: state.game.betState,
-		
+
 		account: state.ethState.currentAccount,
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed
@@ -117,7 +117,7 @@ export default class GamePage extends Component {
 
 			let x = injectedWeb3;
 			debugger;
-			
+
 			const game = gameInstance
 				.methods
 				.initGame(
@@ -132,13 +132,13 @@ export default class GamePage extends Component {
 
 			game.then((a,b) => {debugger;})
 
-			
+
 		} else {
 
 		}
 
 
-		
+
 		/* const res = await this.props.getGameResult();
 		   const { hashedServerSeed, account } = this.props;
 		   const {
@@ -289,7 +289,6 @@ export default class GamePage extends Component {
 			<div className="col-md-12">
 				<div className="panel panel-default">
 					<div className="panel-heading">
-						Game - 0 or 1
 					</div>
 					<div className="panel-body">
 
@@ -318,7 +317,7 @@ export default class GamePage extends Component {
 
 
 						<BetBoard />
-						
+
 						<Chips />
 
 						<button onClick={this.handleBetReset}>reset</button>
