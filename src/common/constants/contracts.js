@@ -5,7 +5,7 @@ import { ethEnv } from './config';
 const addresses = {
 	live: {},
 	testnet: {
-		game: '0x76ad555a7f3cf02b628fc5a9cb82e134f5c4bb7a'
+		game: '0x36c814f40c381c6828c022b5f8d6b4428b56432f'
 	},
 	npseth: {
 		game: ''

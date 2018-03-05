@@ -89,9 +89,6 @@ const { makeSignedTransaction } = require('./utils');
 let gameInstance = new web3.eth.Contract(gameABI, gameAddress);
 
 let seedMap = {
-	'0xf02e2f5a0f96d0c6e7613a092db8b036af65be4feb29df084fb8025491d1b910': '111',
-	'0x472e324fe0a3d839ff62fb9dac67e3685e0277bbe58a79c3f26693b85f8b5b35': '222',
-	'0x9443d5f42d235cc94733a86239ffc70c7ea3c7f3951dafaf70e2feaba69eef15': '333',
 	'0xdcaddd55043dce1a34357e873f5fc7ecfcaf2de23127b48ef2bd55172630cb3d': '1',
 	'0x81f4bb8774c5c25c60ee666ed91449d0fe77ea15b018c58fca8d9946684d4e7a': '2',
 	'0xddcfeeaf0105f9553c30dcd9c7be76a6f3e79728d1d3f3557fa63b5c5b1072eb': '3',
