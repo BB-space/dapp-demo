@@ -293,7 +293,8 @@ betting related functions
   */
   event Finalize(
     bytes32 hashedDealerSeed,
-    bytes32 dealerSeed
+    bytes32 dealerSeed,
+    uint reward
   );
   function finalize(bytes32 hashedDealerSeed, bytes32 dealerSeed) public onlyCoo{
     //check if has played the game
@@ -308,7 +309,6 @@ betting related functions
     if(game.finalized){
       revert();
     }
-    Finalize(hashedDealerSeed, dealerSeed);
     game.dealerSeed = dealerSeed;
     setResult(
       hashedDealerSeed,
@@ -320,6 +320,7 @@ betting related functions
       game.betData,
       hashedDealerSeed
     );
+    Finalize(hashedDealerSeed, dealerSeed, reward);
     game.reward = reward;
     removePlayedGame(reward, game.player, hashedDealerSeed);
   }

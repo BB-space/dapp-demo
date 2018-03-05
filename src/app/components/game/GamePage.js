@@ -30,6 +30,7 @@ import Chips from './Chips';
 		isWeb3Injected: state.auth.isWeb3Injected,
 		betState: state.game.betState,
 		account: state.ethState.currentAccount,
+		metamaskAccount: state.auth.metamaskAccount,
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed
 	}),	{
@@ -102,7 +103,8 @@ export default class GamePage extends Component {
 			metamaskMode,
 			isWeb3Injected,
 			betState,
-			clientSeed
+			clientSeed,
+			metamaskAccount
 		} = this.props;
 
 		if(metamaskMode && isWeb3Injected) {
@@ -122,7 +124,7 @@ export default class GamePage extends Component {
 					contractInput
 				)
 				.send({
-					from: '0x0f8b9f87eb70fe45C460aA50eee4f21957cB4d57',
+					from: metamaskAccount,
 					value: toWei(totalEther)
 				});
 
