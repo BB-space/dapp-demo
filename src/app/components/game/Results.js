@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-	reconstructResult,
+	reconstructResult2,
 } from '../../../common/utils';
 
 @connect(
@@ -93,14 +93,15 @@ export default class Results extends Component {
 			reward
 		} = this.props;
 
-		const result = reconstructResult(serverSeed, clientSeed);
+		const result = reconstructResult2(serverSeed, clientSeed);
 
 		const resultElem =
 			<div>
 				축하합니다. {reward}에 당첨되셨습니다.
 				<ul>
 					<li>
-						Server Seed =
+						client Seed : {clientSeed} <br/>
+						Server Seed : {serverSeed} <br/>
 						Server Seed (Hashed): {hashedServerSeed}
 					</li>
 					<li>
@@ -122,8 +123,8 @@ export default class Results extends Component {
 
 		const panelElem =
 			clientSeed ===''?noPlayElem:
-			isPlaying?playingElem():
-			resultElem();
+			isPlaying?playingElem:
+			resultElem;
 
 		return (
 			<div className="col-md-12">

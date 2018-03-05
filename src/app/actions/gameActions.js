@@ -5,11 +5,11 @@ import { serviceWeb3 } from '../utils/web3';
 import { stringToBytes32 } from '../../common/utils';
 import { gameABI, gameAddress } from '../../common/constants/contracts';
 import {
-	_setIsPlaying,
-	_setClientSeed,
-	_setServerSeed,
-	_setHashedServerSeed as _setHashedServerSeed,
-	_setReward
+	setIsPlaying as _setIsPlaying,
+	setClientSeed as _setClientSeed,
+	setServerSeed as _setServerSeed,
+	setHashedServerSeed as _setHashedServerSeed,
+	setReward as _setReward
 } from './resultActions';
 
 function setHashedServerSeed(hashedServerSeed) {
@@ -62,19 +62,19 @@ export function fetchHashedServerSeed() {
 		   })*/
 
 		new serviceWeb3.eth.Contract(gameABI, gameAddress).events.Finalize((e,r) => {
+			debugger;
 			if(!e){
 				const{
-					isPlaying,
 					clientSeed,
-					serverSeed,
-					hashedServerSeed,
+					dealerSeed,
+					hashedDealerSeed,
 					reward
-				} = r;
+				} = r.returnValues;
 				dispatch(_setIsPlaying(false));
 				dispatch(_setClientSeed(clientSeed));
-				dispatch(_setServerSeed(serverSeed));
-				dispatch(_setHashedServerSeed(hashedServerSeed));
-				dispatch(_setReward(reward));
+				dispatch(_setServerSeed(dealerSeed));
+				dispatch(_setHashedServerSeed(hashedDealerSeed));
+				dispatch(_setReward(web3.fromWei(reward)));
 			}
 		})
 		dispatch(setHashedServerSeed(hash));
