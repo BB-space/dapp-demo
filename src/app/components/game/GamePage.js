@@ -7,6 +7,9 @@ import {
 	resetBet
 } from '../../actions/gameActions';
 import {
+	setIsPlaying
+} from '../../actions/resultActions';
+import {
 	generateRandomString,
 	reconstructResult,
 	toWei,
@@ -37,7 +40,8 @@ import Results from './Results';
 		fetchHashedServerSeed,
 		setClientSeed,
 		resetBet,
-		getGameResult
+		getGameResult,
+		setIsPlaying
 	}
 )
 export default class GamePage extends Component {
@@ -104,7 +108,8 @@ export default class GamePage extends Component {
 			isWeb3Injected,
 			betState,
 			clientSeed,
-			metamaskAccount
+			metamaskAccount,
+			setIsPlaying
 		} = this.props;
 
 		if(metamaskMode && isWeb3Injected) {
@@ -127,6 +132,9 @@ export default class GamePage extends Component {
 					from: metamaskAccount,
 					value: toWei(totalEther)
 				});
+
+			setIsPlaying(true);
+
 
 
 

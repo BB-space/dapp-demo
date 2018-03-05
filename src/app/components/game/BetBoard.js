@@ -74,7 +74,7 @@ export default class BetBoard extends Component {
 								colSpan="3"
 							    rowSpan="4"
 							    betSide="even">
-								<b>ODD</b> <br/>
+								<b>EVEN</b> <br/>
 								주사위 합이 짝수일 시 <br/>
 								2배 지급
 							</BetCell>
