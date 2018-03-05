@@ -254,7 +254,7 @@ export default class GamePage extends Component {
 			<div className="dice-box">
 				{ numbers.map(e => dices[e-1]) }
 			</div>
-		)
+		);
 	}
 
 	render() {

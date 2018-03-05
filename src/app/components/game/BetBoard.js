@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { addToBet } from '../../actions/gameActions';
 import { chipUnits } from '../../constants/gameConfig';
 import BetCell from './BetCell';
+import Dice from '../common/Dice';
 
 import styles from './BetBoard.scss';
 
@@ -38,68 +39,13 @@ export default class BetBoard extends Component {
 	}
 
 	getDiceComponent(numbers) {
-		const dices = [
-			(
-				<div className="first-face">
-					<span className="pip" />
-				</div>
-			), (
-				<div className="second-face">
-					<span className="pip" />
-					<span className="pip" />
-				</div>
-			), (
-				<div className="third-face">
-					<span className="pip" />
-					<span className="pip" />
-					<span className="pip" />
-				</div>
-			), (
-				<div className="fourth-face">
-					<div className="column">
-						<span className="pip" />
-						<span className="pip" />
-					</div>
-					<div className="column">
-						<span className="pip" />
-						<span className="pip" />
-					</div>
-				</div>
-			), (
-				<div className="fifth-face">
-					<div className="column">
-						<span className="pip" />
-						<span className="pip" />
-					</div>
-					<div className="column">
-						<span className="pip" />
-					</div>
-					<div className="column">
-						<span className="pip" />
-						<span className="pip" />
-					</div>
-				</div>
-			), (
-				<div className="sixth-face">
-					<div className="column">
-						<span className="pip" />
-						<span className="pip" />
-						<span className="pip" />
-					</div>
-					<div className="column">
-						<span className="pip" />
-						<span className="pip" />
-						<span className="pip" />
-					</div>
-				</div>
-			)
-		];
-
 		return (
 			<div className="bet-table dice-box">
-				{ numbers.map(e => dices[e-1]) }
+				{ numbers.map((n, idx) => (
+					<Dice key={idx} face={n} />
+				)) }
 			</div>
-		)
+		);
 	}
 
 	render() {
