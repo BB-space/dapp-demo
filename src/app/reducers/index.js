@@ -3,13 +3,15 @@ import ethState from './ethStateReducer';
 import global from './globalReducer';
 import auth from './authReducer';
 import game from './gameReducer';
+import result from './resultReducer';
 
 
 const rootReducer = combineReducers({
 	global,
-    ethState,
+  ethState,
 	auth,
-	game
+	game,
+	result
 });
 
 export default rootReducer;

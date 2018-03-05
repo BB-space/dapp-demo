@@ -4,7 +4,13 @@ import { request } from '../utils/fetch';
 import { serviceWeb3 } from '../utils/web3';
 import { stringToBytes32 } from '../../common/utils';
 import { gameABI, gameAddress } from '../../common/constants/contracts';
-
+import {
+	_setIsPlaying,
+	_setClientSeed,
+	_setServerSeed,
+	_setHashedServerSeed as _setHashedServerSeed,
+	_setReward
+} from './resultActions';
 
 function setHashedServerSeed(hashedServerSeed) {
 	return {
@@ -56,10 +62,21 @@ export function fetchHashedServerSeed() {
 		   })*/
 
 		new serviceWeb3.eth.Contract(gameABI, gameAddress).events.Finalize((e,r) => {
-			debugger;
+			if(!e){
+				const{
+					isPlaying,
+					clientSeed,
+					serverSeed,
+					hashedServerSeed,
+					reward
+				} = r;
+				dispatch(_setIsPlaying(false));
+				dispatch(_setClientSeed(clientSeed));
+				dispatch(_setServerSeed(serverSeed));
+				dispatch(_setHashedServerSeed(hashedServerSeed));
+				dispatch(_setReward(reward));
+			}
 		})
-
-		
 		dispatch(setHashedServerSeed(hash));
 	};
 }
