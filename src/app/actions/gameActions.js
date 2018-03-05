@@ -47,7 +47,7 @@ export function fetchHashedServerSeed() {
 
 	return async (dispatch, getState) => {
 		const hashListLength = await gameMethods.getHashListLength().call();
-		const randIdx = _.random(hashListLength);
+		const randIdx = _.random(hashListLength) % hashListLength;
 
 		const hash = await gameMethods.getHash(randIdx).call();
 

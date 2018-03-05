@@ -30,7 +30,7 @@ export function generateRandomString(length=16) {
 }
 
 export function keccak256(hex) {
-	return web3.utils.soliditySha3({type:'bytes32', value:hex});
+	return web3.utils.soliditySha3({type:'bytes32', value: hex});
 }
 
 export function stringToBytes32(str) {

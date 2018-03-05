@@ -89,20 +89,9 @@ const { makeSignedTransaction } = require('./utils');
 let gameInstance = new web3.eth.Contract(gameABI, gameAddress);
 
 let seedMap = {
-	'0x9b1a4dab1a7025ad6dba6e13d87ea8ea934b9b1b572469d285e906ead52fe8a6': 'very11',
-	'0x1fe891ef181bbaa0ca4b6c06006e2becc4cca13f88682284d9e82aa82372e758': 'seeds',
-	'0x7d8bf1f68ea62ccdc2cddb984b9e0e4d4fb0e4a620488813790a764cf1920983': 'strong111',
-	'0x62a7249a1f7f289baf0456ee2de6123da3e57a39671ca7b0f7b7640ad866e9d9': 'abc',
-	'0xdb933f2a0bb951b5c20ee044393808ca76b6474ea10cc8df65a9b7f37a1a78e6': 'def',
-	'0x186865c7f283a132acec923b1a7aeb8eaffeaf5ffd26b12d835445af6b58ad28': 'ghi',
-	
-	'0x0b57f84596d20883bde0a6fae29719f091e59c30ed4fcebc3687dbf1e1085875': '123',
-	'0x6646cdc81d54f479b9ab34e53644efe58928b480e80fe4014ff718128461a4cd': '456',
-	'0x19d23dbe4c2d3b0b3009beccb163055aec1cb81e05e0fcb9f06bbaf85f2ae8a4': '789',
-	
-	'0xdd6889b144b542e3585d1e69aca7ec06432cc10f852693d3733c6522455058c2': '111',
-	'0xc96acbd0ceca423fa399cdd99e791eb3e691f44ecbcea42eef6503f3ff933ae8': '222',
-	'0x80e9c5f5fa74fa7d584b3e31c075fc1bab83fd3ddba39bf5b39f35e5ee79f255': '333',
+	'0xf02e2f5a0f96d0c6e7613a092db8b036af65be4feb29df084fb8025491d1b910': '111',
+	'0x472e324fe0a3d839ff62fb9dac67e3685e0277bbe58a79c3f26693b85f8b5b35': '222',
+	'0x9443d5f42d235cc94733a86239ffc70c7ea3c7f3951dafaf70e2feaba69eef15': '333',
 };
 
 gameInstance.events.InitGame(async (err, result) => {

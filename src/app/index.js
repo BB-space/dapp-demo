@@ -5,7 +5,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import MainApp from './components/MainApp';
 import configureStore from './store/configureStore';
-import { setInjectedWeb3 } from './utils/web3';
+import web3, { setInjectedWeb3 } from './utils/web3';
 import { setIfWeb3Injected } from './actions/authActions';
 
 
@@ -19,6 +19,8 @@ if (typeof window.web3 !== 'undefined') {
     setInjectedWeb3(window.web3.currentProvider);
 	store.dispatch(setIfWeb3Injected(true));
 }
+
+
 
 (function renderApp() {
 	render(
