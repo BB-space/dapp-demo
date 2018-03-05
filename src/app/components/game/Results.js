@@ -122,8 +122,8 @@ export default class Results extends Component {
 			</div>;
 
 		const panelElem =
-			clientSeed ===''?noPlayElem:
 			isPlaying?playingElem:
+			clientSeed ===''?noPlayElem:
 			resultElem;
 
 		return (
