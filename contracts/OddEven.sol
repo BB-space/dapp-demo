@@ -294,6 +294,7 @@ betting related functions
   event Finalize(
     bytes32 hashedDealerSeed,
     bytes32 dealerSeed,
+    bytes32 clientSeed,
     uint reward
   );
   function finalize(bytes32 hashedDealerSeed, bytes32 dealerSeed) public onlyCoo{
@@ -320,7 +321,12 @@ betting related functions
       game.betData,
       hashedDealerSeed
     );
-    Finalize(hashedDealerSeed, dealerSeed, reward);
+    Finalize(
+      hashedDealerSeed,
+      dealerSeed,
+      game.playerSeed,
+      reward
+    );
     game.reward = reward;
     removePlayedGame(reward, game.player, hashedDealerSeed);
   }
