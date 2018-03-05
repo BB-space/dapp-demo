@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import classNames from 'classnames';
-import { setMetamaskUse, attemptLogout } from '../../actions/authActions';
+import { setMetamaskUse, attemptLogout, setMetamaskAccount, setMetamaskNetwork } from '../../actions/authActions';
+import {getPlayerEtherBalance} from '../../actions/gameActions';
 import { setSignUpModal } from '../../actions/globalActions';
 import HeaderSignIn from '../auth/HeaderSignIn';
 
@@ -12,6 +13,8 @@ import styles from './HeaderRightBlock.scss';
 @connect(
 	(state, ownProps) => ({
 		metamaskMode: state.auth.metamaskMode,
+		metamaskAccount: state.auth.metamaskAccount,
+		metamaskNetwork: state.auth.metamaskNetwork,
 		isWeb3Injected: state.auth.isWeb3Injected,
 		isAuthenticated: state.auth.isAuthenticated,
 		email: state.auth.email,
@@ -19,6 +22,9 @@ import styles from './HeaderRightBlock.scss';
 	}),	{
 		attemptLogout,
 		setMetamaskUse,
+		setMetamaskAccount,
+		setMetamaskNetwork,
+		getPlayerEtherBalance,
 		setSignUpModal
 	}
 )
@@ -30,6 +36,33 @@ export default class HeaderRightBlock extends Component {
 		this.handleMetamaskClick = this.setMetamask.bind(this, true);
 		this.handleMembershipClick = this.setMetamask.bind(this, false);
     }
+		componentDidMount() {
+			if(web3.currentProvider.isMetaMask){
+				this.props.setMetamaskUse(true);
+				this.props.setMetamaskAccount(web3.eth.defaultAccount);
+				this.props.getPlayerEtherBalance();
+				web3.version.getNetwork((err,netId)=>{
+					let network = '';
+					switch (netId) {
+				    case "1":
+				      network = 'MainNet'
+				      break
+				    case "2":
+				      network = 'Morden'
+				      break
+				    case "3":
+							network = 'Ropsten'
+				      break
+						case '4':
+							network = 'Rinkeby'
+							break
+				    default:
+				      network = 'private'
+				  }
+					this.props.setMetamaskNetwork(network)
+				})
+			}
+		}
 
 	setMetamask(toUseMetamask, evt) {
 		this.props.setMetamaskUse(toUseMetamask);
@@ -42,6 +75,8 @@ export default class HeaderRightBlock extends Component {
     render() {
 		const {
 			metamaskMode,
+			metamaskAccount,
+			metamaskNetwork,
 			isWeb3Injected,
 			isAuthenticated,
 			email,
@@ -53,7 +88,7 @@ export default class HeaderRightBlock extends Component {
 			<div
 				className={styles.memberInfo}
 				onClick={()=>{this.props.history.push('/account');}}>
-				{!metamaskMode && <div>{ email }</div>}
+				{metamaskMode ? <div>Account : {metamaskAccount} ({metamaskNetwork} Network)</div> : <div>{ email }</div>}
 				<div>wallet: {wallet}</div>
 			</div>
 		);
@@ -122,7 +157,7 @@ export default class HeaderRightBlock extends Component {
 		const content = metamaskMode ?
 						caseMetamaskElem : isAuthenticated ?
 						caseAuthedElem : caseNotAuthedElem;
-		
+
         return(
 			<div className={styles.headerRightBlock}>
 				{content}

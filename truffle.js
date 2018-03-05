@@ -1,3 +1,6 @@
+const Web3 = require('web3');
+
+
 module.exports = {
 	networks: {
 		development: {
@@ -6,6 +9,7 @@ module.exports = {
 			network_id: "6000"
 		},
 		rinkeby: {
+			/* provider: new Web3.providers.WebsocketProvider('ws://localhost:8545'),*/
 			host: "localhost", // Connect to geth on the specified
 			port: 8545,
 			network_id: 4,

@@ -128,6 +128,20 @@ export function setMetamaskUse(toUseMetamask) {
     };
 }
 
+export function setMetamaskAccount(metamaskAccount) {
+	return {
+		type: actionTypes.AUTH_SET_METAMASK_ACCOUNT,
+		metamaskAccount
+	};
+}
+
+export function setMetamaskNetwork(metamaskNetwork) {
+	return {
+		type: actionTypes.AUTH_SET_METAMASK_NETWORK,
+		metamaskNetwork
+	};
+}
+
 export function setIfWeb3Injected(isInjected) {
 	return {
 		type: actionTypes.AUTH_SET_IF_WEB3_INJECTED,

@@ -44,16 +44,21 @@ export function resetBet() {
 
 export function fetchHashedServerSeed() {
 	const gameMethods = new serviceWeb3.eth.Contract(gameABI, gameAddress).methods;
-	
+
 	return async (dispatch, getState) => {
 		const hashListLength = await gameMethods.getHashListLength().call();
 		const randIdx = _.random(hashListLength);
 
 		const hash = await gameMethods.getHash(randIdx).call();
 
+		/* new serviceWeb3.eth.Contract(gameABI, gameAddress).events.InitGame((e,r) => {
+		   debugger;
+		   })*/
+
 		new serviceWeb3.eth.Contract(gameABI, gameAddress).events.Finalize((e,r) => {
 			debugger;
 		})
+
 		
 		dispatch(setHashedServerSeed(hash));
 	};
@@ -67,4 +72,26 @@ export function getGameResult() {
 
 		return request.post(url, gameObj);
 	};
+}
+
+export function getPlayerEtherBalance(){
+	return (dispatch, getState) =>{
+		const metamaskAccount = getState().auth.metamaskAccount;
+		web3.eth.getBalance(
+			metamaskAccount,
+			(err,res)=>{
+				const metamaskBalance = web3.fromWei(res).toString();
+				dispatch(setPlayerEtherBalance(
+					metamaskBalance
+				))
+			}
+		);
+	}
+}
+
+export function setPlayerEtherBalance(playerEtherBalance){
+	return {
+		type: actionTypes.GAME_SET_PLAYER_ETHER_BALANCE,
+		playerEtherBalance
+	}
 }

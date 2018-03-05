@@ -29,7 +29,6 @@ import Chips from './Chips';
 		metamaskMode: state.auth.metamaskMode,
 		isWeb3Injected: state.auth.isWeb3Injected,
 		betState: state.game.betState,
-		
 		account: state.ethState.currentAccount,
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed
@@ -114,7 +113,7 @@ export default class GamePage extends Component {
 				contractInput,
 				totalEther
 			} = generateBettingInput(betState);
-			
+
 			const game = gameInstance
 				.methods
 				.initGame(
@@ -128,13 +127,13 @@ export default class GamePage extends Component {
 				});
 
 
-			
+
 		} else {
 
 		}
 
 
-		
+
 		/* const res = await this.props.getGameResult();
 		   const { hashedServerSeed, account } = this.props;
 		   const {
@@ -285,9 +284,14 @@ export default class GamePage extends Component {
 			<div className="col-md-12">
 				<div className="panel panel-default">
 					<div className="panel-heading">
-						Game - 0 or 1
 					</div>
 					<div className="panel-body">
+
+
+						<BetTable
+							handleBetReset={this.handleBetReset}
+							handlePlayBtnClick={this.handlePlayBtnClick}
+						/>
 
 						<ul>
 							<li>
@@ -312,15 +316,6 @@ export default class GamePage extends Component {
 							</span>
 						</div>
 
-
-						<BetBoard />
-						
-						<Chips />
-
-						<button onClick={this.handleBetReset}>reset</button>
-						<button onClick={this.handlePlayBtnClick}>roll</button>
-
-
 						<div className="text-center">
 							<div style={{fontSize:30}}>Your Bet Side: {prevBetSideText} ({win})</div>
 							<div style={{fontSize:30}}>Your Bet Money: {prevBetMoney}</div>
@@ -329,10 +324,6 @@ export default class GamePage extends Component {
 							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
 						</div>
 
-
-						<BetTable />
-
-						<button onClick={this.handleBetReset}>reset</button>
 
 					</div>
 				</div>

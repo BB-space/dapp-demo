@@ -8,11 +8,15 @@ const {
 	AUTH_SET_ETH_BALANCE,
 	AUTH_SET_TOKEN_BALANCE,
 	AUTH_SET_METAMASK_USE,
-	AUTH_SET_IF_WEB3_INJECTED
+	AUTH_SET_IF_WEB3_INJECTED,
+  AUTH_SET_METAMASK_ACCOUNT,
+  AUTH_SET_METAMASK_NETWORK
 } = actionTypes;
 
 const initialState = {
 	metamaskMode: false,
+  metamaskAccount: '',
+  metamaskNetwork: '',
 	isWeb3Injected: false,
     email: '',
 	wallet: '',
@@ -54,6 +58,14 @@ export default function search(state=initialState, action) {
 			return Object.assign({}, state, {
 				metamaskMode: action.toUseMetamask
 			});
+    case AUTH_SET_METAMASK_ACCOUNT:
+      return Object.assign({}, state, {
+        metamaskAccount: action.metamaskAccount
+      });
+    case AUTH_SET_METAMASK_NETWORK:
+      return Object.assign({}, state, {
+        metamaskNetwork: action.metamaskNetwork
+      })
 
 		case AUTH_SET_IF_WEB3_INJECTED:
 			return Object.assign({}, state, {
