@@ -82,9 +82,9 @@ contract GRC is DSSafeAddSub{
         win = win || gameResult[k] == betSide - 8;
       }
     }else if (14 == betSide){// if low
-      win = sumOfDice <= 7;
+      win = sumOfDice <= 10;
     }else if (15 == betSide){// if High
-      win = sumOfDice > 7;
+      win = sumOfDice > 10;
     }
     return win;
   }

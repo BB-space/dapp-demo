@@ -9,7 +9,7 @@ import {
 		isPlaying: state.result.isPlaying,
 		clientSeed: state.result.clientSeed,
 		serverSeed: state.result.serverSeed,
-		hashedServerSeed: state.result.serverHashedSeed,
+		hashedServerSeed: state.result.hashedServerSeed,
 		reward: state.result.reward
 	}),	{
 	}
@@ -130,7 +130,7 @@ export default class Results extends Component {
 			<div className="col-md-12">
 				<div className="panel panel-default">
 					<div className="panel-heading">
-						Validation
+						게임 결과
 					</div>
 					<div className="panel-body">
 						{panelElem}
