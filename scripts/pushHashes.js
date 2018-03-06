@@ -18,7 +18,7 @@ module.exports = async function(callback){
 		let x = await oddEven.encryptSeeds(stringToBytes32(e));
 		hashes.push(x);
 	});
-	
+
 	let prevLength = await oddEven.getHashListLength.call();
 	
 	console.log('hashes',hashes);
