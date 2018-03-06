@@ -181,13 +181,13 @@ gameInstance.events.InitGame(async (err, result) => {
 
 			tran.on('error', console.error);
 
-			
+
 
 			// push hash
-			
 
-			
-			
+
+
+
 
 		} catch(e) {
 			console.error(e);

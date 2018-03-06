@@ -13,7 +13,7 @@ ethEnv = ethEnv === 'live' ?
 const nodes = {
 	local: 'http://localhost:8545',
 	npseth: 'http://eth1.npsdev.cloud:8545',
-	testnet: 'ws://localhost:8545'
+	testnet: 'ws://10.30.193.124:8545'
 };
 
 

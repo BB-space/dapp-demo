@@ -115,7 +115,7 @@ export default class ValidationSection extends Component {
 			<div className="col-md-12">
 				<div className="panel panel-default">
 					<div className="panel-heading">
-						Validation
+						<font className="heading">Validation</font>
 					</div>
 					<div className="panel-body">
 
