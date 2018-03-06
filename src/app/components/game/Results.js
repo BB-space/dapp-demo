@@ -144,6 +144,7 @@ export default class Results extends Component {
 		const playingElem =
 			<div>
 				결과를 받는 중 입니다. 약 ({passedTime})초 경과
+				<a target="_blank" href={`https://rinkeby.etherscan.io/tx/${isPlaying}`}>etherscan 에서 확인</a>
 			</div>;
 
 		const noPlayElem =

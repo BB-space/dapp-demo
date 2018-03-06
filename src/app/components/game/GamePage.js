@@ -133,7 +133,11 @@ export default class GamePage extends Component {
 					value: toWei(totalEther)
 				});
 
-			setIsPlaying(true);
+			game.on('transactionHash', hash => {
+				setIsPlaying(hash);
+			})
+
+			
 
 
 
