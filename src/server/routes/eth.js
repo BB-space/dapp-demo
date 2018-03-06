@@ -41,7 +41,7 @@ const { stringToBytes32, computeMultipleHash } = require('../../common/utils');
 
 
 router.get(`${BASE_URL}/test`, async (ctx) => {
-	const x = Object.assign({}, ...'1234567890qwertyuiopasdfghjklzxcvbnm'.split('').map(e => ({
+	const x = Object.assign({}, ...'11,22,33,44,55,66,77,88,99,100,111,222,333,444,555,666,777,888,999,1111,2222,3333,4444,5555,6666,7777,8888,9999'.split(',').map(e => ({
 		[computeMultipleHash(stringToBytes32(e), 4)]: e
 	})));
 
