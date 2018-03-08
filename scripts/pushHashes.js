@@ -11,10 +11,10 @@ const seedsToPush = '11,22,33,44,55,66,77,88,99,100,111,222,333,444,555,666,777,
 module.exports = async function(callback){
 	const oddEven = await OddEven.deployed();
 	const gameAddress = oddEven.address;
-	console.log("gameAddress", gameAddress);
+	console.log('gameAddress', gameAddress);
 
 	let hashes = [];
-	seedsToPush.forEach(async e => {
+	await seedsToPush.forEach(async e => {
 		let x = await oddEven.encryptSeeds(stringToBytes32(e));
 		hashes.push(x);
 	});
