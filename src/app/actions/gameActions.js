@@ -62,7 +62,6 @@ export function fetchHashedServerSeed() {
 		   })*/
 
 		new serviceWeb3.eth.Contract(gameABI, gameAddress).events.Finalize((e,r) => {
-			debugger;
 			if(!e){
 				const{
 					clientSeed,

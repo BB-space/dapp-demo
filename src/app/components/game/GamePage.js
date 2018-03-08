@@ -254,11 +254,15 @@ export default class GamePage extends Component {
 
 						<Results/>
 
+
+						<font className="heading">
+							배팅 변경
+						</font>
 						<ul>
 							<li>
 								<b>Hashed Server Seed</b>
 								<span>: { hashedServerSeed } </span>
-								<button onClick={fetchHashedServerSeed}>Get Other One</button>
+								<button onClick={fetchHashedServerSeed}>다른 해시 불러오기</button>
 							</li>
 							<li>
 								<b>Client Seed</b><span>: {' '}</span>
@@ -267,26 +271,8 @@ export default class GamePage extends Component {
 							</li>
 
 						</ul>
-
-						<div className="text-center">
-							<div>Result:</div>
-							{ this.getDiceComponent(prevResult) }
-
-							<span style={{fontSize: 32}}>
-								{result} ({resultText})
-							</span>
-						</div>
-
-						<div className="text-center">
-							<div style={{fontSize:30}}>Your Bet Side: {prevBetSideText} ({win})</div>
-							<div style={{fontSize:30}}>Your Bet Money: {prevBetMoney}</div>
-							<div>Client Seed: {prevClientSeed}</div>
-							<div>Server Seed: {prevServerSeed}</div>
-							<div>Server Seed (Hashed): {prevHashedServerSeed}</div>
-						</div>
-
-
 					</div>
+					<hr/>
 				</div>
 			</div>
 		);
