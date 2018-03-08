@@ -8,6 +8,11 @@ module.exports = {
 			port: 8545,
 			network_id: "6000"
 		},
+		npseth: {
+			host: "eth2.npsdev.cloud",
+			port: 8545,
+			network_id: "8000"
+		},
 		rinkeby: {
 			/* provider: new Web3.providers.WebsocketProvider('ws://localhost:8545'),*/
 			host: "localhost", // Connect to geth on the specified
