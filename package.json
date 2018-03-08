@@ -12,6 +12,7 @@
     "start": "npm run dev:local",
     "dev": "nodemon --exec npm run babel-cli -- src/server/index.js",
     "dev:local": "ETH_ENV=local npm run dev",
+    "dev:npseth": "ETH_ENV=npseth npm run dev",
     "dev:testnet": "ETH_ENV=testnet npm run dev"
   },
   "author": "",
