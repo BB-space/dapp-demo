@@ -11,21 +11,36 @@ const seedsToPush = '11,22,33,44,55,66,77,88,99,100,111,222,333,444,555,666,777,
 module.exports = async function(callback){
 	const oddEven = await OddEven.deployed();
 	const gameAddress = oddEven.address;
+	console.log("-------------------------------");
 	console.log("gameAddress", gameAddress);
 
 	let hashes = [];
-	seedsToPush.forEach(async e => {
+	// by KTH
+	// Array.forEach 와 같은 higher-order function들은 async/await 을 제대로 지원하지 못한다.
+	// 아래 링크의 코드를 보면 callback 에 대한 await 이 없기에...
+	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#Polyfill
+	// await 을 추가한 별도의 함수(forEachAsync)를 만들거나 그냥 for 루프를 써야 한다.
+
+	// seedsToPush.forEach(async e => {
+	// 	let x = await oddEven.encryptSeeds(stringToBytes32(e));
+	// 	hashes.push(x);
+	// 	console.log("push >> ", x);
+	// });
+	for (let e of seedsToPush) {
 		let x = await oddEven.encryptSeeds(stringToBytes32(e));
 		hashes.push(x);
-	});
+	}
 
 	let prevLength = await oddEven.getHashListLength.call();
 	
-	console.log('hashes',hashes);
+	console.log("-------------------------------");
+	console.log('hashes', hashes);
 	console.log('prevLength', prevLength.toString());
 	
 	await oddEven.pushHashes(hashes);
 	
 	let afterLength = await oddEven.getHashListLength.call();
+	console.log("-------------------------------");
 	console.log('afterLength', afterLength.toString());
+	console.log("-------------------------------");
 };
