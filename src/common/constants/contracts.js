@@ -10,7 +10,7 @@ const addresses = {
 	},
 	
 	npseth: {
-		game: '0x36c814f40c381c6828c022b5f8d6b4428b56432f' // false
+		game: gameSpec['networks']['1581']['address']
 	},
 	
 	local: {
