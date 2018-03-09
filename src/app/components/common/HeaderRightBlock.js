@@ -40,27 +40,27 @@ export default class HeaderRightBlock extends Component {
 			if(web3.currentProvider.isMetaMask){
 				this.props.setMetamaskUse(true);
 				this.props.setMetamaskAccount(web3.eth.defaultAccount);
-				this.props.getPlayerEtherBalance();
-				web3.version.getNetwork((err,netId)=>{
-					let network = '';
-					switch (netId) {
-				    case "1":
-				      network = 'MainNet'
-				      break
-				    case "2":
-				      network = 'Morden'
-				      break
-				    case "3":
-							network = 'Ropsten'
-				      break
-						case '4':
-							network = 'Rinkeby'
-							break
-				    default:
-				      network = 'private'
-				  }
-					this.props.setMetamaskNetwork(network)
-				})
+				// this.props.getPlayerEtherBalance();
+				/* web3.version.getNetwork((err,netId)=>{
+				   let network = '';
+				   switch (netId) {
+				   case "1":
+				   network = 'MainNet'
+				   break
+				   case "2":
+				   network = 'Morden'
+				   break
+				   case "3":
+				   network = 'Ropsten'
+				   break
+				   case '4':
+				   network = 'Rinkeby'
+				   break
+				   default:
+				   network = 'private'
+				   }
+				   this.props.setMetamaskNetwork(network)
+				   })*/
 			}
 		}
 
