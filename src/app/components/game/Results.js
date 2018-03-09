@@ -17,6 +17,33 @@ import {
 export default class Results extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			passedTime:0,
+			timer:null
+		};
+	}
+	componentWillReceiveProps(nextProps){
+		if(nextProps.isPlaying && !this.props.isPlaying){
+			this.updatePassedTime()
+		}else if(!nextProps.isPlaying && this.props.isPlaying){
+			clearInterval(this.state.timer);
+			this.setState({
+				passedTime:0
+			});
+		}
+	}
+
+	updatePassedTime(){
+		const timer = setInterval(
+			()=>{
+				this.setState({
+					passedTime: this.state.passedTime + 1
+				})
+			},1000
+		);
+		this.setState({
+			timer
+		})
 	}
 
 	getDiceComponent(numbers) {
@@ -92,28 +119,32 @@ export default class Results extends Component {
 			hashedServerSeed,
 			reward
 		} = this.props;
-
+		const{
+			passedTime
+		} = this.state;
 		const result = reconstructResult2(serverSeed, clientSeed);
 
 		const resultElem =
 			<div>
-				축하합니다. {reward}에 당첨되셨습니다.
 				<ul>
+					<li>
+						축하합니다. {reward}에 당첨되셨습니다.
+					</li>
+					<li>
+						{ this.getDiceComponent(result) }
+					</li>
 					<li>
 						client Seed : {clientSeed} <br/>
 						Server Seed : {serverSeed} <br/>
 						Server Seed (Hashed): {hashedServerSeed}
-					</li>
-					<li>
-						Result Then:
-						{ this.getDiceComponent(result) }
 					</li>
 				</ul>
 			</div>;
 
 		const playingElem =
 			<div>
-				결과를 받는 중 입니다. <a target="_blank" href={`https://rinkeby.etherscan.io/tx/${isPlaying}`}>etherscan 에서 확인</a>
+				결과를 받는 중 입니다. 약 ({passedTime})초 경과
+				<a target="_blank" href={`https://rinkeby.etherscan.io/tx/${isPlaying}`}>etherscan 에서 확인</a>
 			</div>;
 
 		const noPlayElem =
@@ -130,12 +161,14 @@ export default class Results extends Component {
 			<div className="col-md-12">
 				<div className="panel panel-default">
 					<div className="panel-heading">
-						게임 결과
+						<font className='heading'>게임 결과</font>
 					</div>
+					<br/>
 					<div className="panel-body">
 						{panelElem}
 					</div>
 				</div>
+				<hr/>
 			</div>
 		);
 	}
