@@ -21,11 +21,10 @@ module.exports = async function(callback){
 	// 아래 링크의 코드를 보면 callback 에 대한 await 이 없기에...
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#Polyfill
 	// await 을 추가한 별도의 함수(forEachAsync)를 만들거나 그냥 for 루프를 써야 한다.
-	
-	await seedsToPush.forEach(async e => {
-		let x = await oddEven.encryptSeeds(stringToBytes32(e));
-		hashes.push(x);
-	});
+	for (let e of seedsToPush) {
+ 		let x = await oddEven.encryptSeeds(stringToBytes32(e));
+ 		hashes.push(x);
+	}
 
 	let prevLength = await oddEven.getHashListLength.call();
 	
