@@ -43,6 +43,7 @@
 	background-color: $mercury;
 
 	cursor: pointer;
+	vertical-align: top;
 	
 	div {
 		line-height: ($appbar-height - 2 * $padding) / 2;

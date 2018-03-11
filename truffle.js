@@ -9,7 +9,7 @@ module.exports = {
 			network_id: "6000"
 		},
 		npseth: {
-			host: "eth1.npsdev.cloud",
+			host: "eth2.npsdev.cloud",
 			port: 8545,
 			network_id: 1581,
 			from: '0x627306090abab3a6e1400e9345bc60c78a8bef57'

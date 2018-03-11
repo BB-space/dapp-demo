@@ -23,7 +23,7 @@ import 'font-awesome/css/font-awesome.css';
 )
 export default class MainApp extends Component {
 	componentDidMount() {
-		this.props.checkAuth();
+		// this.props.checkAuth();
 	}
 
 	render() {

@@ -8,15 +8,15 @@ import styles from './BetTable.scss';
 
 @connect(
 	(state, ownProps) => ({
-		playerEtherBalance: state.game.playerEtherBalance,
+		ethBalance: state.auth.ethBalance,
 		betState: state.game.betState
 	}),	{
+		
 	},
 	null,
 	{ pure: false }
 )
 export default class BetTable extends Component {
-
 	constructor(props) {
 		super(props);
 	}
@@ -25,44 +25,48 @@ export default class BetTable extends Component {
 		const {
 			handleBetReset,
 			handlePlayBtnClick,
-			playerEtherBalance,
+			ethBalance,
 			betState
 		} = this.props;
+		
 		let betEther = 0;
+		
 		for (let key in betState){
 			betEther += parseFloat(betState[key]);
 		}
+		
 		return (
-			<div className = {styles.betTable}>
+			<div className={styles.betTable}>
 				<BetBoard/>
 				<Chips />
-				<table className = {styles.betSummary}>
-					<tbody className = {styles.table}>
+				
+				<table className={styles.betSummary}>
+					<tbody className={styles.table}>
 						<tr>
-							<td className ={styles.content}>
+							<td className={styles.content}>
 								플레이어 잔고
 							</td>
-							<td>{playerEtherBalance}</td>
+							<td>{ethBalance}</td>
 						</tr>
 						<tr>
-							<td className ={styles.content}>
+							<td className={styles.content}>
 								현재 배팅 금액
 							</td>
-							<td>{betEther.toFixed(2)}</td>
+							<td>{ betEther.toFixed(2) }</td>
 						</tr>
 						<tr>
 							<td>
 								<button
-									onClick = {handleBetReset}
-									className = {styles.button}
+									onClick={handleBetReset}
+									className={styles.button}
 								>
 									배팅 초기화
 								</button>
 							</td>
 							<td>
 								<button
-									onClick = {handlePlayBtnClick}
-									className = {styles.button}
+									onClick={handlePlayBtnClick}
+									className={styles.button}
 								>
 									배팅
 								</button>

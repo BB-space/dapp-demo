@@ -10,14 +10,15 @@ const {
 } = actionTypes;
 
 const initialState = {
-	isPlaying:false,
-	clientSeed:'',
-	serverSeed:'',
-	hashedServerSeed:'',
-	reward:''
+	gameStack: [],
+	isPlaying: false,
+	clientSeed: '',
+	serverSeed: '',
+	hashedServerSeed: '',
+	reward: ''
 };
 
-export default function ethState(state=initialState, action) {
+export default function result(state=initialState, action) {
   switch(action.type) {
 		case RESULT_SET_IS_PLAYING:
 			return Object.assign({}, state, {

@@ -40,52 +40,52 @@ export function stringToBytes32(str) {
 }
 
 export function computeMultipleHash(str, nTimes){
-  let hash = str;
-  for (var i=0; i<nTimes; i++){
-    hash = keccak256(hash);
-  }
-  return hash;
+	let hash = str;
+	for (var i=0; i<nTimes; i++){
+		hash = keccak256(hash);
+	}
+	return hash;
 }
 
 export function reconstructResult(_serverSeed, _clientSeed) {
-  const serverSeed = stringToBytes32(_serverSeed);
-  const clientSeed = stringToBytes32(_clientSeed);
-  const dice3hash = web3.utils.soliditySha3(
-    {type:'bytes32',value:computeMultipleHash(serverSeed,3)},
-    {type:'bytes32',value:clientSeed}
-  );
-  const dice2hash = web3.utils.soliditySha3(
-    {type:'bytes32',value:computeMultipleHash(serverSeed,2)},
-    {type:'bytes32',value:clientSeed}
-  );
-  const dice1hash = web3.utils.soliditySha3(
-    {type:'bytes32',value:computeMultipleHash(serverSeed,1)},
-    {type:'bytes32',value:clientSeed}
-  );
-  const dice1NumberRaw = BigNumber(dice1hash)
-  const dice2NumberRaw = BigNumber(dice2hash)
-  const dice3NumberRaw = BigNumber(dice3hash)
+	const serverSeed = stringToBytes32(_serverSeed);
+	const clientSeed = stringToBytes32(_clientSeed);
+	const dice3hash = web3.utils.soliditySha3(
+		{type:'bytes32',value:computeMultipleHash(serverSeed,3)},
+		{type:'bytes32',value:clientSeed}
+	);
+	const dice2hash = web3.utils.soliditySha3(
+		{type:'bytes32',value:computeMultipleHash(serverSeed,2)},
+		{type:'bytes32',value:clientSeed}
+	);
+	const dice1hash = web3.utils.soliditySha3(
+		{type:'bytes32',value:computeMultipleHash(serverSeed,1)},
+		{type:'bytes32',value:clientSeed}
+	);
+	const dice1NumberRaw = BigNumber(dice1hash)
+	const dice2NumberRaw = BigNumber(dice2hash)
+	const dice3NumberRaw = BigNumber(dice3hash)
 
-  const dice1Number = Number(dice1NumberRaw.modulo(6).plus(1))
-  const dice2Number = Number(dice2NumberRaw.modulo(6).plus(1))
-  const dice3Number = Number(dice3NumberRaw.modulo(6).plus(1))
-  return [
-    dice1Number,
-    dice2Number,
-    dice3Number
-  ]
+	const dice1Number = Number(dice1NumberRaw.modulo(6).plus(1))
+	const dice2Number = Number(dice2NumberRaw.modulo(6).plus(1))
+	const dice3Number = Number(dice3NumberRaw.modulo(6).plus(1))
+	return [
+		dice1Number,
+		dice2Number,
+		dice3Number
+	]
 	// serverSeed = BigNumber(web3.utils.asciiToHex(serverSeed), 16);
 	// clientSeed = BigNumber(web3.utils.asciiToHex(clientSeed), 16);
 	// let seedsCombined = serverSeed.plus(clientSeed);
-  //
+	//
 	// seedsCombined = seedsCombined
 	// 	.toString(16)
 	// 	.match(/.{1,3}/g)
 	// 	.map(str => parseInt(str, 16));
-  //
+	//
 	// const mt = new MersenneTwister();
 	// mt.seedArray(seedsCombined);
-  //
+	//
 	// return [
 	// 	Math.floor(mt.random() * 6) + 1,
 	// 	Math.floor(mt.random() * 6) + 1,
@@ -94,42 +94,42 @@ export function reconstructResult(_serverSeed, _clientSeed) {
 }
 
 export function reconstructResult2(serverSeed, clientSeed) {
-  const dice3hash = web3.utils.soliditySha3(
-    {type:'bytes32',value:computeMultipleHash(serverSeed,3)},
-    {type:'bytes32',value:clientSeed}
-  );
-  const dice2hash = web3.utils.soliditySha3(
-    {type:'bytes32',value:computeMultipleHash(serverSeed,2)},
-    {type:'bytes32',value:clientSeed}
-  );
-  const dice1hash = web3.utils.soliditySha3(
-    {type:'bytes32',value:computeMultipleHash(serverSeed,1)},
-    {type:'bytes32',value:clientSeed}
-  );
-  const dice1NumberRaw = BigNumber(dice1hash)
-  const dice2NumberRaw = BigNumber(dice2hash)
-  const dice3NumberRaw = BigNumber(dice3hash)
+	const dice3hash = web3.utils.soliditySha3(
+		{type:'bytes32',value:computeMultipleHash(serverSeed,3)},
+		{type:'bytes32',value:clientSeed}
+	);
+	const dice2hash = web3.utils.soliditySha3(
+		{type:'bytes32',value:computeMultipleHash(serverSeed,2)},
+		{type:'bytes32',value:clientSeed}
+	);
+	const dice1hash = web3.utils.soliditySha3(
+		{type:'bytes32',value:computeMultipleHash(serverSeed,1)},
+		{type:'bytes32',value:clientSeed}
+	);
+	const dice1NumberRaw = BigNumber(dice1hash)
+	const dice2NumberRaw = BigNumber(dice2hash)
+	const dice3NumberRaw = BigNumber(dice3hash)
 
-  const dice1Number = Number(dice1NumberRaw.modulo(6).plus(1))
-  const dice2Number = Number(dice2NumberRaw.modulo(6).plus(1))
-  const dice3Number = Number(dice3NumberRaw.modulo(6).plus(1))
-  return [
-    dice1Number,
-    dice2Number,
-    dice3Number
-  ]
+	const dice1Number = Number(dice1NumberRaw.modulo(6).plus(1))
+	const dice2Number = Number(dice2NumberRaw.modulo(6).plus(1))
+	const dice3Number = Number(dice3NumberRaw.modulo(6).plus(1))
+	return [
+		dice1Number,
+		dice2Number,
+		dice3Number
+	]
 	// serverSeed = BigNumber(web3.utils.asciiToHex(serverSeed), 16);
 	// clientSeed = BigNumber(web3.utils.asciiToHex(clientSeed), 16);
 	// let seedsCombined = serverSeed.plus(clientSeed);
-  //
+	//
 	// seedsCombined = seedsCombined
 	// 	.toString(16)
 	// 	.match(/.{1,3}/g)
 	// 	.map(str => parseInt(str, 16));
-  //
+	//
 	// const mt = new MersenneTwister();
 	// mt.seedArray(seedsCombined);
-  //
+	//
 	// return [
 	// 	Math.floor(mt.random() * 6) + 1,
 	// 	Math.floor(mt.random() * 6) + 1,

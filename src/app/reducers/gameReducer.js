@@ -6,14 +6,12 @@ const {
 	GAME_SET_CLIENT_SEED,
 	GAME_SET_CHIP_INDEX,
 	GAME_ADD_TO_BET,
-	GAME_RESET_BET,
-	GAME_SET_PLAYER_ETHER_BALANCE
+	GAME_RESET_BET
 } = actionTypes;
 
 const initialState = {
 	betState: {},
 	currentChipIdx: 0,
-
 	hashedServerSeed: '',
 	clientSeed: '',
 	clientSeedBytes32: ''
@@ -37,17 +35,10 @@ export default function gameReducer(state=initialState, action) {
 				currentChipIdx: action.chipIdx
 			});
 
-		case GAME_SET_PLAYER_ETHER_BALANCE:
-			return Object.assign({}, state, {
-				playerEtherBalance: action.playerEtherBalance
-			})
 		case GAME_RESET_BET:
 			return Object.assign({}, state, {
 				betState: {}
 			});
-
-        default:
-            return state;
 
 		case GAME_ADD_TO_BET: {
 			const {
@@ -65,7 +56,10 @@ export default function gameReducer(state=initialState, action) {
 					}
 				)
 			});
-			}
+		}			
+
+        default:
+            return state;
     }
 
 }

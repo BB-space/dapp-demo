@@ -9,8 +9,8 @@ export const serviceWeb3 = new Web3(
 
 export let injectedWeb3 = undefined;
 
-export function setInjectedWeb3(provider) {
-	injectedWeb3 = new Web3(provider);
+export function setInjectedWeb3(web3) {
+	injectedWeb3 = web3;
 }
 
 export default serviceWeb3;

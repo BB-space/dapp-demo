@@ -1,8 +1,9 @@
 import { browserHistory } from 'react-router';
 import { request } from '../utils/fetch';
 import actionTypes from '../constants/actionTypes';
-import { injectedWeb3 } from '../utils/web3';
-import { toWei } from '../../common/utils';
+import { injectedWeb3, serviceWeb3, setProvider } from '../utils/web3';
+import { nodeUrl } from '../../common/constants/config';
+import { toWei, fromWei } from '../../common/utils';
 
 
 export function attemptSignIn(email, password) {
@@ -66,7 +67,6 @@ export function checkAuth() {
     };
 }
 
-
 function setAuthenticating(isAuthenticating) {
     return {
 		type: actionTypes.AUTH_SET_AUTHENTICATING,
@@ -106,36 +106,65 @@ function setEthBalance(balance) {
 	};
 }
 
-function setTokenBalance(balance) {
-	return {
-		type: actionTypes.AUTH_SET_TOKEN_BALANCE,
-		balance
-	};
-}
-
 export function setMetamaskUse(toUseMetamask) {
 	return async (dispatch, getState) => {
+		let { isWeb3Injected } = getState().auth;
+		
 		dispatch(setUser({ email: '', wallet: '' }));
+		dispatch(setEthBalance(0));
         dispatch({
 			type: actionTypes.AUTH_SET_METAMASK_USE,
 			toUseMetamask
 		});
 
-		const wallet = await injectedWeb3.eth.getCoinbase();
-		dispatch(setUser({ wallet }));
+		if(toUseMetamask && isWeb3Injected) {
+			
+			const wallet = injectedWeb3.eth.defaultAccount;
+			const balance = await serviceWeb3.eth.getBalance(wallet);
+
+			dispatch(setEthBalance(
+				parseFloat(fromWei(balance).toNumber())
+			));
+			dispatch(fetchMetamaskNetwork());
+			dispatch(setUser({ wallet }));
+		}
 
         return true;
     };
 }
 
-export function setMetamaskAccount(metamaskAccount) {
-	return {
-		type: actionTypes.AUTH_SET_METAMASK_ACCOUNT,
-		metamaskAccount
+function fetchMetamaskNetwork() {
+	return (dispatch, getState) => {
+		injectedWeb3.version.getNetwork((err, networkId) => {
+			if(err) {
+				console.error(err);
+				return false;
+			}
+			
+			let network = '';
+			switch (networkId) {
+				case '1':
+					network = 'MainNet';
+					break;
+				case '2':
+					network = 'Morden';
+					break;
+				case '3':
+					network = 'Ropsten';
+					break;
+				case '4':
+					network = 'Rinkeby';
+					break;
+				default:
+					network = 'Private';
+			}
+
+			dispatch(setMetamaskNetwork(network));
+		});
 	};
 }
 
-export function setMetamaskNetwork(metamaskNetwork) {
+function setMetamaskNetwork(metamaskNetwork) {
 	return {
 		type: actionTypes.AUTH_SET_METAMASK_NETWORK,
 		metamaskNetwork

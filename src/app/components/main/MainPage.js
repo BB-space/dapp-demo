@@ -6,7 +6,6 @@ import {
 	gameABI
 } from '../../../common/constants/contracts';
 import GamePage from '../game/GamePage';
-import TokenPurchaseSection from '../token/TokenPurchaseSection';
 import ValidationSection from '../game/ValidationSection';
 
 
@@ -14,11 +13,6 @@ import ValidationSection from '../game/ValidationSection';
 export default class MainPage extends Component {
 	constructor(props) {
 		super(props);
-
-		
-		this.handleTokenAddressChange = this.handleInputChange.bind(this, 'tokenAddress');
-		this.handleTlpForTransferChange = this.handleInputChange.bind(this, 'tlpForTransfer');
-		this.handleTlpRecipientChange = this.handleInputChange.bind(this, 'tlpRecipient');
 	}
 
 	componentDidMount(){
@@ -51,28 +45,6 @@ export default class MainPage extends Component {
 	   )
 	   }*/
 
-
-	sendTLP = () => {
-		const {
-			currentAccount,
-		} = this.props;
-
-		const {
-			tokenAddress,
-			tlpForTransfer,
-			tlpRecipient
-		} = this.state;
-
-		// const tokenInstance = new web3.eth.Contract(tulipABI, tokenAddress);
-
-		/* tokenInstance
-		   .methods
-		   .transfer(tlpRecipient, toWei(tlpForTransfer))
-		   .send({
-		   from: currentAccount
-		   });*/
-	}
-
 	handleInputChange(whichState, evt) {
 		const newVal = evt.target.value;
 
@@ -81,13 +53,6 @@ export default class MainPage extends Component {
 
 
     render() {
-		const {
-			isAuthenticated,
-			wallet,
-			ethBalance,
-			tokenBalance
-		} = this.props;
-
 		return (
 			<main className="page-container">
 				<div className="row">
