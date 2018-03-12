@@ -18,7 +18,6 @@ async function calculateItemsToInsert(cli, totalCount) {
 
     let currentCount = await hlenAsync();
     let itemsToInsert = totalCount - currentCount;
-    itemsToInsert = 10;
     return itemsToInsert > 0 ? itemsToInsert : 0;
 }
 
@@ -39,7 +38,6 @@ async function generateNewHashItems(cli, count) {
 	while (count > 0) {
 		const seed = (Math.random() * Math.pow(10, 18)).toFixed().toString(16);
 
-        console.log('try to hash', ethEnv, ',', seed);
 		const hashed = await game.encryptSeeds(stringToBytes32(seed)).call();
 		console.log("hashed", seed, ':', hashed);
 
