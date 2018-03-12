@@ -102,11 +102,11 @@ export default function listenAndFinalize(web3) {
 
 			try {
 				// const dealerSeed = seedMap[dealerHash];
-				const dealerSeed = await hgetAsync(delaerHash);
+				const dealerSeed = await hgetAsync(dealerHash);
 				if (dealerSeed === undefined || dealerSeed == null) {
 					// TODO:
 					// 치명적인 에러이므로 처리를 어떻게 할건지 협의 필요
-					throw new Error("not found seed:" + delaerHash);
+					throw new Error("not found seed:" + dealerHash);
 				}
 				console.log('Original Seed:', dealerSeed);
 
@@ -150,6 +150,8 @@ export default function listenAndFinalize(web3) {
 
 			} catch(e) {
 				console.error(e);
+			} finally {
+				cli.quit();
 			}
 		}
 	});
