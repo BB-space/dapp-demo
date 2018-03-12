@@ -10,7 +10,7 @@ const {
 } = actionTypes;
 
 const initialState = {
-	gameStack: [],
+	history: [],
 	isPlaying: false,
 	clientSeed: '',
 	serverSeed: '',

@@ -72,7 +72,7 @@ export default class Results extends Component {
 		} else if(!nextProps.isPlaying && this.props.isPlaying) {
 			clearInterval(this.state.timer);
 			this.setState({
-				passedTime:0
+				passedTime: 0
 			});
 		}
 	}
