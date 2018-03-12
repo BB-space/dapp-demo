@@ -10,7 +10,7 @@ const addresses = {
 	},
 	
 	npseth: {
-		game: '0x7574dc08d162dec4abcad3a62dc6795fb3e5c9ea'
+		game: '0xf204a4ef082f5c04bb89f7d5e6568b796096735a'
 	},
 	
 	local: {
