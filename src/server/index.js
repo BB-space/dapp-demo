@@ -12,7 +12,7 @@ import webpack from 'webpack';
 import runDevServer from './runDevServer';
 import renderApp from './renderApp';
 import listenAndFinalize from './listenAndFinalize';
-import { nodeUrl } from '../common/constants/config';
+import { nodeUrl, NUMBER_OF_SEEDS, INTERVAL_TO_REGEN_SEEDS } from '../common/constants/config';
 
 // routes
 import gameRoutes from './routes/games';
@@ -21,11 +21,25 @@ import ethRoutes from './routes/eth';
 
 import webpackConfig from '../../webpack.config';
 
+import hashGenerator from './db/hashGenerator';
+
 console.log(nodeUrl);
 global.web3 = new Web3(
 	new Web3.providers.WebsocketProvider(nodeUrl)
 );
 
+// 주기적으로 시드정보를 생성하기 위한 함수
+var genfunc = function() {
+    genfunc = function() {
+        try {
+            hashGenerator.generate(NUMBER_OF_SEEDS);
+        } finally {
+            setTimeout(genfunc, INTERVAL_TO_REGEN_SEEDS);
+        }
+    };
+    genfunc();
+    return genfunc;
+}();
 
 const frontApp = new Koa();  // Renderer
 const backApp = new Koa();   // REST API

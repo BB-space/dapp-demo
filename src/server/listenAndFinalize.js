@@ -5,6 +5,10 @@ import { gameABI, gameAddress } from '../common/constants/contracts';
 import { coinbase, privateKey } from './constants/wallets';
 import { stringToBytes32 } from '../common/utils';
 import { makeSignedTransaction } from './utils';
+import { ethEnv } from '../common/constants/config';
+
+const redis = require('redis');
+const { promisify } = require('util');
 
 
 
@@ -80,7 +84,7 @@ export default function listenAndFinalize(web3) {
 	let gameInstance = new web3.eth.Contract(gameABI, gameAddress);
 	
 	gameInstance.events.InitGame(async (err, result) => {
-		if(err) {
+		if (err) {
 			console.error(err);
 		} else {
 			const {
@@ -89,14 +93,23 @@ export default function listenAndFinalize(web3) {
 				player,
 				playerSeed
 			} = result.returnValues;
+			const cli = redis.createClient();
+			const hgetAsync = promisify(cli.hget).bind(cli, ethEnv);
+			const hdelAsync = promisify(cli.hdel).bind(cli, ethEnv);
 
 			console.log('InitGame event has been emitted!!');
 			console.log('Dealer Hash:', dealerHash);
 
-			const dealerSeed = seedMap[dealerHash];
-			console.log('Original Seed:', dealerSeed);
-
 			try {
+				// const dealerSeed = seedMap[dealerHash];
+				const dealerSeed = await hgetAsync(delaerHash);
+				if (dealerSeed === undefined || dealerSeed == null) {
+					// TODO:
+					// 치명적인 에러이므로 처리를 어떻게 할건지 협의 필요
+					throw new Error("not found seed:" + delaerHash);
+				}
+				console.log('Original Seed:', dealerSeed);
+
 				const txData = gameInstance
 					.methods
 					.finalize(
@@ -128,6 +141,9 @@ export default function listenAndFinalize(web3) {
 
 				tran.on('error', console.error);
 
+				// TODO:
+				// 여기가 맞나???
+				await hdelAsync(dealerHash);
 
 				// TODO: push another hash
 

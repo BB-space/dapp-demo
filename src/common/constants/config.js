@@ -16,6 +16,9 @@ const nodes = {
 	testnet: 'ws://localhost:8545'
 };
 
+export const NUMBER_OF_SEEDS = 100;
+export const INTERVAL_TO_REGEN_SEEDS = 1000 * 60; // 1min
+
 
 export { ethEnv };
 export const nodeUrl = nodes[ethEnv];
