@@ -120,38 +120,40 @@ export default function listenAndFinalize(web3) {
 
 				const nonce = await web3.eth.getTransactionCount(coinbase);
 
-				const tran = makeSignedTransaction(
+				makeSignedTransaction(
 					coinbase,
 					privateKey,
 					gameAddress,
 					'0',
 					nonce,
 					txData
-				);
-
-				tran.on('transactionHash', hash => {
+				)
+				.once('transactionHash', hash => {
 					console.log('finalize transaction hash');
 					console.log(hash);
-				});
-
-				tran.on('receipt', receipt => {
+				})
+				.once('receipt', receipt => {
 					console.log('reciept');
 					console.log(receipt);
+				})
+				.on('confirmation', (confNumber, receipt) => {
+					console.log('confirmation');
+					console.log(confNumber, ':', receipt);
+				})
+				.on('error', error => {
+					console.error(error);
+				})
+				.then(receipt => {
+					//await hdelAsync(dealerHash);
+					console.log('delete hash item:', dealerHash);
+					cli.hdel(ethEnv, dealerHash);
+				})
+				.finally(() => {
+					cli.quit();
 				});
-
-				tran.on('error', console.error);
-
-				// TODO:
-				// 여기가 맞나???
-				await hdelAsync(dealerHash);
-
-				// TODO: push another hash
-
-
 			} catch(e) {
 				console.error(e);
 			} finally {
-				cli.quit();
 			}
 		}
 	});
