@@ -8,10 +8,13 @@
 import { ethEnv } from '../../common/constants/config';
 import { serviceWeb3 } from '../../app/utils/web3';
 import { stringToBytes32 } from '../../common/utils';
+import { makeSignedTransaction } from '../utils';
 import { gameABI, gameAddress } from '../../common/constants/contracts';
+import { coinbase, privateKey } from '../constants/wallets';
 
 const redis = require('redis');
 const { promisify } = require('util');
+const game = new serviceWeb3.eth.Contract(gameABI, gameAddress).methods;
 
 async function calculateItemsToInsert(cli, totalCount) {
     const hlenAsync = promisify(cli.hlen).bind(cli, ethEnv);
@@ -28,7 +31,6 @@ async function deleteItems(cli, items) {
 }
 
 async function generateNewHashItems(cli, count) {
-    const game = new web3.eth.Contract(gameABI, gameAddress).methods;
     const hsetnxAsync = promisify(cli.hsetnx).bind(cli, ethEnv);
 
     // 시드 생성
@@ -50,7 +52,7 @@ async function generateNewHashItems(cli, count) {
     if (items.length > 0) {
         try {
             // contract 추가 시도
-            await game.pushHashes(items).call();
+            await pushHashes(items);
             return items.length;
         } catch (e) {
             // 실패할 경우 redis의 데이터도 삭제한다.
@@ -59,6 +61,40 @@ async function generateNewHashItems(cli, count) {
             console.log('Deleted count: ', deleted);
             return 0;
         }
+    }
+}
+
+async function pushHashes(items) {
+    try {
+        const txData = game.pushHashes(items).encodeABI();
+        const nonce = await serviceWeb3.eth.getTransactionCount(coinbase);
+
+        await makeSignedTransaction(
+            coinbase,
+            privateKey,
+            gameAddress,
+            '0',
+            nonce,
+            txData
+        )
+        .once('transactionHash', hash => {
+            console.log('pushHashes transaction hash');
+            console.log(hash);
+        })
+        .once('receipt', receipt => {
+            console.log('pushHashes reciept');
+            console.log(receipt);
+        })
+        .on('confirmation', (confNumber, receipt) => {
+            console.log('pushHashes confirmation');
+            console.log(confNumber, ':', receipt);
+        })
+        .on('error', error => {
+            console.error(error);
+        });
+    } catch(e) {
+        console.error(e);
+    } finally {
     }
 }
 

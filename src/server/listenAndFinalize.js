@@ -120,7 +120,7 @@ export default function listenAndFinalize(web3) {
 
 				const nonce = await web3.eth.getTransactionCount(coinbase);
 
-				makeSignedTransaction(
+				await makeSignedTransaction(
 					coinbase,
 					privateKey,
 					gameAddress,
@@ -142,18 +142,15 @@ export default function listenAndFinalize(web3) {
 				})
 				.on('error', error => {
 					console.error(error);
-				})
-				.then(receipt => {
-					//await hdelAsync(dealerHash);
-					console.log('delete hash item:', dealerHash);
-					cli.hdel(ethEnv, dealerHash);
-				})
-				.finally(() => {
-					cli.quit();
 				});
 			} catch(e) {
 				console.error(e);
 			} finally {
+				// 트랜잭션 성공 여부와 관계 없이 블록체인 내의 시드는 지워지므로 
+				// 서버의 저장값도 여기서 지워버린다.
+				console.log('delete hash item:', dealerHash);
+				await hdelAsync(dealerHash);
+				cli.quit();
 			}
 		}
 	});
