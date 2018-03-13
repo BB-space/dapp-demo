@@ -99,9 +99,9 @@ export default function listenAndFinalize(web3) {
 
 			try {
 				const url = REDIS_URL[ethEnv];
-				const cli = redis.createClient(url.host);
-				const hgetAsync = promisify(cli.hget).bind(cli, ethEnv);
-				const hdelAsync = promisify(cli.hdel).bind(cli, ethEnv);
+				var cli = redis.createClient(url.host);
+				var hgetAsync = promisify(cli.hget).bind(cli, ethEnv);
+				var hdelAsync = promisify(cli.hdel).bind(cli, ethEnv);
 				if (url.password) {
 					const authAsync = promisify(cli.auth).bind(cli);
 					await authAsync(url.password);
@@ -148,6 +148,9 @@ export default function listenAndFinalize(web3) {
 				})
 				.on('error', error => {
 					console.error(error);
+				})
+				.catch (error => {
+					throw new Error(error);
 				});
 			} catch(e) {
 				console.error(e);

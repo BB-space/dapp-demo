@@ -38,6 +38,8 @@ async function generateNewHashItems(cli, count) {
     // redis에 문제가 없는데 실패했다면 duplicate
 	let items = [];
 	while (count > 0) {
+        // TODO:
+        // 시드 생성 로직은 협의 후 변경 필요
 		const seed = (Math.random() * Math.pow(10, 18)).toFixed().toString(16);
 
 		const hashed = await game.encryptSeeds(stringToBytes32(seed)).call();
@@ -105,10 +107,9 @@ module.exports = {
      * @return number of items inserted
      */
 	generate : async function(totalCount) {
-        let cli;
         try {
             const url = REDIS_URL[ethEnv];
-            cli = redis.createClient(url.host);
+            var cli = redis.createClient(url.host);
             if (url.password) {
                 const authAsync = promisify(cli.auth).bind(cli);
                 await authAsync(url.password);
