@@ -50,15 +50,15 @@ contract CLevelAuth{
 }
 
 contract QuickSort {
-    function sort(uint[] _data) public view returns(uint[] memory) {
-       uint[] memory data;
+    function sort(uint[3] _data) public view returns(uint[3] memory) {
+       uint[3] memory data;
        for(uint i = 0; i < _data.length; i++){
          data[i] = _data[i];
        }
        quickSort(data, int(0), int(data.length - 1));
        return data;
     }
-    function quickSort(uint[] arr, int left, int right) internal view{
+    function quickSort(uint[3] arr, int left, int right) internal view{
       int i = left;
       int j = right;
       if(i==j) return;
@@ -77,10 +77,10 @@ contract QuickSort {
       if (i < right)
           quickSort(arr, i, right);
     }
-    function permanentSort(uint[] storage data) internal{
+    function permanentSort(uint[3] storage data) internal{
       permanentQuickSort(data, int(0), int(data.length - 1));
     }
-    function permanentQuickSort(uint[] storage arr, int left, int right) internal{
+    function permanentQuickSort(uint[3] storage arr, int left, int right) internal{
       int i = left;
       int j = right;
       if(i==j) return;
@@ -104,149 +104,18 @@ contract QuickSort {
 contract GRC is QuickSort{
   //betTable in BP
   //betTable & logic for 1 * 3 slot only
-  struct Symbol{
-    uint none;
-    uint bar1;
-    uint bar2;
-    uint bar3;
-    uint anybar;
-    uint bonus;
-    uint seven;
-    uint cherry;
-    uint wild;
-  }
 
-  Symbol symbol = Symbol(
-    1, //none
-    2, //bar1
-    6, //bar2
-    10,//bar3
-    14,//anybar
-    12,//bonus
-    0, //seven
-    8, //cheery
-    4  //wild
-  );
-
-  struct WinComb{
-    uint[] result;
-    uint multp;
-  }
-
-  WinComb[] wincombs;
-
-  function GRC() public{
-      // 3 wilds
-    wincombs.push(WinComb(convertDynamicArray([symbol.wild, symbol.wild, symbol.wild]),1000));
-      // 3 sevens
-    wincombs.push(WinComb(convertDynamicArray([symbol.seven, symbol.seven, symbol.seven]),70 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.seven, symbol.seven, symbol.wild]),70 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.seven, symbol.wild, symbol.wild]),70 * 3));
-      // 3 bar3s
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.bar3]),30 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.wild]),30 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.wild, symbol.wild]),30 * 3));
-      // 3 bar2s
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.bar2]),25 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.wild]),25 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.wild, symbol.wild]),25 * 3));
-      // 3 bar1s
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.bar1]),5 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.wild]),5 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.wild, symbol.wild]),5 * 3));
-      // 3 cherries
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.cherry]),5 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.wild]),5 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.wild]),5 * 3));
-      // anybars w0
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.bar2]),3 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.bar3]),3 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.bar1]),3 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.bar3]),3 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.bar1]),3 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.bar2]),3 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar2, symbol.bar3]),3 * 1));
-      // anybars w1
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar2, symbol.wild]),3 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar3, symbol.wild]),3 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar3, symbol.wild]),3 * 2));
-      // 2 cherries w0
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bonus]),2 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.seven]),2 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bar3]),2 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bar2]),2 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bar1]),2 * 1));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.none]),2 * 1));
-      // 2 cherries w1
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bonus]),2 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.seven]),2 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bar3]),2 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bar2]),2 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bar1]),2 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.none]),2 * 2));
-
-      // 1 cherry
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bonus]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.seven]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bar3]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bar2]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bar1]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.none]),1 * 2));
-
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bonus]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.seven]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bar3]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bar2]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bar1]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.none]),1 * 2));
-
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bonus]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.seven]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bar3]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bar2]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bar1]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.none]),1 * 2));
-
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bonus]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.seven]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bar3]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bar2]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bar1]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.none]),1 * 2));
-
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bonus]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.seven]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bar3]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bar2]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bar1]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.none]),1 * 2));
-
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bonus]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.seven]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bar3]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bar2]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bar1]),1 * 2));
-    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.none]),1 * 2));
-    for(uint i=0; i<wincombs.length; i++){
-      permanentSort(wincombs[i].result);
-    }
-  }
-
-  function convertDynamicArray(uint[3] arr) public pure returns (uint[] memory){
-    uint[] memory _arr;
-    _arr[0] = arr[0];
-    _arr[1] = arr[1];
-    _arr[2] = arr[2];
-  }
-
-  // wincomb array 만들고 나서
-  //array 만들고 나서 forloop 돌리다가 맞는게 찾아지면 retrun okay
-  //못찾았다면 0 return
-  // array 로 pure 함수 만드는 방법 알아보기 (될 것 같음)
-
-  function computeReward(uint betAmount, uint betLines, uint[] memory gameResult) public view returns(uint){
-    uint multp = 0;
-    uint[] memory sortedResult = sort(gameResult);
+  //1 /*symbol.none*/
+  //2 /*symbol.bar1*/
+  //6 /*symbol.bar2*/
+  //10 /*symbol.bar3*/
+  //14 /*symbol.anybar*/
+  //12 /*symbol.bonus*/
+  //0 /*symbol.seven*/
+  //4 /*symbol.wild*/
+  //8 /*symbol.cherry*/
+  function computeReward(uint betAmount, uint betLines, uint[3] memory gameResult) public view returns(uint){
+    uint[3] memory sortedResult = sort(gameResult);
     uint symbol1;
     uint symbol2;
     uint symbol3;
@@ -265,18 +134,115 @@ contract GRC is QuickSort{
     }else{
       symbol3 = 1;
     }
-
-    for(uint i=0; i < wincombs.length; i++){
-      if(
-        symbol1 == wincombs[i].result[0] &&
-        symbol2 == wincombs[i].result[1] &&
-        symbol2 == wincombs[i].result[2]
-      ){
-        multp = wincombs[i].multp;
-        break;
+    if(
+    // 3 wilds
+      symbol1 == 4 /*symbol.wild*/ &&
+      symbol2 == 4 /*symbol.wild*/ &&
+      symbol2 == 4 /*symbol.wild*/
+    ){
+      return betAmount * 1000 / betLines;
+    }else if(
+    // 3 sevens
+      symbol1 == 0 /*symbol.seven*/
+    ){
+      if(symbol2 == 0 /*symbol.seven*/ && symbol3 == 0 /*symbol.seven*/){
+        return betAmount * 70 * 1 / betLines;
       }
+      if(symbol2 == 0 /*symbol.seven*/ && symbol3 == 4 /*symbol.wild*/){
+        return betAmount * 70 * 2 / betLines;
+      }
+      if(symbol2 == 4 /*symbol.wild*/ && symbol3 == 4 /*symbol.wild*/){
+        return betAmount * 70 * 3 / betLines;
+      }
+    }else if(
+    // 3 bar3s
+      symbol3 == 10 /*symbol.bar3*/
+    ){
+      if(symbol2 == 10 /*symbol.bar3*/ && symbol3 == 10 /*symbol.bar3*/){
+        return betAmount * 30 * 1 / betLines;
+      }
+      if(symbol2 == 10 /*symbol.bar3*/ && symbol1 == 4 /*symbol.wild*/){
+        return betAmount * 30 * 2 / betLines;
+      }
+      if(symbol2 == 4 /*symbol.wild*/ && symbol1 == 4 /*symbol.wild*/){
+        return betAmount * 30 * 3 / betLines;
+      }
+    }else if(
+    // 3 bar2s
+      symbol3 == 6 /*symbol.bar2*/
+    ){
+      if(symbol2 == 6 /*symbol.bar2*/ && symbol3 == 6 /*symbol.bar2*/){
+        return betAmount * 30 * 1 / betLines;
+      }
+      if(symbol2 == 6 /*symbol.bar2*/ && symbol1 == 4 /*symbol.wild*/){
+        return betAmount * 30 * 2 / betLines;
+      }
+      if(symbol2 == 4 /*symbol.wild*/ && symbol1 == 4 /*symbol.wild*/){
+        return betAmount * 30 * 3 / betLines;
+      }
+    }else if(
+    // 3 bar1s
+      symbol1 == 2 /*symbol.bar1*/
+    ){
+      if(symbol2 == 2 /*symbol.bar1*/ && symbol3 == 2 /*symbol.bar1*/){
+        return betAmount * 70 * 1 / betLines;
+      }
+      if(symbol2 == 2 /*symbol.bar1*/ && symbol3 == 4 /*symbol.wild*/){
+        return betAmount * 70 * 2 / betLines;
+      }
+      if(symbol2 == 4 /*symbol.wild*/ && symbol3 == 4 /*symbol.wild*/){
+        return betAmount * 70 * 3 / betLines;
+      }
+    }else if(
+    // 3 cherries
+      symbol3 == 8 /*symbol.cherry*/
+    ){
+      if(symbol2 == 8 /*symbol.cherry*/ && symbol3 == 8 /*symbol.cherry*/){
+        return betAmount * 30 * 1 / betLines;
+      }
+      if(symbol2 == 8 /*symbol.cherry*/ && symbol1 == 4 /*symbol.wild*/){
+        return betAmount * 30 * 2 / betLines;
+      }
+      if(symbol2 == 4 /*symbol.wild*/ && symbol1 == 4 /*symbol.wild*/){
+        return betAmount * 30 * 3 / betLines;
+      }
+    }else if(
+    // any bar
+      (symbol1 == 2 /*symbol.bar1*/ || symbol1 == 6 /*symbol.bar2*/ || symbol1 == 10 /*symbol.bar3*/) &&
+      (symbol2 == 2 /*symbol.bar1*/ || symbol2 == 6 /*symbol.bar2*/ || symbol2 == 10 /*symbol.bar3*/) &&
+      (symbol3 == 2 /*symbol.bar1*/ || symbol3 == 6 /*symbol.bar2*/ || symbol3 == 10 /*symbol.bar3*/)
+    ){
+      return betAmount * 3 * 1 / betLines;
+    }else if(
+    // any bar w1
+      (symbol1 == 2 /*symbol.bar1*/ && symbol2 == 4 /*symbol.wild*/ && symbol3 == 6 /*symbol.bar2*/)||
+      (symbol1 == 2 /*symbol.bar1*/ && symbol2 == 4 /*symbol.wild*/ && symbol3 == 10 /*symbol.bar3*/)||
+      (symbol1 == 4 /*symbol.wild*/ && symbol2 == 6 /*symbol.bar2*/ && symbol3 == 10 /*symbol.bar3*/)
+    ){
+      return betAmount * 3 * 2 / betLines;
+    }else if(
+    // two cherries w0
+      (symbol1 == 8 /*symbol.cherry*/ && symbol2 == 8 /*symbol.cherry*/ && symbol3 != 4 /*symbol.wild*/)||
+      (symbol1 == 8 /*symbol.cherry*/ && symbol3 == 8 /*symbol.cherry*/ && symbol2 != 4 /*symbol.wild*/)||
+      (symbol2 == 8 /*symbol.cherry*/ && symbol3 == 8 /*symbol.cherry*/ && symbol1 != 4 /*symbol.wild*/)
+    ){
+      return betAmount * 2 * 1 / betLines;
+    }else if(
+    // two cherries w1
+      (symbol1 == 4 /*symbol.wild*/ && symbol2 == 8 /*symbol.cherry*/)||
+      (symbol1 == 4 /*symbol.wild*/ && symbol3 == 8 /*symbol.cherry*/)||
+      (symbol2 == 4 /*symbol.wild*/ && symbol3 == 8 /*symbol.cherry*/)
+    ){
+      return betAmount * 2 * 2 / betLines;
+    }else if(
+    // one cherry
+      (symbol1 == 8 /*symbol.cherry*/)||
+      (symbol2 == 8 /*symbol.cherry*/)||
+      (symbol3 == 8 /*symbol.cherry*/)
+    ){
+      return betAmount * 1 * 1 / betLines;
     }
-    return betAmount * multp / betLines;
+    return 0;
   }
   function computeDeposit(uint betAmount, uint betLines) public pure returns(uint){
     return betAmount * 1000 * betLines;
@@ -307,7 +273,7 @@ states
     uint reward;
     bool finalized;
     uint betLines;
-    uint[] gameResult;
+    uint[3] gameResult;
   }
   // deposit : total amount of deposit
   uint deposit;
@@ -525,7 +491,7 @@ betting related functions
         computeMultipleHash(serverSeed, maxHashNum - 1 - i),
         playerSeed
       );
-      gameResult.push(uint(reelHash) % reelSymbolNum);
+      gameResult[i] = uint(reelHash) % reelSymbolNum;
     }
   }
 
@@ -589,7 +555,7 @@ logging
     betLines = game.betLines;
   }
   function getGameResult(bytes32 _serverHash) public view returns(
-    uint[] gameResult
+    uint[3] gameResult
   ){
     var game = games[_serverHash];
     gameResult = game.gameResult;
