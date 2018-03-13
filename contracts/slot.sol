@@ -49,23 +49,242 @@ contract CLevelAuth{
   }
 }
 
-contract GRC is DSSafeAddSub{
+contract QuickSort {
+    function sort(uint[] _data) public view returns(uint[] memory) {
+       uint[] memory data;
+       for(uint i = 0; i < _data.length; i++){
+         data[i] = _data[i];
+       }
+       quickSort(data, int(0), int(data.length - 1));
+       return data;
+    }
+    function quickSort(uint[] arr, int left, int right) internal view{
+      int i = left;
+      int j = right;
+      if(i==j) return;
+      uint pivot = arr[uint(left + (right - left) / 2)];
+      while (i <= j) {
+          while (arr[uint(i)] < pivot) i++;
+          while (pivot < arr[uint(j)]) j--;
+          if (i <= j) {
+              (arr[uint(i)], arr[uint(j)]) = (arr[uint(j)], arr[uint(i)]);
+              i++;
+              j--;
+          }
+      }
+      if (left < j)
+          quickSort(arr, left, j);
+      if (i < right)
+          quickSort(arr, i, right);
+    }
+    function permanentSort(uint[] storage data) internal{
+      permanentQuickSort(data, int(0), int(data.length - 1));
+    }
+    function permanentQuickSort(uint[] storage arr, int left, int right) internal{
+      int i = left;
+      int j = right;
+      if(i==j) return;
+      uint pivot = arr[uint(left + (right - left) / 2)];
+      while (i <= j) {
+          while (arr[uint(i)] < pivot) i++;
+          while (pivot < arr[uint(j)]) j--;
+          if (i <= j) {
+              (arr[uint(i)], arr[uint(j)]) = (arr[uint(j)], arr[uint(i)]);
+              i++;
+              j--;
+          }
+      }
+      if (left < j)
+          permanentQuickSort(arr, left, j);
+      if (i < right)
+          permanentQuickSort(arr, i, right);
+    }
+}
+
+contract GRC is QuickSort{
   //betTable in BP
   //betTable & logic for 1 * 3 slot only
-  function computeReward(uint betAmount, uint betLines, uint[] gameResult) public pure returns(uint){
-    // TODO: add logic
-    //to remove linter error
-    return betAmount * betLines * gameResult[0];
-    //return unitRewardInBp
+  struct Symbol{
+    uint none;
+    uint bar1;
+    uint bar2;
+    uint bar3;
+    uint anybar;
+    uint bonus;
+    uint seven;
+    uint cherry;
+    uint wild;
+  }
+
+  Symbol symbol = Symbol(
+    1, //none
+    2, //bar1
+    6, //bar2
+    10,//bar3
+    14,//anybar
+    12,//bonus
+    0, //seven
+    8, //cheery
+    4  //wild
+  );
+
+  struct WinComb{
+    uint[] result;
+    uint multp;
+  }
+
+  WinComb[] wincombs;
+
+  function GRC() public{
+      // 3 wilds
+    wincombs.push(WinComb(convertDynamicArray([symbol.wild, symbol.wild, symbol.wild]),1000));
+      // 3 sevens
+    wincombs.push(WinComb(convertDynamicArray([symbol.seven, symbol.seven, symbol.seven]),70 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.seven, symbol.seven, symbol.wild]),70 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.seven, symbol.wild, symbol.wild]),70 * 3));
+      // 3 bar3s
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.bar3]),30 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.wild]),30 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.wild, symbol.wild]),30 * 3));
+      // 3 bar2s
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.bar2]),25 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.wild]),25 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.wild, symbol.wild]),25 * 3));
+      // 3 bar1s
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.bar1]),5 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.wild]),5 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.wild, symbol.wild]),5 * 3));
+      // 3 cherries
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.cherry]),5 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.wild]),5 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.wild]),5 * 3));
+      // anybars w0
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.bar2]),3 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar1, symbol.bar3]),3 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.bar1]),3 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar2, symbol.bar3]),3 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.bar1]),3 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar3, symbol.bar3, symbol.bar2]),3 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar2, symbol.bar3]),3 * 1));
+      // anybars w1
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar2, symbol.wild]),3 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar1, symbol.bar3, symbol.wild]),3 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.bar2, symbol.bar3, symbol.wild]),3 * 2));
+      // 2 cherries w0
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bonus]),2 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.seven]),2 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bar3]),2 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bar2]),2 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.bar1]),2 * 1));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.cherry, symbol.none]),2 * 1));
+      // 2 cherries w1
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bonus]),2 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.seven]),2 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bar3]),2 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bar2]),2 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.bar1]),2 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.wild, symbol.none]),2 * 2));
+
+      // 1 cherry
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bonus]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.seven]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bar3]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bar2]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.bar1]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bonus, symbol.none]),1 * 2));
+
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bonus]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.seven]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bar3]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bar2]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.bar1]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.seven, symbol.none]),1 * 2));
+
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bonus]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.seven]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bar3]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bar2]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.bar1]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar3, symbol.none]),1 * 2));
+
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bonus]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.seven]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bar3]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bar2]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.bar1]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar2, symbol.none]),1 * 2));
+
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bonus]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.seven]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bar3]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bar2]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.bar1]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.bar1, symbol.none]),1 * 2));
+
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bonus]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.seven]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bar3]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bar2]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.bar1]),1 * 2));
+    wincombs.push(WinComb(convertDynamicArray([symbol.cherry, symbol.none, symbol.none]),1 * 2));
+    for(uint i=0; i<wincombs.length; i++){
+      permanentSort(wincombs[i].result);
+    }
+  }
+
+  function convertDynamicArray(uint[3] arr) public pure returns (uint[] memory){
+    uint[] memory _arr;
+    _arr[0] = arr[0];
+    _arr[1] = arr[1];
+    _arr[2] = arr[2];
+  }
+
+  // wincomb array 만들고 나서
+  //array 만들고 나서 forloop 돌리다가 맞는게 찾아지면 retrun okay
+  //못찾았다면 0 return
+  // array 로 pure 함수 만드는 방법 알아보기 (될 것 같음)
+
+  function computeReward(uint betAmount, uint betLines, uint[] memory gameResult) public view returns(uint){
+    uint multp = 0;
+    uint[] memory sortedResult = sort(gameResult);
+    uint symbol1;
+    uint symbol2;
+    uint symbol3;
+    if(sortedResult [0] % 2 == 0){
+      symbol1 = sortedResult[0];
+    }else{
+      symbol1 = 1;
+    }
+    if(sortedResult [1] % 2 == 0){
+      symbol2 = sortedResult[1];
+    }else{
+      symbol2 = 1;
+    }
+    if(sortedResult [2] % 2 == 0){
+      symbol3 = sortedResult[2];
+    }else{
+      symbol3 = 1;
+    }
+
+    for(uint i=0; i < wincombs.length; i++){
+      if(
+        symbol1 == wincombs[i].result[0] &&
+        symbol2 == wincombs[i].result[1] &&
+        symbol2 == wincombs[i].result[2]
+      ){
+        multp = wincombs[i].multp;
+        break;
+      }
+    }
+    return betAmount * multp / betLines;
   }
   function computeDeposit(uint betAmount, uint betLines) public pure returns(uint){
-    // TODO: add logic
-    return betLines * betAmount / 10000;
+    return betAmount * 1000 * betLines;
   }
 
 }
 
-contract OddEven is DSSafeAddSub, Utilities, CLevelAuth, GRC{
+contract Slot is DSSafeAddSub, Utilities, CLevelAuth, GRC{
 /*
 states
 */
@@ -130,7 +349,7 @@ contract constructor
     //set default contract variables
     setReelNum(3);
     setHashNum(4);
-    setReelSymbolNum(6);
+    setReelSymbolNum(8);
     setEdge(100);
     //odd, even
     //tripple 1, tripple 2, tripple 3, tripple 4, tripple 5, tripple 6

@@ -1,6 +1,6 @@
-const OddEven = artifacts.require("./OddEven.sol");
+const slot = artifacts.require("./slot.sol");
 
 
 module.exports = function(deployer, network, accounts) {
-	deployer.deploy(OddEven);
+	deployer.deploy(slot);
 };
