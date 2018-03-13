@@ -5,7 +5,7 @@ import { gameABI, gameAddress } from '../common/constants/contracts';
 import { coinbase, privateKey } from './constants/wallets';
 import { stringToBytes32 } from '../common/utils';
 import { makeSignedTransaction } from './utils';
-import { ethEnv } from '../common/constants/config';
+import { ethEnv, REDIS_URL } from '../common/constants/config';
 
 const redis = require('redis');
 const { promisify } = require('util');
@@ -93,14 +93,20 @@ export default function listenAndFinalize(web3) {
 				player,
 				playerSeed
 			} = result.returnValues;
-			const cli = redis.createClient();
-			const hgetAsync = promisify(cli.hget).bind(cli, ethEnv);
-			const hdelAsync = promisify(cli.hdel).bind(cli, ethEnv);
 
 			console.log('InitGame event has been emitted!!');
 			console.log('Dealer Hash:', dealerHash);
 
 			try {
+				const url = REDIS_URL[ethEnv];
+				const cli = redis.createClient(url.host);
+				const hgetAsync = promisify(cli.hget).bind(cli, ethEnv);
+				const hdelAsync = promisify(cli.hdel).bind(cli, ethEnv);
+				if (url.password) {
+					const authAsync = promisify(cli.auth).bind(cli);
+					await authAsync(url.password);
+				}
+
 				// const dealerSeed = seedMap[dealerHash];
 				const dealerSeed = await hgetAsync(dealerHash);
 				if (dealerSeed === undefined || dealerSeed == null) {

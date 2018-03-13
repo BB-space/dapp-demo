@@ -5,7 +5,7 @@
  * 지정된 카운트만큼의 시드 데이터를 유지하기 위한 기능
  */
 
-import { ethEnv } from '../../common/constants/config';
+import { ethEnv, REDIS_URL } from '../../common/constants/config';
 import { serviceWeb3 } from '../../app/utils/web3';
 import { stringToBytes32 } from '../../common/utils';
 import { makeSignedTransaction } from '../utils';
@@ -56,7 +56,7 @@ async function generateNewHashItems(cli, count) {
             return items.length;
         } catch (e) {
             // 실패할 경우 redis의 데이터도 삭제한다.
-            console.log('catch', e);
+            console.error(e);
             let deleted = await deleteItems(cli, items);
             console.log('Deleted count: ', deleted);
             return 0;
@@ -65,37 +65,35 @@ async function generateNewHashItems(cli, count) {
 }
 
 async function pushHashes(items) {
-    try {
-        const txData = game.pushHashes(items).encodeABI();
-        const nonce = await serviceWeb3.eth.getTransactionCount(coinbase);
+    const txData = game.pushHashes(items).encodeABI();
+    const nonce = await serviceWeb3.eth.getTransactionCount(coinbase);
 
-        await makeSignedTransaction(
-            coinbase,
-            privateKey,
-            gameAddress,
-            '0',
-            nonce,
-            txData
-        )
-        .once('transactionHash', hash => {
-            console.log('pushHashes transaction hash');
-            console.log(hash);
-        })
-        .once('receipt', receipt => {
-            console.log('pushHashes reciept');
-            console.log(receipt);
-        })
-        .on('confirmation', (confNumber, receipt) => {
-            console.log('pushHashes confirmation');
-            console.log(confNumber, ':', receipt);
-        })
-        .on('error', error => {
-            console.error(error);
-        });
-    } catch(e) {
-        console.error(e);
-    } finally {
-    }
+    await makeSignedTransaction(
+        coinbase,
+        privateKey,
+        gameAddress,
+        '0',
+        nonce,
+        txData
+    )
+    .once('transactionHash', hash => {
+        console.log('pushHashes transaction hash');
+        console.log(hash);
+    })
+    .once('receipt', receipt => {
+        console.log('pushHashes reciept');
+        console.log(receipt);
+    })
+    .on('confirmation', (confNumber, receipt) => {
+        console.log('pushHashes confirmation');
+        console.log(confNumber, ':', receipt);
+    })
+    .on('error', error => {
+        console.error(error);
+    })
+    .catch (error => {
+        throw new Error(error);
+    });
 }
 
 module.exports = {
@@ -107,8 +105,15 @@ module.exports = {
      * @return number of items inserted
      */
 	generate : async function(totalCount) {
-        const cli = redis.createClient();
+        let cli;
         try {
+            const url = REDIS_URL[ethEnv];
+            cli = redis.createClient(url.host);
+            if (url.password) {
+                const authAsync = promisify(cli.auth).bind(cli);
+                await authAsync(url.password);
+            }
+
             let count = await calculateItemsToInsert(cli, totalCount);
             console.log('Items to insert: ', count);
 
