@@ -2,13 +2,8 @@ import gameSpec from '../../../build/contracts/OddEven.json';
 import { ethEnv } from './config';
 
 function getAddress(network_id) {
-	return (gameSpec['networks'] ? 
-				(gameSpec['networks'][network_id] ? 
-					(gameSpec['networks'][network_id]['address'] ?
-						gameSpec['networks'][network_id]['address'] :
-						null) : 
-					null) :
-				null);
+	let o;
+	return (o = gameSpec['networks']) && (o = o[network_id]) && (o = o['address'])
 }
 
 const addresses = {
