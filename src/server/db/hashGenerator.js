@@ -120,7 +120,7 @@ module.exports = {
 
             if (count > 0) {
                 var inserted = await generateNewHashItems(cli, count);
-                console.log('Newly inserted count: ', inserted);
+                console.log('Inserted items: ', inserted);
             }
             return inserted;
         } catch (e) {

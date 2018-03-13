@@ -31,11 +31,10 @@ global.web3 = new Web3(
 // 주기적으로 시드정보를 생성하기 위한 함수
 var genfunc = function() {
     genfunc = function() {
-        try {
-            hashGenerator.generate(NUMBER_OF_SEEDS);
-        } finally {
+        hashGenerator.generate(NUMBER_OF_SEEDS)
+        .finally (() => {
             setTimeout(genfunc, INTERVAL_TO_REGEN_SEEDS);
-        }
+        });
     };
     genfunc();
     return genfunc;
