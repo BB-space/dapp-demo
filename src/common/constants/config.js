@@ -16,8 +16,9 @@ const nodes = {
 	testnet: 'ws://localhost:8545'
 };
 
-export const NUMBER_OF_SEEDS = 10;
+export const NUMBER_OF_SEEDS = 20;
 export const INTERVAL_TO_REGEN_SEEDS = 1000 * 60; // 1min
+export const SEED_CHUNKS = 10;
 
 export const REDIS_URL = {
 	local: { host: 'redis://localhost:6379', password: '' },

@@ -23,6 +23,8 @@ import webpackConfig from '../../webpack.config';
 
 import hashGenerator from './db/hashGenerator';
 
+import { ethEnv, REDIS_URL, SEED_CHUNKS } from '../common/constants/config';
+
 console.log(nodeUrl);
 global.web3 = new Web3(
 	new Web3.providers.WebsocketProvider(nodeUrl)
@@ -31,9 +33,12 @@ global.web3 = new Web3(
 // 주기적으로 시드정보를 생성하기 위한 함수
 var genfunc = function() {
     genfunc = function() {
+        let start = Date.now();
         hashGenerator.generate(NUMBER_OF_SEEDS)
         .finally (() => {
-            setTimeout(genfunc, INTERVAL_TO_REGEN_SEEDS);
+            let elapsed = Date.now() - start;
+            let nextTurnDelay = INTERVAL_TO_REGEN_SEEDS - elapsed;
+            setTimeout(genfunc, nextTurnDelay > 0 ? nextTurnDelay : 0);
         });
     };
     genfunc();
