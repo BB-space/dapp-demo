@@ -308,7 +308,7 @@ states
 /*
 contract constructor
 */
-  function OddEven() public {
+  function Slot() public {
     //set c-level accounts
     ceo = msg.sender;
     coo = msg.sender;
@@ -548,7 +548,7 @@ logging
     reward = game.reward;
     finalized = game.finalized;
   }
-  function getbetLines(bytes32 _serverHash) public view returns(
+  function getBetLines(bytes32 _serverHash) public view returns(
     uint betLines
   ){
     var game = games[_serverHash];

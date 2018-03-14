@@ -1,10 +1,10 @@
-var OddEven = artifacts.require('./OddEven.sol');
+var Slot = artifacts.require('./Slot.sol');
 
-var ethAmount = 1;
+var ethAmount = 100000;
 var accountIdx = 2;
 module.exports = async function(callback){
-  const oddEven = await OddEven.deployed();
-  const gameAddress = oddEven.address;
+  const slot = await Slot.deployed();
+  const gameAddress = slot.address;
   console.log('value',web3.toWei(ethAmount,"ether"));
   const accounts = web3.eth.accounts;
   var send = await web3.eth.sendTransaction({
