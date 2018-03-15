@@ -17,10 +17,6 @@ import ResultRow from './ResultRow';
 export default class Results extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			passedTime: 0,
-			timer: null
-		};
 	}
 
 	componentDidMount() {

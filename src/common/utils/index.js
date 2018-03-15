@@ -74,28 +74,13 @@ export function reconstructResult(_serverSeed, _clientSeed) {
 	const dice1Number = Number(dice1NumberRaw.modulo(6).plus(1))
 	const dice2Number = Number(dice2NumberRaw.modulo(6).plus(1))
 	const dice3Number = Number(dice3NumberRaw.modulo(6).plus(1))
+	
 	return [
 		dice1Number,
 		dice2Number,
 		dice3Number
-	]
-	// serverSeed = BigNumber(web3.utils.asciiToHex(serverSeed), 16);
-	// clientSeed = BigNumber(web3.utils.asciiToHex(clientSeed), 16);
-	// let seedsCombined = serverSeed.plus(clientSeed);
-	//
-	// seedsCombined = seedsCombined
-	// 	.toString(16)
-	// 	.match(/.{1,3}/g)
-	// 	.map(str => parseInt(str, 16));
-	//
-	// const mt = new MersenneTwister();
-	// mt.seedArray(seedsCombined);
-	//
-	// return [
-	// 	Math.floor(mt.random() * 6) + 1,
-	// 	Math.floor(mt.random() * 6) + 1,
-	// 	Math.floor(mt.random() * 6) + 1
-	// ];
+	];
+
 }
 
 

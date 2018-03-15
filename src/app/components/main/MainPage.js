@@ -5,7 +5,7 @@ import {
 	gameAddress,
 	gameABI
 } from '../../../common/constants/contracts';
-import GamePage from '../game/GamePage';
+import GameSection from '../game/GameSection';
 import ValidationSection from '../game/ValidationSection';
 
 
@@ -56,7 +56,7 @@ export default class MainPage extends Component {
 		return (
 			<main className="page-container">
 				<div className="row">
-					<GamePage />
+					<GameSection />
 					<ValidationSection />
 				</div>
 			</main>

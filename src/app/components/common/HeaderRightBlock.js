@@ -71,15 +71,6 @@ export default class HeaderRightBlock extends Component {
 				{ isWeb3Injected ?
 				  userInfoElem :
 				  <span>'No Metamask has been detected'</span>}
-				<button
-					className={classNames([
-							'btn',
-							'btn-primary',
-							styles.btnConversion
-					])}
-					onClick={this.handleMembershipClick}>
-					Play without Metamask
-				</button>
 			</div>
 		);
 

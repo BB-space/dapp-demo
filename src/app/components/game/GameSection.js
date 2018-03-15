@@ -22,10 +22,10 @@ import {
 	gameAddress,
 	gameABI
 } from '../../../common/constants/contracts';
+import SlotFrame from './SlotFrame';
 import BetTable from './BetTable';
-import BetBoard from './BetBoard';
-import Chips from './Chips';
 import Results from './Results';
+
 
 
 @connect(
@@ -45,7 +45,7 @@ import Results from './Results';
 		setFailure
 	}
 )
-export default class GamePage extends Component {
+export default class GameSection extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -155,11 +155,7 @@ export default class GamePage extends Component {
 					</div>
 					<div className="panel-body">
 
-
-						<BetTable
-							handleBetReset={this.handleBetReset}
-							handlePlayBtnClick={this.handlePlayBtnClick}
-						/>
+						<SlotFrame />
 
 						<Results />
 

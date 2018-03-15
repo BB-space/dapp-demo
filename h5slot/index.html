@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<script type="text/javascript">
+  var game;
+
+  function setGame() {
+		return (game || (game = document.getElementById('game')));
+	}
+
+  function init() {
+
+		window.addEventListener('OnStartGame', function(e) {
+			if (!setGame())
+				return;
+			console.log('set bet range');
+			game.contentWindow.c2_callFunction("InitBetRange", [1000, 5000, 10000, 50000, 100000, 500000]);
+		});
+
+		window.addEventListener('OnClickBetUp', function(e) {
+			console.log('OnClickBetUp');
+			game.contentWindow.c2_callFunction("PressBetUp", []);
+		});
+
+		window.addEventListener('OnClickBetDown', function(e) {
+			console.log('OnClickBetDown');
+			game.contentWindow.c2_callFunction("PressBetDown", []);
+		});
+
+		window.addEventListener('OnClickBetMax', function(e) {
+			console.log('OnClickBetMax');
+			game.contentWindow.c2_callFunction("PressMaxBet", []);
+		});
+
+		window.addEventListener('OnClickSpin', function(e) {
+			console.log('OnClickSpin');
+			game.contentWindow.c2_callFunction("PressSpin", []);
+		});
+
+
+  }
+
+  function onClickButton() {
+    document.getElementById('game').contentWindow.c2_callFunction("FinishSpinWithValue", [0, 0, 0]);
+  }
+
+  function onClickButtonSecond() {
+    document.getElementById('game').contentWindow.c2_callFunction("FinishSpinWithValue", [3, 4, 5]);
+
+  }
+
+</script>
+
+</head>
+
+<body onload="init();">
+
+<h1>TEST...3</h1>
+
+<div>
+
+  <button type="button" onclick="onClickButton();">My Button</button>
+
+  <button type="button" onclick="onClickButtonSecond();">My Second Button</button>
+
+</div>
+
+<iframe src="./slot/index.html" name="game" id="game" width="480" height="640" frameborder="0" scrolling="no" ><p>Your browser does not support iframes.</p> ></iframe>
+
+
+
+
+
+</body>
+
+</html>
+

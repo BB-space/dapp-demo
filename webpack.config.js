@@ -1,5 +1,7 @@
 const path              = require('path'),
-      webpack           = require('webpack');
+      webpack           = require('webpack'),
+	  CopyWebpackPlugin = require('copy-webpack-plugin'),
+	  WriteFilePlugin	= require('write-file-webpack-plugin');
 
 
 const PORT      = process.env.PORT || 3000,
@@ -38,7 +40,14 @@ module.exports = {
             jQuery: 'jquery',
             _: 'lodash'
         }),
-        new webpack.NoEmitOnErrorsPlugin()
+        new webpack.NoEmitOnErrorsPlugin(),
+		new CopyWebpackPlugin([
+			{
+				from: path.join(__dirname, 'h5slot', 'slot'),
+				to: path.join(__dirname, 'dist', 'h5slot')
+			},
+		]),
+		new WriteFilePlugin()
 	],
     module: {
         rules: [
