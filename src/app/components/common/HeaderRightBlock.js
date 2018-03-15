@@ -58,11 +58,11 @@ export default class HeaderRightBlock extends Component {
 				className={styles.memberInfo}
 				onClick={()=>{this.props.history.push('/account');}}>
 				{ metamaskMode ? (
-					  <div>Account : { wallet } ({ metamaskNetwork } Network)</div>
+					  <div>Account : { wallet }</div>
 				) :(
 					  <div>{ email }</div>
 				)}
-				<div>wallet: {wallet}</div>
+				<div>({ metamaskNetwork } Network)</div>
 			</div>
 		);
 

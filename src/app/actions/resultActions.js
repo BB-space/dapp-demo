@@ -12,28 +12,28 @@ export function setIsPlaying(isPlaying){
 }
 
 export function setClientSeed(clientSeed){
-	return{
+	return {
 		type: actionTypes.RESULT_SET_CLIENTSEED,
 		clientSeed
-	}
+	};
 }
 export function setServerSeed(serverSeed){
-	return{
+	return {
 		type: actionTypes.RESULT_SET_SERVERSEED,
 		serverSeed
-	}
+	};
 }
 export function setHashedServerSeed(hashedServerSeed){
-	return{
+	return {
 		type: actionTypes.RESULT_SET_HASHED_SERVER_SEED,
 		hashedServerSeed
-	}
+	};
 }
 export function setReward(reward){
-	return{
+	return {
 		type: actionTypes.RESULT_SET_REWARD,
 		reward
-	}
+	};
 }
 
 export function initGame() {

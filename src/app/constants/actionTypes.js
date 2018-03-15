@@ -20,10 +20,7 @@ export default keymirror({
 	GAME_ADD_TO_BET: null,
 	GAME_RESET_BET: null,
 
-	// result
-	RESULT_SET_IS_PLAYING: null,
-	RESULT_SET_CLIENTSEED: null,
-	RESULT_SET_SERVERSEED: null,
-	RESULT_SET_HASHED_SERVER_SEED: null,
-	RESULT_SET_REWARD: null
+	// results
+	RESULTS_PUSH_GAME: null,
+	RESULTS_CHANGE_GAME_STATE: null
 });

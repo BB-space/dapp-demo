@@ -3,7 +3,7 @@ var OddEven = artifacts.require('./OddEven.sol');
 var ethAmount = 10;
 var accountIdx = 0;
 
-module.exports = async function(callback){
+module.exports = async function(callback) {
 	const oddEven = await OddEven.deployed();
 	const gameAddress = oddEven.address;
 	
