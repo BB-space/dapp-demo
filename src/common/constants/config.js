@@ -18,6 +18,13 @@ const nodes = {
 
 export const NUMBER_OF_SEEDS = 20;
 export const INTERVAL_TO_REGEN_SEEDS = 1000 * 60; // 1min
+export const SEED_CHUNKS = 10;
+
+export const REDIS_URL = {
+	local: { host: 'redis://localhost:6379', password: '' },
+	npseth: { host: 'redis://eth3.npsdev.cloud:9379', password: 'spdhdnlwmfpeltm123' },
+	testnet: { host: 'redis://localhost:6379', password: '' }
+}
 
 
 export { ethEnv };

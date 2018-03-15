@@ -1,6 +1,10 @@
 import gameSpec from '../../../build/contracts/OddEven.json';
 import { ethEnv } from './config';
 
+function getAddress(network_id) {
+	let o;
+	return (o = gameSpec['networks']) && (o = o[network_id]) && (o = o['address'])
+}
 
 const addresses = {
 	live: {},
@@ -10,11 +14,11 @@ const addresses = {
 	},
 	
 	npseth: {
-		game: '0xf204a4ef082f5c04bb89f7d5e6568b796096735a'
+		game: getAddress('1581')
 	},
 	
 	local: {
-		game: gameSpec['networks']['6000']['address']
+		game: getAddress('6000')
 	}
 };
 
