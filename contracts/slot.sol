@@ -50,7 +50,7 @@ contract CLevelAuth{
 }
 
 contract QuickSort {
-    function sort(uint[3] _data) public view returns(uint[3] memory) {
+    function sort(uint[3] memory _data) public pure returns(uint[3] memory) {
        uint[3] memory data;
        for(uint i = 0; i < _data.length; i++){
          data[i] = _data[i];
@@ -58,7 +58,7 @@ contract QuickSort {
        quickSort(data, int(0), int(data.length - 1));
        return data;
     }
-    function quickSort(uint[3] arr, int left, int right) internal view{
+    function quickSort(uint[3] memory arr, int left, int right) internal pure{
       int i = left;
       int j = right;
       if(i==j) return;
@@ -77,7 +77,7 @@ contract QuickSort {
       if (i < right)
           quickSort(arr, i, right);
     }
-    function permanentSort(uint[3] storage data) internal{
+    /* function permanentSort(uint[3] storage data) internal{
       permanentQuickSort(data, int(0), int(data.length - 1));
     }
     function permanentQuickSort(uint[3] storage arr, int left, int right) internal{
@@ -98,7 +98,7 @@ contract QuickSort {
           permanentQuickSort(arr, left, j);
       if (i < right)
           permanentQuickSort(arr, i, right);
-    }
+    } */
 }
 
 contract GRC is QuickSort{
@@ -114,7 +114,7 @@ contract GRC is QuickSort{
   //0 /*symbol.seven*/
   //4 /*symbol.wild*/
   //8 /*symbol.cherry*/
-  function computeReward(uint betAmount, uint betLines, uint[3] memory gameResult) public view returns(uint){
+  function computeReward(uint betAmount, uint betLines, uint[3] memory gameResult) public pure returns(uint){
     uint[3] memory sortedResult = sort(gameResult);
     uint symbol1;
     uint symbol2;
@@ -315,7 +315,7 @@ contract constructor
     //set default contract variables
     setReelNum(3);
     setHashNum(4);
-    setReelSymbolNum(8);
+    setReelSymbolNum(16);
     setEdge(100);
     //odd, even
     //tripple 1, tripple 2, tripple 3, tripple 4, tripple 5, tripple 6
@@ -559,6 +559,12 @@ logging
   ){
     var game = games[_serverHash];
     gameResult = game.gameResult;
+  }
+  function getGameReward(bytes32 _serverHash) public view returns(
+    uint reward
+  ){
+    var game = games[_serverHash];
+    reward = game.reward;
   }
   function getPlayingGames(address _player) public view returns(
     bytes32[] _playingGames

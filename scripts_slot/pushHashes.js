@@ -6,8 +6,7 @@ function stringToBytes32(str) {
 	return '0x' + hex.substr(-64).padStart(64, '0');
 }
 
-//const seedsToPush = '11,22,33,44,55,66,77,88,99,100,111,222,333,444,555,666,777,888,999,1111,2222,3333,4444,5555,6666,7777,8888,9999'.split(',');
-const seedsToPush = '11'.split(',');
+const seedsToPush = '11,22,33,44,55,66,77,88,99,100,111,222,333,444,555,666,777,888,999,1111,2222,3333,4444,5555,6666,7777,8888,9999'.split(',');
 
 module.exports = async function(callback){
 	const slot = await Slot.deployed();
