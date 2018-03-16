@@ -24,25 +24,14 @@ import webpackConfig from '../../webpack.config';
 
 import hashGenerator from './db/hashGenerator';
 
-//import { MQ } from './db/redismq';
-
 console.log(nodeUrl);
 global.web3 = new Web3(
 	new Web3.providers.WebsocketProvider(nodeUrl)
 );
 
-// // MQ 초기화
-// MQ.init();
-
-async function test() {
-}
-
 // 주기적으로 시드정보를 생성하기 위한 함수
 var genfunc = function() {
     genfunc = function() {
-
-        test();
-
         let start = Date.now();
         hashGenerator.generate(NUMBER_OF_SEEDS)
         .finally (() => {

@@ -13,21 +13,42 @@ export const SEED_CHUNKS = 10;
 
 // Redis 서버 주소
 export const REDIS_URL = {
-	local: { host: 'redis://localhost:6379', password: undefined },
-	npseth: { host: 'redis://eth3.npsdev.cloud:9379', password: 'spdhdnlwmfpeltm123' },
-	testnet: { host: 'redis://localhost:6379', password: undefined }
-}
+	local: { url: 'redis://localhost:6379', password: undefined },
+	npseth: { url: 'redis://eth3.npsdev.cloud:9379', password: 'spdhdnlwmfpeltm123' },
+	testnet: { url: 'redis://localhost:6379', password: undefined }
+};
 
-// MQ 이름
-export const MQNAME = 'dicemq';
+export const REDIS_OPTIONS = {
+    url: REDIS_URL[ethEnv].url,
+    password: REDIS_URL[ethEnv].password,
+    retry_strategy: function (options) {
+        if (options.error && options.error.code === 'ECONNREFUSED') {
+            // End reconnecting on a specific error and flush all commands with
+            // a individual error
+            return new Error('The server refused the connection');
+        }
+        if (options.total_retry_time > 1000 * 60 * 60) {
+            // End reconnecting after a specific timeout and flush all commands
+            // with a individual error
+            return new Error('Retry time exhausted');
+        }
+        if (options.attempt > 10) {
+            // End reconnecting with built in error
+            return undefined;
+        }
+        // reconnect after
+        return Math.min(options.attempt * 100, 3000);
+    }
+};
 
 // MQ 설정
 export const MQCONFIG = {
     redis: {
-        redis: REDIS_URL[ethEnv].host,
-        auth: REDIS_URL[ethEnv].password,
+        prefix: 'q',
+        redis: REDIS_OPTIONS.url,
+        auth: REDIS_OPTIONS.password,
         options: {
-			// see https://github.com/mranney/node_redis#rediscreateclient
+			retry_strategy: REDIS_OPTIONS.retry_strategy
 		}
 	},
     monitor: {
@@ -35,4 +56,8 @@ export const MQCONFIG = {
         host: '0.0.0.0',
         port: 8080,
     },
+    jobs: {
+        attempts: 1,
+        concurrency: 5
+    }
 };

@@ -3,9 +3,11 @@
  * Redis wrapper class file
  */
 
-import { ethEnv, REDIS_URL } from '../constants/config';
+import { REDIS_OPTIONS } from '../constants/config';
 import RedisClient from 'redis';
 import { promisify } from 'util';
+
+var client;
 
 /**
  * @class Redis
@@ -15,7 +17,7 @@ import { promisify } from 'util';
 class Redis {
     
     constructor(options) {
-        var cli = RedisClient.createClient(options.host, 
+        var cli = RedisClient.createClient(options.url, 
             options.password ? { password: options.password } : undefined);
         this.auth_ = promisify(cli.auth).bind(cli);
         this.append_ = promisify(cli.append).bind(cli);
@@ -107,8 +109,12 @@ class Redis {
         this.quit_();
     }
 
+    static get client() {
+        return client || (client = Redis.createClient());    
+    }
+
     static createClient(options) {
-        return new Redis(options ? options : REDIS_URL[ethEnv]);
+        return new Redis(options ? options : REDIS_OPTIONS);
     }
 }
 

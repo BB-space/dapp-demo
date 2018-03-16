@@ -105,7 +105,7 @@ module.exports = {
             return new Promise((resolve) => setTimeout(resolve, time));
         }
         try {
-            var cli = Redis.createClient();
+            var cli = Redis.client;
 
             let count = await calculateItemsToInsert(cli, totalCount);
             console.log('Items to insert: ', count);
@@ -129,7 +129,6 @@ module.exports = {
         } catch (e) {
             console.error(e);
         } finally {
-            cli.quit();
         }
     }
 };
