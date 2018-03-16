@@ -1,7 +1,9 @@
-const webpack = require('webpack'),
-	  path = require('path'),
-	  fs = require('fs'),
+const webpack			= require('webpack'),
+	  path				= require('path'),
+	  fs				= require('fs'),
 	  HtmlWebpackPlugin = require('html-webpack-plugin'),
+	  CopyWebpackPlugin = require('copy-webpack-plugin'),
+	  WriteFilePlugin	= require('write-file-webpack-plugin'),
 	  ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
@@ -16,7 +18,7 @@ module.exports = {
     devtool: 'cheap-module-source-map',
     entry: [
         'whatwg-fetch',
-	'babel-polyfill',
+		'babel-polyfill',
         mainPath
     ],
     target: 'web',
@@ -63,7 +65,14 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: '!!html-loader!src/templates/index.html',
             filename: 'index.html'
-        })
+        }),
+		new CopyWebpackPlugin([
+			{
+				from: path.join(__dirname, 'h5slot', 'slot'),
+				to: path.join(buildPath, 'h5slot')
+			},
+		]),
+		new WriteFilePlugin()
     ],
     module: {
         rules: [
