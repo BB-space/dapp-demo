@@ -448,7 +448,8 @@ betting related functions
     bytes32 serverHash,
     bytes32 serverSeed,
     bytes32 clientSeed,
-    uint reward
+    uint reward,
+    address player
   );
   function finalize(bytes32 serverHash, bytes32 serverSeed) public onlyCoo{
     //check if has played the game
@@ -478,10 +479,15 @@ betting related functions
       serverHash,
       serverSeed,
       game.playerSeed,
-      reward
+      reward,
+      game.player
     );
     game.reward = reward;
     removePlayedGame(reward, game.player, serverHash);
+  }
+
+  function checkIfHashUsedBefore(bytes32 serverHash) public view returns(bool){
+    return games[serverHash].player != address(0);
   }
 
   function setResult(bytes32 serverHash, bytes32 serverSeed, bytes32 playerSeed) private onlyCoo{

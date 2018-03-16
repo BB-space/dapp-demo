@@ -1,9 +1,5 @@
-const slot = artifacts.require("./slot.sol");
-const quickSort = artifacts.require('./quickSort.sol');
-const grc = artifacts.require('./grc.sol');
+const slot = artifacts.require("./Slot.sol");
 
 module.exports = function(deployer, network, accounts) {
-	deployer.deploy(slot);
-	deployer.deploy(quickSort);
-	deployer.deploy(grc);
+	deployer.deploy(Slot);
 };
