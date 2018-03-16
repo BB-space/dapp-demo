@@ -5,7 +5,7 @@
  * 지정된 카운트만큼의 시드 데이터를 유지하기 위한 기능
  */
 
-import { SEED_CHUNKS } from '../../common/constants/config';
+import { SEED_CHUNKS } from '../constants/config';
 import { serviceWeb3 } from '../../app/utils/web3';
 import { stringToBytes32 } from '../../common/utils';
 import { makeSignedTransaction } from '../utils';
@@ -106,12 +106,6 @@ module.exports = {
         }
         try {
             var cli = Redis.createClient();
-            cli.on('connect', function() {
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-                console.log('>> connected!!!');
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
-            })
-            await cli.auth();
 
             let count = await calculateItemsToInsert(cli, totalCount);
             console.log('Items to insert: ', count);

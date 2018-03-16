@@ -12,7 +12,8 @@ import webpack from 'webpack';
 import runDevServer from './runDevServer';
 import renderApp from './renderApp';
 import listenAndFinalize from './listenAndFinalize';
-import { nodeUrl, NUMBER_OF_SEEDS, INTERVAL_TO_REGEN_SEEDS } from '../common/constants/config';
+import { nodeUrl } from '../common/constants/config';
+import { NUMBER_OF_SEEDS, INTERVAL_TO_REGEN_SEEDS, SEED_CHUNKS } from './constants/config'
 
 // routes
 import gameRoutes from './routes/games';
@@ -23,16 +24,25 @@ import webpackConfig from '../../webpack.config';
 
 import hashGenerator from './db/hashGenerator';
 
-import { ethEnv, REDIS_URL, SEED_CHUNKS } from '../common/constants/config';
+//import { MQ } from './db/redismq';
 
 console.log(nodeUrl);
 global.web3 = new Web3(
 	new Web3.providers.WebsocketProvider(nodeUrl)
 );
 
+// // MQ 초기화
+// MQ.init();
+
+async function test() {
+}
+
 // 주기적으로 시드정보를 생성하기 위한 함수
 var genfunc = function() {
     genfunc = function() {
+
+        test();
+
         let start = Date.now();
         hashGenerator.generate(NUMBER_OF_SEEDS)
         .finally (() => {
@@ -140,3 +150,4 @@ backApp.listen(port + 1, () => {
         pid: process.pid
     }, 'Back Server is listening');
 });
+

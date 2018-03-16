@@ -95,7 +95,6 @@ export default function listenAndFinalize(web3) {
 
 			try {
 				var cli = Redis.createClient();
-				await cli.auth();
 
 				// const dealerSeed = seedMap[dealerHash];
 				const dealerSeed = await cli.hget(gameAddress, dealerHash);
