@@ -1,6 +1,9 @@
-const OddEven = artifacts.require("./OddEven.sol");
-
+const slot = artifacts.require("./slot.sol");
+const quickSort = artifacts.require('./quickSort.sol');
+const grc = artifacts.require('./grc.sol');
 
 module.exports = function(deployer, network, accounts) {
-	deployer.deploy(OddEven);
+	deployer.deploy(slot);
+	deployer.deploy(quickSort);
+	deployer.deploy(grc);
 };

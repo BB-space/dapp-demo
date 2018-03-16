@@ -1,4 +1,4 @@
-var OddEven = artifacts.require('./OddEven.sol');
+var Slot = artifacts.require('./slot.sol');
 
 function stringToBytes32(str) {
 	// cuts last 64 bits from hex if longer
@@ -9,11 +9,11 @@ function stringToBytes32(str) {
 const seedsToPush = ['a very', 'strong1', 'seeds'];
 
 module.exports = async function(callback){
-  const oddEven = await OddEven.deployed();
-  const gameAddress = oddEven.address;
-  let hashLength = await oddEven.getHashListLength.call();
+  const slot = await Slot.deployed();
+  const gameAddress = slot.address;
+  let hashLength = await slot.getHashListLength.call();
   for (i=0;i<hashLength;i++){
-		hash = await oddEven.getHash.call(i);
+		hash = await slot.getHash.call(i);
 		console.log("hash",hash);
 	}
 }
