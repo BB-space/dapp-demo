@@ -6,43 +6,21 @@ import {
 	setClientSeed,
 	resetBet
 } from '../../actions/gameActions';
-import {
-	pushNewGame,
-	setInitOccurence,
-	setFailure
-} from '../../actions/resultsActions';
-import {
-	generateRandomString,
-	stringToBytes32,
-	generateBettingInput,
-	toWei
-} from '../../../common/utils';
+import { generateRandomString } from '../../../common/utils';
 import { injectedWeb3 } from '../../utils/web3';
-import {
-	gameAddress,
-	gameABI
-} from '../../../common/constants/contracts';
 import SlotFrame from './SlotFrame';
 import BetTable from './BetTable';
 import Results from './Results';
 
 
-
 @connect(
 	(state, ownProps) => ({
-		metamaskMode: state.auth.metamaskMode,
-		isWeb3Injected: state.auth.isWeb3Injected,
-		betState: state.game.betState,
-		wallet: state.auth.wallet,
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed,
 	}),	{
 		fetchHashedServerSeed,
 		setClientSeed,
-		resetBet,
-		pushNewGame,
-		setInitOccurence,
-		setFailure
+		resetBet
 	}
 )
 export default class GameSection extends Component {
@@ -62,71 +40,6 @@ export default class GameSection extends Component {
 	handleClientSeedChange = (evt) => {
 		const newVal = evt.target.value;
 		this.props.setClientSeed(newVal);
-	}
-
-
-	handlePlayBtnClick = async (evt) => {
-		const {
-			metamaskMode,
-			isWeb3Injected,
-			wallet,			
-			betState,
-			clientSeed,
-			hashedServerSeed,
-			fetchHashedServerSeed,
-			pushNewGame,
-			setInitOccurence,
-			setFailure
-		} = this.props;
-
-		if(metamaskMode && isWeb3Injected) {
-			const web3 = new Web3(injectedWeb3.currentProvider);
-			const gameInstance = new web3.eth.Contract(gameABI, gameAddress);
-
-			const {
-				contractInput,
-				totalEther
-			} = generateBettingInput(betState);
-
-			const game = gameInstance
-				.methods
-				.initGame(
-					hashedServerSeed,
-					stringToBytes32(clientSeed),
-					contractInput
-				)
-				.send({
-					from: wallet,
-					value: toWei(totalEther)
-				});
-
-			game
-				.once('transactionHash', txHash => {
-					// Push to History
-					pushNewGame({
-						initGameTxHash: txHash,
-						hasFailed: false,
-						initTransacted: false,
-						finalized: false,
-						clientSeed,
-						serverSeed: '',
-						hashedServerSeed,
-						reward: ''
-					});
-
-					fetchHashedServerSeed();
-				})
-				.once('confirmation', (confNumber, receipt) => {
-					setInitOccurence(hashedServerSeed, true);
-				})
-				.on('error', error => {
-					setFailure(hashedServerSeed, true);
-					fetchHashedServerSeed();
-				});
-
-		} else {
-			
-		}
 	}
 
 	getDiceComponent(numbers) {

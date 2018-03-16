@@ -27,7 +27,7 @@ export default class Results extends Component {
 
 	getDiceComponent(numbers) {
 		return (
-			<div className="dice-box validation">
+			<div className="dice-box bet-table">
 				{ numbers.map((num, idx) => (
 					<Dice key={idx} face={num} />
 				)) }
@@ -51,29 +51,46 @@ export default class Results extends Component {
 		const result = reconstructResult(serverSeed, clientSeed);
 
 		const waitingElem = (
-			<div {...restProps}>
-				결과를 받는 중 입니다... <br />
-				<a target="_blank" href={`https://rinkeby.etherscan.io/tx/${initGameTxHash}`}>etherscan 에서 확인</a> <br />
-				{ initTransacted && <span>(결과 정산 중...)</span> }
-			</div>
+			<tr {...restProps}>
+				<td>
+					<a target="_blank" href={`https://rinkeby.etherscan.io/tx/${initGameTxHash}`}> { initGameTxHash } </a> <br />
+					
+				</td>
+				<td>
+					{initTransacted ? '결과를 받는 중 입니다...' : '정산 대기중...' }
+				</td>
+				<td>
+					-
+				</td>
+				<td>
+					-
+				</td>
+				<td>
+					-
+				</td>
+			</tr>
 		);
 
 		const resultElem = (
-			<div {...restProps}>
-				<ul>
-					<li>
-						축하합니다. {reward}에 당첨되셨습니다.
-					</li>
-					<li>
-						{ this.getDiceComponent(result) }
-					</li>
-					<li>
-						Client Seed : {clientSeed} <br/>
-						Server Seed : {serverSeed} <br/>
-						Server Seed (Hashed): {hashedServerSeed}
-					</li>
-				</ul>
-			</div>
+			<tr {...restProps}>
+				<td>
+					<a target="_blank" href={`https://rinkeby.etherscan.io/tx/${initGameTxHash}`}> { initGameTxHash } </a> <br />
+				</td>
+				<td>
+					Finalized
+				</td>
+				<td>
+					-
+				</td>
+				<td>
+					{ this.getDiceComponent(result) }
+				</td>
+				<td>
+					{ reward }
+				</td>
+				
+
+			</tr>
 		);
 
 

@@ -83,7 +83,6 @@ export function reconstructResult(_serverSeed, _clientSeed) {
 
 }
 
-
 export function generateBettingInput(betState) {
 	const totalEther = _.values(betState).reduce((a, b) => a + b);
 	let contractInput = [];
