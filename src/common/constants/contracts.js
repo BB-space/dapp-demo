@@ -1,4 +1,4 @@
-import gameSpec from '../../../build/contracts/OddEven.json';
+import gameSpec from '../../../build/contracts/Slot.json';
 import { ethEnv } from './config';
 
 function getAddress(network_id) {

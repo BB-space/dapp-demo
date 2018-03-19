@@ -84,32 +84,32 @@ export default function listenAndFinalize(web3) {
 			console.error(err);
 		} else {
 			const {
-				betData,
-				dealerHash,
+				serverHash,
 				player,
-				playerSeed
+				playerSeed,
+				betLines
 			} = result.returnValues;
 
 			console.log('InitGame event has been emitted!!');
-			console.log('Dealer Hash:', dealerHash);
+			console.log('Dealer Hash:', serverHash);
 
 			try {
 				var cli = Redis.createClient();
 				await cli.auth();
 
-				// const dealerSeed = seedMap[dealerHash];
-				const dealerSeed = await cli.hget(gameAddress, dealerHash);
+				// const dealerSeed = seedMap[serverHash];
+				const dealerSeed = await cli.hget(gameAddress, serverHash);
 				if (dealerSeed === undefined || dealerSeed == null) {
 					// TODO:
 					// 치명적인 에러이므로 처리를 어떻게 할건지 협의 필요
-					throw new Error("not found seed:" + dealerHash);
+					throw new Error("not found seed:" + serverHash);
 				}
 				console.log('Original Seed:', dealerSeed);
 
 				const txData = gameInstance
 					.methods
 					.finalize(
-						dealerHash,
+						serverHash,
 						stringToBytes32(dealerSeed)
 					)
 					.encodeABI();
@@ -147,8 +147,8 @@ export default function listenAndFinalize(web3) {
 			} finally {
 				// 트랜잭션 성공 여부와 관계 없이 블록체인 내의 시드는 지워지므로 
 				// 서버의 저장값도 여기서 지워버린다.
-				console.log('delete hash item:', dealerHash);
-				await cli.hdel(gameAddress, dealerHash);
+				console.log('delete hash item:', serverHash);
+				await cli.hdel(gameAddress, serverHash);
 				cli.quit();
 			}
 		}

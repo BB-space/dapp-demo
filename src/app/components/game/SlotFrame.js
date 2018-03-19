@@ -1,67 +1,87 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Web3 from 'web3';
-import { fetchHashedServerSeed } from '../../actions/gameActions';
+import BigNumber from 'bignumber.js';
+import {
+	fetchHashedServerSeed,
+	setBetIndex
+} from '../../actions/gameActions';
 import {
 	pushNewGame,
 	setInitOccurence,
-	setFailure
+	setFailure,
+	setFinalized
 } from '../../actions/resultsActions';
-import { setFinalized } from '../../actions/resultsActions';
+import { fetchBalanceInEth } from '../../actions/authActions';
 import {
 	stringToBytes32,
 	generateBettingInput,
 	toWei,
 	fromWei,
-	bytesToString
+	bytesToString,
+	reconstructResult
 } from '../../../common/utils';
-import { injectedWeb3, serviceWeb3 } from '../../utils/web3';
+import {
+	injectedWeb3,
+	serviceWeb3
+} from '../../utils/web3';
 import {
 	gameAddress,
 	gameABI
 } from '../../../common/constants/contracts';
+import {
+	payTableData,
+	betRange,
+	ethToCreditRate
+} from '../../../common/constants/game';
 
 
 @connect(
 	(state, ownProps) => ({
 		metamaskMode: state.auth.metamaskMode,
 		isWeb3Injected: state.auth.isWeb3Injected,
-		betState: state.game.betState,
 		wallet: state.auth.wallet,
+		ethBalance: state.auth.ethBalance,
 		hashedServerSeed: state.game.hashedServerSeed,
 		clientSeed: state.game.clientSeed,
-		gameResults: state.results
+		gameHistory: state.results
 	}),	{
 		fetchHashedServerSeed,
 		pushNewGame,
 		setInitOccurence,
 		setFailure,
-		setFinalized
+		setFinalized,
+		setBetIndex,
+		fetchBalanceInEth
 	}
 )
 export default class SlotFrame extends Component {
 	constructor(props) {
 		super(props);
+
+		this.handleClickSpin = this.handleSpin.bind(this, 'PressSpin');
+		this.handlePullLever = this.handleSpin.bind(this, 'PullLever');
 	}
 
 	componentDidMount() {
-		window.addEventListener('OnStartGame', this.handleStartGame);
+		window.addEventListener('OnInitGame', this.handleGameLoad);
 		window.addEventListener('OnClickBetUp', this.handleBetUp);
 		window.addEventListener('OnClickBetDown', this.handleBetDown);
 		window.addEventListener('OnClickBetMax', this.handleBetMax);
-		window.addEventListener('OnClickSpin', this.handleSpinBtnClick);
+		window.addEventListener('OnClickSpin', this.handleClickSpin);
+		window.addEventListener('OnPullLever', this.handlePullLever);
 
 		const gameInstance = new serviceWeb3.eth.Contract(gameABI, gameAddress);
 		gameInstance.events.Finalize(this.handleFinalize);
-
 	}
 
 	componentWillUnmount() {
-		window.removeEventListener('OnStartGame', this.handleStartGame);
+		window.removeEventListener('OnInitGame', this.handleGameLoad);
 		window.removeEventListener('OnClickBetUp', this.handleBetUp);
 		window.removeEventListener('OnClickBetDown', this.handleBetDown);
 		window.removeEventListener('OnClickBetMax', this.handleBetMax);
-		window.removeEventListener('OnClickSpin', this.handleSpinBtnClick);
+		window.removeEventListener('OnClickSpin', this.handleClickSpin);
+		window.removeEventListener('OnPullLever', this.handlePullLever);
 	}
 
 	shouldComponentUpdate() {
@@ -72,70 +92,87 @@ export default class SlotFrame extends Component {
 
 	}
 
-	handleStartGame = e => {
-		console.log('set bet range');
-		this.ifr.contentWindow.c2_callFunction('InitBetRange', [1000, 5000, 10000, 50000, 100000, 500000]);
+	handleGameLoad = evt => {
+		// Set bet range
+		this.ifr.contentWindow.c2_callFunction('SetBetRange', betRange);
+		
+		// set pay table
+		const payTable = {
+			c2array: true,
+			size: [19, 4, 1],
+			data: payTableData
+		};
+		
+		this.ifr.contentWindow.c2_callFunction('SetPayTable', [JSON.stringify(payTable)]);
+		const table = this.ifr.contentWindow.c2_callFunction('GetPayTable', []);
+		console.log('PayTable:', table);
+
+		// set balance
+		const { ethBalance } = this.props;
+		console.log(ethBalance);
+		this.setBalanceInGame(
+			BigNumber(ethBalance).times(ethToCreditRate).toNumber()
+		);
+
+		// start game
+		this.ifr.contentWindow.c2_callFunction('StartGame', []);
 	}
 
-	handleBetUp = e => {
+	handleBetUp = evt => {
 		console.log('OnClickBetUp');
 		this.ifr.contentWindow.c2_callFunction('PressBetUp', []);
+		this.syncBetIndex();
 	}
 
-	handleBetDown = e => {
+	handleBetDown = evt => {
 		console.log('OnClickBetDown');
 		this.ifr.contentWindow.c2_callFunction('PressBetDown', []);
+		this.syncBetIndex();
 	}
 
-	handleBetMax = e => {
+	handleBetMax = evt => {
 		console.log('OnClickBetMax');
 		this.ifr.contentWindow.c2_callFunction('PressMaxBet', []);
+		this.syncBetIndex();
 	}
 
-	handleSpinBtnClick = async (evt) => {
+	handleSpin = async (inGamefunc, evt) => {
 		const {
 			metamaskMode,
 			isWeb3Injected,
 			wallet,			
-			betState,
 			clientSeed,
 			hashedServerSeed,
 			fetchHashedServerSeed,
 			pushNewGame,
 			setInitOccurence,
-			setFailure
+			setFailure,
+			fetchBalanceInEth
 		} = this.props;
-
-		console.log('OnClickSpin');
-		this.ifr.contentWindow.c2_callFunction('PressSpin', []);
 
 
 		if(metamaskMode && isWeb3Injected) {
 			const web3 = new Web3(injectedWeb3.currentProvider);
 			const gameInstance = new web3.eth.Contract(gameABI, gameAddress);
+			const betInEth = new BigNumber(betRange[this.getBetIndex()]).dividedBy(ethToCreditRate).toString();
 
-			const {
-				contractInput,
-				totalEther
-			} = generateBettingInput({
-				big: 0.1
-			});
 
 			const game = gameInstance
 				.methods
 				.initGame(
 					hashedServerSeed,
 					stringToBytes32(clientSeed),
-					contractInput
+					1
 				)
 				.send({
 					from: wallet,
-					value: toWei(totalEther)
+					value: toWei(betInEth)
 				});
+
+			this.ifr.contentWindow.c2_callFunction(inGamefunc, []);
 
 			game
 				.once('transactionHash', txHash => {
-					
 					// Push to History
 					pushNewGame({
 						initGameTxHash: txHash,
@@ -145,20 +182,23 @@ export default class SlotFrame extends Component {
 						clientSeed,
 						serverSeed: '',
 						hashedServerSeed,
+						betInEth,
 						reward: ''
 					});
 
 					// Fetch a new dealer hash
 					fetchHashedServerSeed();
 				})
-				.once('confirmation', (confNumber, receipt) => {
+				.once('confirmation', async (confNumber, receipt) => {
 					setInitOccurence(hashedServerSeed, true);
+					this.fetchAndSetBalance();
 				})
 				.on('error', error => {
+					this.fetchAndSetBalance();
+					this.finishSpinWithValue([1,2,3]);
 					setFailure(hashedServerSeed, true);
 					fetchHashedServerSeed();
 				});
-
 		} else {
 			
 		}
@@ -168,34 +208,78 @@ export default class SlotFrame extends Component {
 		if(!err) {
 			const { transactionHash } = res;
 			const {
-				gameResults,
+				gameHistory,
 				setFinalized
 			} = this.props;
 			const {
+				player,
 				clientSeed,
-				dealerSeed,
-				hashedDealerSeed,
+				serverSeed,
+				serverHash,
 				reward
 			} = res.returnValues;
+			
+			const symbolIndices = reconstructResult(
+				serverSeed,
+				clientSeed,
+				false
+			);
 
-
-			if(gameResults.find(record =>
+			if(gameHistory.find(record =>
 				record.hashedServerSeed
-				=== hashedDealerSeed
+				=== serverHash
 			)) {
-				this.ifr.contentWindow.c2_callFunction(
-					"FinishSpinWithValue",
-					[0, 0, 0]
-				);
+				this.finishSpinWithValue(symbolIndices);
 				
 				setFinalized(
-					hashedDealerSeed,
+					serverHash,
 					true,
-					bytesToString(dealerSeed),
+					symbolIndices,
+					bytesToString(serverSeed),
 					fromWei(reward).toString()
 				);
 			}
 		}
+	}
+
+	fetchAndSetBalance = async () => {
+		const {
+			wallet,
+			fetchBalanceInEth
+		} = this.props;
+		
+		const balanceInEth = await fetchBalanceInEth(wallet);
+		// set balance in game
+		this.setBalanceInGame(
+			BigNumber(balanceInEth)
+				.times(ethToCreditRate)
+				.toNumber()
+		);  
+
+		return balance;
+	}
+
+	setBalanceInGame = (creditBalance) => {
+		this.ifr.contentWindow.c2_callFunction(
+			'SetBalance',
+			[creditBalance]
+		);
+	}
+
+	getBetIndex = () => {
+		return this.ifr.contentWindow.c2_callFunction('GetBetIndex', []);
+	}
+
+	syncBetIndex = () => {
+		const betIdx = this.getBetIndex();
+		this.props.setBetIndex(betIdx);
+	}
+
+	finishSpinWithValue(values) {
+		this.ifr.contentWindow.c2_callFunction(
+			'FinishSpinWithValue',
+			values
+		);
 	}
 
 	render() {

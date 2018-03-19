@@ -21,26 +21,6 @@ export function setClientSeed(newSeed) {
 	};
 }
 
-export function setChipIndex(chipIdx) {
-	return {
-		type: actionTypes.GAME_SET_CHIP_INDEX,
-		chipIdx
-	};
-}
-
-export function addToBet(betSide, addition) {
-	return {
-		type: actionTypes.GAME_ADD_TO_BET,
-		betSide,
-		addition
-	};
-}
-
-export function resetBet() {
-	return {
-		type: actionTypes.GAME_RESET_BET
-	};
-}
 
 export function fetchHashedServerSeed() {
 	const gameMethods = new serviceWeb3.eth.Contract(gameABI, gameAddress).methods;
@@ -56,34 +36,21 @@ export function fetchHashedServerSeed() {
 	};
 }
 
-export function getGameResult() {
-	const url = '/api/games';
-
-	return (dispatch, getState) => {
-		const gameObj = getState().game;
-
-		return request.post(url, gameObj);
+export function setBetIndex(betIdx) {
+	return {
+		type: actionTypes.GAME_SET_BET_INDEX,
+		betIdx
 	};
 }
 
-export function getPlayerEtherBalance(){
-	return (dispatch, getState) =>{
-		const metamaskAccount = getState().auth.metamaskAccount;
-		web3.eth.getBalance(
-			metamaskAccount,
-			(err,res)=>{
-				const metamaskBalance = web3.fromWei(res).toString();
-				dispatch(setPlayerEtherBalance(
-					metamaskBalance
-				))
-			}
-		);
-	}
-}
 
-export function setPlayerEtherBalance(playerEtherBalance){
-	return {
-		type: actionTypes.GAME_SET_PLAYER_ETHER_BALANCE,
-		playerEtherBalance
-	}
-}
+/* export function getGameResult() {
+ * 	const url = '/api/games';
+ * 
+ * 	return (dispatch, getState) => {
+ * 		const gameObj = getState().game;
+ * 
+ * 		return request.post(url, gameObj);
+ * 	};
+ * }
+ * */

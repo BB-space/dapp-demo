@@ -16,9 +16,7 @@ export default keymirror({
 	// game
 	GAME_SET_HASHED_SERVER_SEED: null,
 	GAME_SET_CLIENT_SEED: null,
-	GAME_SET_CHIP_INDEX: null,
-	GAME_ADD_TO_BET: null,
-	GAME_RESET_BET: null,
+	GAME_SET_BET_INDEX: null,
 
 	// results
 	RESULTS_PUSH_GAME: null,

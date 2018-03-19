@@ -118,13 +118,10 @@ export function setMetamaskUse(toUseMetamask) {
 		});
 
 		if(toUseMetamask && isWeb3Injected) {
-			
 			const wallet = injectedWeb3.eth.defaultAccount;
-			const balance = await serviceWeb3.eth.getBalance(wallet);
+			const balance = await dispatch(fetchBalanceInEth(wallet));
 
-			dispatch(setEthBalance(
-				parseFloat(fromWei(balance).toNumber())
-			));
+			dispatch(setEthBalance(balance));
 			dispatch(fetchMetamaskNetwork());
 			dispatch(setUser({ wallet }));
 		}
@@ -178,14 +175,24 @@ export function setIfWeb3Injected(isInjected) {
 	};
 }
 
-export function getAccountStatus() {
-	const url = '/api/eth/balance';
-	
-    return async (dispatch, getState) => {
-		const res = await request.get(url);
-
-		if(res.success) {
-			dispatch(setEthBalance(res.ethBalance));
-		}
+export function fetchBalanceInEth(wallet) {
+	return async (dispatch, getState) => {
+ 		const balanceInWei = await serviceWeb3.eth.getBalance(wallet);
+		const balanceInEth = parseFloat(fromWei(balanceInWei).toNumber());
+		dispatch(setEthBalance(balanceInEth));
+		
+		return balanceInEth;
 	};
 }
+
+/* export function getAccountStatus() {
+ * 	const url = '/api/eth/balance';
+ * 	
+ *     return async (dispatch, getState) => {
+ * 		const res = await request.get(url);
+ * 
+ * 		if(res.success) {
+ * 			dispatch(setEthBalance(res.ethBalance));
+ * 		}
+ * 	};
+ * }*/

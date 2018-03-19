@@ -6,6 +6,7 @@
 
 <script type="text/javascript">
   var game;
+	var balance = 200000;
 
   function setGame() {
 		return (game || (game = document.getElementById('game')));
@@ -13,26 +14,78 @@
 
   function init() {
 
-		window.addEventListener('OnStartGame', function(e) {
+		window.addEventListener('OnInitGame', function(e) {
+			console.log('OnInitGame');
 			if (!setGame())
 				return;
 			console.log('set bet range');
-			game.contentWindow.c2_callFunction("InitBetRange", [1000, 5000, 10000, 50000, 100000, 500000]);
+
+			// set betting range
+			game.contentWindow.c2_callFunction("SetBetRange", [1000, 5000, 10000, 50000, 100000, 500000]);
+			var range = game.contentWindow.c2_callFunction("GetBetRange", []);
+			console.log('BetRange:', range);
+
+			// set pay table
+			var payTable = {
+				c2array: true,
+				size: [19, 4, 1],
+				data: [
+								[ [4], [4], [4], [1000] ],
+							
+								[ [0], [0], [0], [70] ],
+								[ [10], [10], [10], [30] ],
+								[ [6], [6], [6], [25] ],
+								[ [2], [2], [2], [5] ],
+								[ [8], [8], [8], [5] ],
+							
+								[ [14], [14], [14], [3] ],
+								[ [8], [8], [-1], [2] ], 
+								[ [8], [-1], [8], [2] ],
+								[ [-1], [8], [8], [2] ],    
+								[ [8], [-1], [-1], [1] ],
+							
+								[ [-1], [8], [-1], [1] ],
+								[ [-1], [-1], [8], [1] ],
+								[ [4], [4], [-1], [3] ],
+								[ [4], [-1], [4], [3] ],    
+								[ [-1], [4], [4], [3] ],
+							
+								[ [4], [-1], [-1], [2] ],
+								[ [-1], [4], [-1], [2] ],
+								[ [-1], [-1], [4], [2] ]
+						]
+			};
+			game.contentWindow.c2_callFunction("SetPayTable", [JSON.stringify(payTable)]);
+			var table = game.contentWindow.c2_callFunction("GetPayTable", []);
+			console.log('PayTable:', table);
+
+			// set balance
+      game.contentWindow.c2_callFunction("SetBalance", [balance]);
+
+			// start game
+      game.contentWindow.c2_callFunction("StartGame", []);
+		});
+		
+		window.addEventListener('OnStartGame', function(e) {
+			console.log('OnStartGame');
 		});
 
 		window.addEventListener('OnClickBetUp', function(e) {
 			console.log('OnClickBetUp');
 			game.contentWindow.c2_callFunction("PressBetUp", []);
+			console.log('Current Bet:', game.contentWindow.c2_callFunction("GetBetIndex", []));
 		});
 
 		window.addEventListener('OnClickBetDown', function(e) {
 			console.log('OnClickBetDown');
 			game.contentWindow.c2_callFunction("PressBetDown", []);
+			console.log('Current Bet:', game.contentWindow.c2_callFunction("GetBetIndex", []));
 		});
 
 		window.addEventListener('OnClickBetMax', function(e) {
 			console.log('OnClickBetMax');
 			game.contentWindow.c2_callFunction("PressMaxBet", []);
+			console.log('Current Bet:', game.contentWindow.c2_callFunction("GetBetIndex", []));
 		});
 
 		window.addEventListener('OnClickSpin', function(e) {
@@ -40,15 +93,38 @@
 			game.contentWindow.c2_callFunction("PressSpin", []);
 		});
 
+		window.addEventListener('OnPullLever', function(e) {
+			console.log('OnPullLever');
+			game.contentWindow.c2_callFunction("PullLever", []);
+		});
+
+		window.addEventListener('OnGameStateChanged', function(e) {
+			console.log('OnChangeGameState:', e.detail[0], '->', e.detail[1]);
+		});
+
+		window.addEventListener('OnGameStateReady', function(e) {
+			console.log('OnGameStateReady:', e.detail[0]);
+		});
+
+
 
   }
 
   function onClickButton() {
-    document.getElementById('game').contentWindow.c2_callFunction("FinishSpinWithValue", [0, 0, 0]);
+		balance += 1000;
+    game.contentWindow.c2_callFunction("SetBalance", [balance]);
+
+	  var table = game.contentWindow.c2_callFunction("GetPayTable", []);
+			console.log('PayTable:', table);
   }
 
   function onClickButtonSecond() {
-    document.getElementById('game').contentWindow.c2_callFunction("FinishSpinWithValue", [3, 4, 5]);
+    game.contentWindow.c2_callFunction("FinishSpinWithValue", [0, 0, 0]);
+
+  }
+
+  function onClickButtonThird() {
+    game.contentWindow.c2_callFunction("FinishSpinWithValue", [1, 2, 3]);
 
   }
 
@@ -62,9 +138,11 @@
 
 <div>
 
-  <button type="button" onclick="onClickButton();">My Button</button>
+  <button type="button" onclick="onClickButton();">SetBalance</button>
 
-  <button type="button" onclick="onClickButtonSecond();">My Second Button</button>
+  <button type="button" onclick="onClickButtonSecond();"> Lucky </button>
+
+  <button type="button" onclick="onClickButtonThird();">&nbsp;&nbsp;Fail&nbsp;&nbsp;</button>
 
 </div>
 

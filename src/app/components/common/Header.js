@@ -16,7 +16,7 @@ export default class Header extends Component {
 			<header className={styles.appBar}>
 				<div className={styles.logoBlock}>
 					<span className={styles.logo}>
-						<Link to="/">Dice Roll</Link>
+						<Link to="/">Three Stars</Link>
 					</span>
 				</div>
 				<HeaderNavBlock />

@@ -17,6 +17,8 @@ export default class Results extends Component {
 		clientSeed: PropTypes.string,
 		serverSeed: PropTypes.string,
 		hashedServerSeed: PropTypes.string,
+		symbolIndices: PropTypes.array,
+		betInEth: PropTypes.string,
 		reward: PropTypes.string
 	};
 	
@@ -44,12 +46,12 @@ export default class Results extends Component {
 			clientSeed,
 			serverSeed,
 			hashedServerSeed,
+			symbolIndices,
+			betInEth,
 			reward,
 			...restProps
 		} = this.props;
 		
-		const result = reconstructResult(serverSeed, clientSeed);
-
 		const waitingElem = (
 			<tr {...restProps}>
 				<td>
@@ -60,7 +62,7 @@ export default class Results extends Component {
 					{initTransacted ? '결과를 받는 중 입니다...' : '정산 대기중...' }
 				</td>
 				<td>
-					-
+					{ betInEth } ETH
 				</td>
 				<td>
 					-
@@ -80,10 +82,10 @@ export default class Results extends Component {
 					Finalized
 				</td>
 				<td>
-					-
+					{ betInEth } ETH
 				</td>
 				<td>
-					{ this.getDiceComponent(result) }
+					{ (symbolIndices || []).join(',') }
 				</td>
 				<td>
 					{ reward }

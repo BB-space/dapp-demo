@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import _ from 'lodash';
 import Web3 from 'web3';
-import { betDefMap } from '../constants/interfaces';
+
 
 const web3 = new Web3();
 
@@ -43,8 +43,7 @@ export function bytesToString(bytes) {
 	return web3.utils.toAscii(bytes);
 }
 
-
-export function computeMultipleHash(str, nTimes){
+export function computeMultipleHash(str, nTimes) {
 	let hash = str;
 	for (var i=0; i<nTimes; i++){
 		hash = keccak256(hash);
@@ -52,9 +51,19 @@ export function computeMultipleHash(str, nTimes){
 	return hash;
 }
 
-export function reconstructResult(_serverSeed, _clientSeed) {
-	const serverSeed = stringToBytes32(_serverSeed);
-	const clientSeed = stringToBytes32(_clientSeed);
+export function reconstructResult(
+	_serverSeed,
+	_clientSeed,
+	convertToBytes=true
+) {
+	let serverSeed = _serverSeed;
+	let clientSeed = _clientSeed;
+	
+	if(convertToBytes) {
+		serverSeed = stringToBytes32(_serverSeed);
+		clientSeed = stringToBytes32(_clientSeed);
+	}
+	
 	const dice3hash = web3.utils.soliditySha3(
 		{type:'bytes32',value:computeMultipleHash(serverSeed,3)},
 		{type:'bytes32',value:clientSeed}
@@ -67,13 +76,14 @@ export function reconstructResult(_serverSeed, _clientSeed) {
 		{type:'bytes32',value:computeMultipleHash(serverSeed,1)},
 		{type:'bytes32',value:clientSeed}
 	);
-	const dice1NumberRaw = BigNumber(dice1hash)
-	const dice2NumberRaw = BigNumber(dice2hash)
-	const dice3NumberRaw = BigNumber(dice3hash)
+	
+	const dice1NumberRaw = BigNumber(dice1hash);
+	const dice2NumberRaw = BigNumber(dice2hash);
+	const dice3NumberRaw = BigNumber(dice3hash);
 
-	const dice1Number = Number(dice1NumberRaw.modulo(6).plus(1))
-	const dice2Number = Number(dice2NumberRaw.modulo(6).plus(1))
-	const dice3Number = Number(dice3NumberRaw.modulo(6).plus(1))
+	const dice1Number = Number(dice1NumberRaw.modulo(16));
+	const dice2Number = Number(dice2NumberRaw.modulo(16));
+	const dice3Number = Number(dice3NumberRaw.modulo(16));
 	
 	return [
 		dice1Number,
@@ -81,18 +91,4 @@ export function reconstructResult(_serverSeed, _clientSeed) {
 		dice3Number
 	];
 
-}
-
-export function generateBettingInput(betState) {
-	const totalEther = _.values(betState).reduce((a, b) => a + b);
-	let contractInput = [];
-
-	for(let key in betState) {
-		if(key in betDefMap) {
-			contractInput.push(betDefMap[key]);
-			contractInput.push(parseInt(betState[key] * 1000));
-		}
-	}
-
-	return { contractInput, totalEther };
 }

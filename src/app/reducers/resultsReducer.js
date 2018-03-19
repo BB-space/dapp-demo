@@ -19,7 +19,9 @@ Game Object: {
    clientSeed,
    serverSeed,
    hashedServerSeed,
-   reward
+   betInEth,
+   reward,
+   symbolIndices
 }
 */
 const initialState = [];
@@ -39,7 +41,9 @@ export default function results(state=initialState, action) {
 					=== action.newState.hashedServerSeed
 				));
 
-			game = Object.assign(game, action.newState);
+			if(game) {
+				game = Object.assign(game, action.newState);
+			}
 
 			return newResults;
 		}

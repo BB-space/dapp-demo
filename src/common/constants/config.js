@@ -24,7 +24,7 @@ export const REDIS_URL = {
 	local: { host: 'redis://localhost:6379', password: '' },
 	npseth: { host: 'redis://eth3.npsdev.cloud:9379', password: 'spdhdnlwmfpeltm123' },
 	testnet: { host: 'redis://localhost:6379', password: '' }
-}
+};
 
 
 export { ethEnv };

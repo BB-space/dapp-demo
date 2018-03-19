@@ -38,14 +38,16 @@ export function setFailure(dealerHash, hasFailed){
 export function setFinalized(
 	dealerHash,
 	finalized,
+	symbolIndices,
 	serverSeed='',
-	reward=''
-){
+	reward='',
+) {
 	return {
 		type: actionTypes.RESULTS_CHANGE_GAME_STATE,
 		newState: {
 			hashedServerSeed: dealerHash,
 			finalized,
+			symbolIndices,
 			serverSeed,
 			reward
 		}
