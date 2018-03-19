@@ -6,7 +6,7 @@
 
 <script type="text/javascript">
   var game;
-	var balance = 200000;
+	var balance = 0;
 
   function setGame() {
 		return (game || (game = document.getElementById('game')));
@@ -59,10 +59,8 @@
 			var table = game.contentWindow.c2_callFunction("GetPayTable", []);
 			console.log('PayTable:', table);
 
-			// set balance
       game.contentWindow.c2_callFunction("SetBalance", [balance]);
 
-			// start game
       game.contentWindow.c2_callFunction("StartGame", []);
 		});
 		
@@ -106,6 +104,10 @@
 			console.log('OnGameStateReady:', e.detail[0]);
 		});
 
+		window.addEventListener('OnInsufficientFunds', function(e) {
+			console.log('OnInsufficientFunds');
+		});
+
 
 
   }
@@ -114,18 +116,34 @@
 		balance += 1000;
     game.contentWindow.c2_callFunction("SetBalance", [balance]);
 
-	  var table = game.contentWindow.c2_callFunction("GetPayTable", []);
-			console.log('PayTable:', table);
+//	  var table = game.contentWindow.c2_callFunction("GetPayTable", []);
+//			console.log('PayTable:', table);
   }
 
-  function onClickButtonSecond() {
-    game.contentWindow.c2_callFunction("FinishSpinWithValue", [0, 0, 0]);
+  function onClickClearBalanceButton() {
+	balance = 0;
+    game.contentWindow.c2_callFunction("SetBalance", [balance]);
+  }
 
+  function onClickButtonSuperWin() {
+    game.contentWindow.c2_callFunction("FinishSpinWithValue", [6, 6, 6, 5, 15, 30 ]);
+  }
+
+  function onClickButtonBigWin() {
+    game.contentWindow.c2_callFunction("FinishSpinWithValue", [2, 2, 2, 5, 15, 30]);
   }
 
   function onClickButtonThird() {
-    game.contentWindow.c2_callFunction("FinishSpinWithValue", [1, 2, 3]);
+    game.contentWindow.c2_callFunction("FinishSpinWithValue", [1, 2, 3, 5, 15, 30]);
 
+  }
+
+  function onClickButtonMegaWin() {
+    game.contentWindow.c2_callFunction("FinishSpinWithValue", [4, 4, 4, 5, 15, 30]);
+  }
+
+  function onClickButtonWin() {
+    game.contentWindow.c2_callFunction("FinishSpinWithValue", [8, 8, 7, 5, 15, 30]);
   }
 
 </script>
@@ -140,9 +158,19 @@
 
   <button type="button" onclick="onClickButton();">SetBalance</button>
 
-  <button type="button" onclick="onClickButtonSecond();"> Lucky </button>
+  <button type="button" onclick="onClickClearBalanceButton();">ClearBalance</button>
+
+  <button type="button" onclick="onClickButtonMegaWin();"> MegaWin </button>
+
+  <button type="button" onclick="onClickButtonSuperWin();"> SuperWin </button>
+
+  <button type="button" onclick="onClickButtonBigWin();"> BigWin </button>
+
+  <button type="button" onclick="onClickButtonWin();"> Win </button>
 
   <button type="button" onclick="onClickButtonThird();">&nbsp;&nbsp;Fail&nbsp;&nbsp;</button>
+
+  <p></p>
 
 </div>
 
