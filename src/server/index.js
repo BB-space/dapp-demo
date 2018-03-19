@@ -12,7 +12,8 @@ import webpack from 'webpack';
 import runDevServer from './runDevServer';
 import renderApp from './renderApp';
 import listenAndFinalize from './listenAndFinalize';
-import { nodeUrl, NUMBER_OF_SEEDS, INTERVAL_TO_REGEN_SEEDS } from '../common/constants/config';
+import { nodeUrl } from '../common/constants/config';
+import { NUMBER_OF_SEEDS, INTERVAL_TO_REGEN_SEEDS, SEED_CHUNKS } from './constants/config'
 
 // routes
 import gameRoutes from './routes/games';
@@ -22,8 +23,6 @@ import ethRoutes from './routes/eth';
 import webpackConfig from '../../webpack.config';
 
 import hashGenerator from './db/hashGenerator';
-
-import { ethEnv, REDIS_URL, SEED_CHUNKS } from '../common/constants/config';
 
 console.log(nodeUrl);
 global.web3 = new Web3(
@@ -140,3 +139,4 @@ backApp.listen(port + 1, () => {
         pid: process.pid
     }, 'Back Server is listening');
 });
+

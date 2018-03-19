@@ -3,9 +3,11 @@
  * Redis wrapper class file
  */
 
-import { ethEnv, REDIS_URL } from '../../common/constants/config';
-const RedisCore = require('redis');
-const { promisify } = require('util');
+import { REDIS_OPTIONS } from '../constants/config';
+import RedisClient from 'redis';
+import { promisify } from 'util';
+
+var client;
 
 /**
  * @class Redis
@@ -15,8 +17,8 @@ const { promisify } = require('util');
 class Redis {
     
     constructor(options) {
-        var cli = RedisCore.createClient(options.host);
-        this.password_ = options.password;
+        var cli = RedisClient.createClient(options.url, 
+            options.password ? { password: options.password } : undefined);
         this.auth_ = promisify(cli.auth).bind(cli);
         this.append_ = promisify(cli.append).bind(cli);
         this.bitcount_ = promisify(cli.bitcount).bind(cli);
@@ -38,6 +40,11 @@ class Redis {
             // 연결에 성공하면 이후 코드가 실행될 것이므로...
             console.log(error);
         });
+        this.client_ = cli;
+    }
+
+    get client() {
+        return this.client_;
     }
 
     async auth() {
@@ -102,8 +109,12 @@ class Redis {
         this.quit_();
     }
 
+    static get client() {
+        return client || (client = Redis.createClient());    
+    }
+
     static createClient(options) {
-        return new Redis(options ? options : REDIS_URL[ethEnv]);
+        return new Redis(options ? options : REDIS_OPTIONS);
     }
 }
 
