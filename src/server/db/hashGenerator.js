@@ -12,6 +12,7 @@ import { makeSignedTransaction } from '../utils';
 import { gameABI, gameAddress } from '../../common/constants/contracts';
 import { coinbase, privateKey } from '../constants/wallets';
 import { Redis } from './redis';
+import uuid from 'uuid/v4'
 
 const game = new serviceWeb3.eth.Contract(gameABI, gameAddress).methods;
 
@@ -22,7 +23,7 @@ async function calculateItemsToInsert(cli, totalCount) {
 }
 
 async function deleteItems(cli, items) {
-    return await cli.hel(gameAddress, items);
+    return await cli.hdel(gameAddress, items);
 }
 
 async function generateNewHashItems(cli, count) {
@@ -33,7 +34,10 @@ async function generateNewHashItems(cli, count) {
 	while (count > 0) {
         // TODO:
         // 시드 생성 로직은 협의 후 변경 필요
-		const seed = (Math.random() * Math.pow(10, 18)).toFixed().toString(16);
+        let buf = new Array();
+        uuid(null, buf);
+        uuid(null, buf, 16);
+        const seed = Buffer.from(buf).toString('base64');
 
 		const hashed = await game.encryptSeeds(stringToBytes32(seed)).call();
 		console.log("hashed", seed, ':', hashed);
