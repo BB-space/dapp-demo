@@ -32,7 +32,8 @@ import {
 import {
 	payTableData,
 	betRange,
-	ethToCreditRate
+	ethToCreditRate,
+	bigWinConditions
 } from '../../../common/constants/game';
 
 
@@ -59,6 +60,10 @@ export default class SlotFrame extends Component {
 	constructor(props) {
 		super(props);
 
+		this.state = {
+			gameState: null
+		};
+
 		this.handleClickSpin = this.handleSpin.bind(this, 'PressSpin');
 		this.handlePullLever = this.handleSpin.bind(this, 'PullLever');
 	}
@@ -70,9 +75,15 @@ export default class SlotFrame extends Component {
 		window.addEventListener('OnClickBetMax', this.handleBetMax);
 		window.addEventListener('OnClickSpin', this.handleClickSpin);
 		window.addEventListener('OnPullLever', this.handlePullLever);
+		window.addEventListener('OnGameStateChanged', this.setGameState);
 
 		const gameInstance = new serviceWeb3.eth.Contract(gameABI, gameAddress);
 		gameInstance.events.Finalize(this.handleFinalize);
+
+		/* setTimeout(() => {
+		   console.log('forceUpdate');
+		   this.forceUpdate();
+		   }, 10000);*/
 	}
 
 	componentWillUnmount() {
@@ -150,12 +161,12 @@ export default class SlotFrame extends Component {
 			fetchBalanceInEth
 		} = this.props;
 
+		const { gameState } = this.state;
 
 		if(metamaskMode && isWeb3Injected) {
 			const web3 = new Web3(injectedWeb3.currentProvider);
 			const gameInstance = new web3.eth.Contract(gameABI, gameAddress);
 			const betInEth = new BigNumber(betRange[this.getBetIndex()]).dividedBy(ethToCreditRate).toString();
-
 
 			const game = gameInstance
 				.methods
@@ -256,7 +267,7 @@ export default class SlotFrame extends Component {
 				.toNumber()
 		);  
 
-		return balance;
+		return balanceInEth;
 	}
 
 	setBalanceInGame = (creditBalance) => {
@@ -278,8 +289,16 @@ export default class SlotFrame extends Component {
 	finishSpinWithValue(values) {
 		this.ifr.contentWindow.c2_callFunction(
 			'FinishSpinWithValue',
-			values
+			[...values, ...bigWinConditions]
 		);
+	}
+	
+	setGameState = (evt) => {
+		this.setState({
+			gameState: evt.detail[1]
+		}, () => {
+			console.log(this.state);
+		});
 	}
 
 	render() {

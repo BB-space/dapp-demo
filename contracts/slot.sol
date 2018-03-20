@@ -141,7 +141,8 @@ contract GRC is QuickSort{
       symbol2 == 4 /*symbol.wild*/
     ){
       return betAmount * 1000 / betLines;
-    }else if(
+    }
+	if(
     // 3 sevens
       symbol1 == 0 /*symbol.seven*/
     ){
@@ -154,7 +155,8 @@ contract GRC is QuickSort{
       if(symbol2 == 4 /*symbol.wild*/ && symbol3 == 4 /*symbol.wild*/){
         return betAmount * 70 * 3 / betLines;
       }
-    }else if(
+    }
+	if(
     // 3 bar3s
       symbol3 == 10 /*symbol.bar3*/
     ){
@@ -167,7 +169,8 @@ contract GRC is QuickSort{
       if(symbol2 == 4 /*symbol.wild*/ && symbol1 == 4 /*symbol.wild*/){
         return betAmount * 30 * 3 / betLines;
       }
-    }else if(
+    }
+	if(
     // 3 bar2s
       symbol3 == 6 /*symbol.bar2*/
     ){
@@ -180,7 +183,8 @@ contract GRC is QuickSort{
       if(symbol2 == 4 /*symbol.wild*/ && symbol1 == 4 /*symbol.wild*/){
         return betAmount * 30 * 3 / betLines;
       }
-    }else if(
+    }
+	if(
     // 3 bar1s
       symbol1 == 2 /*symbol.bar1*/
     ){
@@ -193,7 +197,8 @@ contract GRC is QuickSort{
       if(symbol2 == 4 /*symbol.wild*/ && symbol3 == 4 /*symbol.wild*/){
         return betAmount * 70 * 3 / betLines;
       }
-    }else if(
+    }
+	if(
     // 3 cherries
       symbol3 == 8 /*symbol.cherry*/
     ){
@@ -206,35 +211,40 @@ contract GRC is QuickSort{
       if(symbol2 == 4 /*symbol.wild*/ && symbol1 == 4 /*symbol.wild*/){
         return betAmount * 30 * 3 / betLines;
       }
-    }else if(
+    }
+	if(
     // any bar
       (symbol1 == 2 /*symbol.bar1*/ || symbol1 == 6 /*symbol.bar2*/ || symbol1 == 10 /*symbol.bar3*/) &&
       (symbol2 == 2 /*symbol.bar1*/ || symbol2 == 6 /*symbol.bar2*/ || symbol2 == 10 /*symbol.bar3*/) &&
       (symbol3 == 2 /*symbol.bar1*/ || symbol3 == 6 /*symbol.bar2*/ || symbol3 == 10 /*symbol.bar3*/)
     ){
       return betAmount * 3 * 1 / betLines;
-    }else if(
+    }
+	if(
     // any bar w1
       (symbol1 == 2 /*symbol.bar1*/ && symbol2 == 4 /*symbol.wild*/ && symbol3 == 6 /*symbol.bar2*/)||
       (symbol1 == 2 /*symbol.bar1*/ && symbol2 == 4 /*symbol.wild*/ && symbol3 == 10 /*symbol.bar3*/)||
       (symbol1 == 4 /*symbol.wild*/ && symbol2 == 6 /*symbol.bar2*/ && symbol3 == 10 /*symbol.bar3*/)
     ){
       return betAmount * 3 * 2 / betLines;
-    }else if(
+    }
+	if(
     // two cherries w0
       (symbol1 == 8 /*symbol.cherry*/ && symbol2 == 8 /*symbol.cherry*/ && symbol3 != 4 /*symbol.wild*/)||
       (symbol1 == 8 /*symbol.cherry*/ && symbol3 == 8 /*symbol.cherry*/ && symbol2 != 4 /*symbol.wild*/)||
       (symbol2 == 8 /*symbol.cherry*/ && symbol3 == 8 /*symbol.cherry*/ && symbol1 != 4 /*symbol.wild*/)
     ){
       return betAmount * 2 * 1 / betLines;
-    }else if(
+    }
+	if(
     // two cherries w1
       (symbol1 == 4 /*symbol.wild*/ && symbol2 == 8 /*symbol.cherry*/)||
       (symbol1 == 4 /*symbol.wild*/ && symbol3 == 8 /*symbol.cherry*/)||
       (symbol2 == 4 /*symbol.wild*/ && symbol3 == 8 /*symbol.cherry*/)
     ){
       return betAmount * 2 * 2 / betLines;
-    }else if(
+    }
+	if(
     // one cherry
       (symbol1 == 8 /*symbol.cherry*/)||
       (symbol2 == 8 /*symbol.cherry*/)||
