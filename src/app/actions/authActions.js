@@ -118,8 +118,24 @@ export function setMetamaskUse(toUseMetamask) {
 		});
 
 		if(toUseMetamask && isWeb3Injected) {
-			const wallet = injectedWeb3.eth.defaultAccount;
-			dispatch(setUser({ wallet }));
+			let wallet = injectedWeb3.eth.defaultAccount;
+			
+			if(!wallet) {
+				web3.eth.getAccounts(function (error, result) {
+					if (error) {
+						console.error(error);
+					} else {
+						if(result.length == 0) {
+							alert('Unlock MetaMask *and* click \'Get Accounts\'');
+							return false;
+						} else {
+							dispatch(setUser({ wallet: result[0] }));
+						}
+					}
+				});
+			} else {
+				dispatch(setUser({ wallet }));
+			}
 
 			try {
 				const balance = await dispatch(fetchBalanceInEth(wallet));
