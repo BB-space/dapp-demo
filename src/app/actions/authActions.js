@@ -119,11 +119,16 @@ export function setMetamaskUse(toUseMetamask) {
 
 		if(toUseMetamask && isWeb3Injected) {
 			const wallet = injectedWeb3.eth.defaultAccount;
-			const balance = await dispatch(fetchBalanceInEth(wallet));
-
-			dispatch(setEthBalance(balance));
-			dispatch(fetchMetamaskNetwork());
 			dispatch(setUser({ wallet }));
+
+			try {
+				const balance = await dispatch(fetchBalanceInEth(wallet));
+				dispatch(setEthBalance(balance));
+			} catch(e){
+				console.error(e);
+			}
+			
+			dispatch(fetchMetamaskNetwork());
 		}
 
         return true;
