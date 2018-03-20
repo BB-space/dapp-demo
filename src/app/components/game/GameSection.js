@@ -63,35 +63,28 @@ export default class GameSection extends Component {
 
 		return (
 			<div className="col-md-12">
-				<div className="panel panel-default">
-					<div className="panel-heading">
-					</div>
-					<div className="panel-body">
+				<SlotFrame />
 
-						<SlotFrame />
+				<Results />
 
-						<Results />
+				<font className="heading">
+					배팅 변경
+				</font>
+				
+				<ul>
+					<li>
+						<b>Hashed Server Seed</b>
+						<span>: { hashedServerSeed } </span>
+						<button onClick={fetchHashedServerSeed}>다른 해시 불러오기</button>
+					</li>
+					<li>
+						<b>Client Seed</b><span>: {' '}</span>
+						<input value={clientSeed}
+							   onChange={this.handleClientSeedChange} />
+					</li>
 
-						<font className="heading">
-							배팅 변경
-						</font>
-						
-						<ul>
-							<li>
-								<b>Hashed Server Seed</b>
-								<span>: { hashedServerSeed } </span>
-								<button onClick={fetchHashedServerSeed}>다른 해시 불러오기</button>
-							</li>
-							<li>
-								<b>Client Seed</b><span>: {' '}</span>
-								<input value={clientSeed}
-									   onChange={this.handleClientSeedChange} />
-							</li>
-
-						</ul>
-					</div>
-					<hr/>
-				</div>
+				</ul>
+				<hr/>
 			</div>
 		);
 	}

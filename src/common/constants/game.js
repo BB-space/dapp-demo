@@ -26,6 +26,8 @@ export const payTableData = [
 
 export const betRange = [1000, 5000, 10000, 50000, 100000, 500000];
 
-// 1 ETH = 100000 credit
+// 1 ETH = 100,000 credit
 export const ethToCreditRate = 100000;
 
+// Big / Super / Mega win conditions
+export const bigWinConditions = [5, 15, 30];

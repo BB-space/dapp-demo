@@ -15,36 +15,6 @@ export default class MainPage extends Component {
 		super(props);
 	}
 
-	componentDidMount(){
-		//this.watchContractOddEven();
-		//this.watchContractCrowdSale();
-	}
-	
-	/* watchContractOddEven(){
-	   const oddEven = new web3.eth.Contract(gameABI,gameAddress)
-	   oddEven.events.allEvents(
-	   (error, result)=>{
-	   if(error){
-	   console.log("error",error);
-	   } else {
-	   this.refreshStatus();
-	   }
-	   }
-	   )
-	   }
-	   watchContractCrowdSale(){
-	   const tokenSale = new web3.eth.Contract(tokenSaleABI, tokenSaleAddress)
-	   tokenSale.events.allEvents(
-	   (error, result)=>{
-	   if(error){
-	   console.log("error",error);
-	   } else{
-	   this.refreshStatus();
-	   }
-	   }
-	   )
-	   }*/
-
 	handleInputChange(whichState, evt) {
 		const newVal = evt.target.value;
 
