@@ -6,7 +6,7 @@
 .wrapper {
     display: none;
     visibility: hidden;
-    position: absolute;
+    position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
@@ -30,9 +30,8 @@
 
 .content {
     @extend %vertical-align;	
-    $addition : $appbar-height / 2;
 	
-    top: calc(50% + #{$addition}); /* to locate at the center of app contents*/
+    top: 50%; /* to locate at the center of app contents*/
     margin: auto;
     z-index: $modal-content;
     min-width: 320px;

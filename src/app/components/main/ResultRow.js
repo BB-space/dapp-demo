@@ -59,7 +59,7 @@ export default class Results extends Component {
 					
 				</td>
 				<td>
-					{initTransacted ? '결과를 받는 중 입니다...' : '정산 대기중...' }
+					{initTransacted ? '정산 대기중...' : '결과를 받는 중 입니다...' }
 				</td>
 				<td>
 					{ betInEth } ETH

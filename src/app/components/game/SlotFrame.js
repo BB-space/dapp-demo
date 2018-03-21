@@ -79,11 +79,6 @@ export default class SlotFrame extends Component {
 
 		const gameInstance = new serviceWeb3.eth.Contract(gameABI, gameAddress);
 		gameInstance.events.Finalize(this.handleFinalize);
-
-		/* setTimeout(() => {
-		   console.log('forceUpdate');
-		   this.forceUpdate();
-		   }, 10000);*/
 	}
 
 	componentWillUnmount() {
@@ -162,6 +157,10 @@ export default class SlotFrame extends Component {
 		} = this.props;
 
 		const { gameState } = this.state;
+
+		if(gameState !== '0') {
+			return false;
+		}
 
 		if(metamaskMode && isWeb3Injected) {
 			const web3 = new Web3(injectedWeb3.currentProvider);
@@ -296,8 +295,6 @@ export default class SlotFrame extends Component {
 	setGameState = (evt) => {
 		this.setState({
 			gameState: evt.detail[1]
-		}, () => {
-			console.log(this.state);
 		});
 	}
 

@@ -8,14 +8,16 @@ import styles from './Modal.scss';
 const Modal = ({
     isOpen=false,
     className='',
-    style,
+	style,
     onClickOutside,
     children
 }) => {
 	return (
-        <div className={classNames([styles.wrapper, {
+        <div
+			className={classNames([styles.wrapper, {
                 [styles.open]: isOpen
-        }])}>
+			}])}
+		>
             <div className={classNames(styles.content, {
                     [className]: !!className
             })}

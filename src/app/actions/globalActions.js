@@ -7,3 +7,10 @@ export function setSignUpModal(isOpen) {
 		isOpen
 	};
 }
+
+export function setSettingsModal(isOpen) {
+	return {
+		type: actionTypes.GLOBAL_SET_SETTINGS_MODAL,
+		isOpen
+	};
+}

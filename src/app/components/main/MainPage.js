@@ -6,8 +6,8 @@ import {
 	gameABI
 } from '../../../common/constants/contracts';
 import GameSection from '../game/GameSection';
+import ResultsSection from './ResultsSection';
 import ValidationSection from '../game/ValidationSection';
-
 
 
 export default class MainPage extends Component {
@@ -27,6 +27,7 @@ export default class MainPage extends Component {
 			<main className="page-container">
 				<div className="row">
 					<GameSection />
+					<ResultsSection />
 					<ValidationSection />
 				</div>
 			</main>
