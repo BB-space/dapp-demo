@@ -6,7 +6,6 @@
  */
 
 import { SEED_CHUNKS } from '../constants/config';
-import { serviceWeb3 } from '../../app/utils/web3';
 import { stringToBytes32 } from '../../common/utils';
 import { getNonce, makeSignedTransaction } from '../utils';
 import { gameABI, gameAddress } from '../../common/constants/contracts';
@@ -14,7 +13,8 @@ import { coinbase, privateKey } from '../constants/wallets';
 import { Redis } from './redis';
 import uuid from 'uuid/v4'
 
-const game = new serviceWeb3.eth.Contract(gameABI, gameAddress).methods;
+var game;
+//const game = new serviceWeb3.eth.Contract(gameABI, gameAddress).methods;
 
 async function calculateItemsToInsert(cli, totalCount) {
     let currentCount = await cli.hlen(gameAddress);
@@ -38,7 +38,7 @@ async function generateNewHashItems(cli, count) {
         uuid(null, buf);
         uuid(null, buf, 16);
         const seed = Buffer.from(buf).toString('base64');
-
+        game || (game = new web3.eth.Contract(gameABI, gameAddress).methods);
 		const hashed = await game.encryptSeeds(stringToBytes32(seed)).call();
 		console.log("hashed", seed, ':', hashed);
 
@@ -64,6 +64,7 @@ async function generateNewHashItems(cli, count) {
 }
 
 async function pushHashes(items) {
+    game || (game = new web3.eth.Contract(gameABI, gameAddress).methods);
     const txData = game.pushHashes(items).encodeABI();
     //const nonce = await serviceWeb3.eth.getTransactionCount(coinbase);
     const nonce = await getNonce(coinbase);
