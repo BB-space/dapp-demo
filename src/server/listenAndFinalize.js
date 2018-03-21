@@ -10,8 +10,8 @@ import { MQ } from './db/redismq';
 
 // 처리 순서:
 // Contract -> LISTEN_Q -> FINALIZE_Q -> finalize
-const LISTEN_Q = 'ListenQ';
-const FINALIZE_Q = 'FinalizeQ';
+const LISTEN_Q = 'ListenQ:' + gameAddress;
+const FINALIZE_Q = 'FinalizeQ' + gameAddress;
 
 // Contract Callback
 export default function listenAndFinalize(web3) {
@@ -41,7 +41,7 @@ export default function listenAndFinalize(web3) {
 					playerSeed: playerSeed
 				});
 			} catch (e) {
-				console.log(e);
+				console.error(e);
 			}
 		}
 	});
@@ -51,13 +51,14 @@ async function prepareTransaction(job) {
 	try {
 		var cli = Redis.client;
 		var dealerHash = job.data.dealerHash;
+//		console.log('Prepare transaction:', dealerHash);
 		var dealerSeed = await cli.hget(gameAddress, dealerHash);
 		if (dealerSeed === undefined || dealerSeed == null) {
 			// TODO:
 			// 치명적인 에러이므로 처리를 어떻게 할건지 협의 필요
-			throw new Error("not found seed:" + dealerHash);
+			throw new Error("not found seed:", dealerHash, " account:", gameAddress);
 		}
-		console.log('Original Seed:', dealerSeed);
+//		console.log('Original Seed:', dealerSeed);
 		job.data.dealerSeed = dealerSeed;
 		await MQ.produce(FINALIZE_Q, job.data);
 	} catch (e) {
@@ -107,6 +108,7 @@ async function executeFinalizeTransaction(job) {
 
 	const nonce = await web3.eth.getTransactionCount(coinbase);
 
+//	console.log('try to finalize:', dealerHash);
 	await makeSignedTransaction(
 		coinbase,
 		privateKey,
@@ -116,19 +118,19 @@ async function executeFinalizeTransaction(job) {
 		txData
 	)
 	.once('transactionHash', hash => {
-		console.log('finalize transaction hash');
+		console.log('transactionHash:');
 		console.log(hash);
 	})
 	.once('receipt', receipt => {
-		console.log('reciept');
+		console.log('reciept:');
 		console.log(receipt);
 	})
 	.on('confirmation', (confNumber, receipt) => {
-		console.log('confirmation');
+		console.log('confirmation:');
 		console.log(confNumber, ':', receipt);
 	})
 	.on('error', error => {
-		console.log('TransactionError', error);
+		console.log('TransactionError:', error);
 	})
 	.catch (error => {
 		throw new Error(error);
