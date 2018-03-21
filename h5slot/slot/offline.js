@@ -1,5 +1,5 @@
 ﻿{
-	"version": 1521559104,
+	"version": 1521643541,
 	"fileList": [
 		"data.js",
 		"c2runtime.js",
@@ -37,6 +37,7 @@
 		"images/loading.png",
 		"images/loadingbg-sheet0.png",
 		"images/presseffect-sheet0.png",
+		"images/ethereum-sheet0.png",
 		"images/bonusplate-sheet0.png",
 		"images/bonusreelbox-sheet0.png",
 		"images/bonusreelmask-sheet0.png",
