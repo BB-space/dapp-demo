@@ -34,23 +34,28 @@ console.log(nodeUrl);
 */
 function createWeb3() {
     let wsp = new Web3.providers.WebsocketProvider(nodeUrl);
-    wsp.on('connect', e => {
-        //console.log('ws-connect', e);
-    })
-    wsp.on('end', e => {
-        // 연결이 종료된 경우
-        // 이 경우는 에러가 아니라고 볼 수도 있지만 keepalive 시간이 지나면
-        // 연결이 끊어질 수 있기 때문에 재연결 처리를 해야 한다.
-        // 문제는 트랜잭션 처리 도중에 이 이벤트가 발생하는 경우인데...
-        // 현재 시점에서는 어떻게 동작할지 알 수 없다.
-        console.log('ws-end', e);
-        global.web3 = createWeb3();
-    })
-    wsp.on('error', e => {
-        // 에러에서도 일단 재연결한다.
-        console.log('ws-error', e);
-        global.web3 = createWeb3();
-    })
+
+    //
+    // Web3-provider 의 코드를 확인해 보니 문제가 있어 보여서 아래 처리는 잠시 보류
+    // 
+
+    // wsp.on('connect', e => {
+    //     //console.log('ws-connect', e);
+    // })
+    // wsp.on('end', e => {
+    //     // 연결이 종료된 경우
+    //     // 이 경우는 에러가 아니라고 볼 수도 있지만 keepalive 시간이 지나면
+    //     // 연결이 끊어질 수 있기 때문에 재연결 처리를 해야 한다.
+    //     // 문제는 트랜잭션 처리 도중에 이 이벤트가 발생하는 경우인데...
+    //     // 현재 시점에서는 어떻게 동작할지 알 수 없다.
+    //     console.log('ws-end', e);
+    //     global.web3 = createWeb3();
+    // })
+    // wsp.on('error', e => {
+    //     // 에러에서도 일단 재연결한다.
+    //     console.log('ws-error', e);
+    //     global.web3 = createWeb3();
+    // })
     return new Web3(wsp);
 }
 
