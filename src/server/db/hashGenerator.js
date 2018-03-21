@@ -8,7 +8,7 @@
 import { SEED_CHUNKS } from '../constants/config';
 import { serviceWeb3 } from '../../app/utils/web3';
 import { stringToBytes32 } from '../../common/utils';
-import { makeSignedTransaction } from '../utils';
+import { getNonce, makeSignedTransaction } from '../utils';
 import { gameABI, gameAddress } from '../../common/constants/contracts';
 import { coinbase, privateKey } from '../constants/wallets';
 import { Redis } from './redis';
@@ -65,8 +65,8 @@ async function generateNewHashItems(cli, count) {
 
 async function pushHashes(items) {
     const txData = game.pushHashes(items).encodeABI();
-    const nonce = await serviceWeb3.eth.getTransactionCount(coinbase);
-
+    //const nonce = await serviceWeb3.eth.getTransactionCount(coinbase);
+    const nonce = await getNonce(coinbase);
     await makeSignedTransaction(
         coinbase,
         privateKey,
@@ -75,24 +75,26 @@ async function pushHashes(items) {
         nonce,
         txData
     )
-    .once('transactionHash', hash => {
+    .once('transactionHash-pushHashes:', hash => {
         console.log('pushHashes transaction hash');
         console.log(hash);
     })
-    .once('receipt', receipt => {
+    .once('receipt-pushHashes:', receipt => {
         console.log('pushHashes reciept');
         console.log(receipt);
     })
-    .on('confirmation', (confNumber, receipt) => {
+    .once('confirmation-pushHashes:', (confNumber, receipt) => {
         console.log('pushHashes confirmation');
         console.log(confNumber, ':', receipt);
     })
-    .on('error', error => {
+    .on('error-pushHashes:', error => {
         console.error(error);
     })
     .catch (error => {
         throw new Error(error);
     });
+
+    console.log('regenerated hashes:', items);
 }
 
 module.exports = {

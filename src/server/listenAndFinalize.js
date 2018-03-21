@@ -4,7 +4,7 @@
 import { gameABI, gameAddress } from '../common/constants/contracts';
 import { coinbase, privateKey } from './constants/wallets';
 import { stringToBytes32 } from '../common/utils';
-import { makeSignedTransaction } from './utils';
+import { getNonce, makeSignedTransaction } from './utils';
 import { Redis } from './db/redis';
 import { MQ } from './db/redismq';
 
@@ -106,7 +106,8 @@ async function executeFinalizeTransaction(job) {
 		)
 		.encodeABI();
 
-	const nonce = await web3.eth.getTransactionCount(coinbase);
+	//const nonce = await web3.eth.getTransactionCount(coinbase);
+	const nonce = await getNonce(coinbase);
 
 //	console.log('try to finalize:', dealerHash);
 	await makeSignedTransaction(
@@ -118,19 +119,19 @@ async function executeFinalizeTransaction(job) {
 		txData
 	)
 	.once('transactionHash', hash => {
-		console.log('transactionHash:');
+		console.log('transactionHash-finalize:');
 		console.log(hash);
 	})
 	.once('receipt', receipt => {
-		console.log('reciept:');
+		console.log('reciept-finalize:');
 		console.log(receipt);
 	})
-	.on('confirmation', (confNumber, receipt) => {
-		console.log('confirmation:');
+	.once('confirmation', (confNumber, receipt) => {
+		console.log('confirmation-finalize:');
 		console.log(confNumber, ':', receipt);
 	})
 	.on('error', error => {
-		console.log('TransactionError:', error);
+		console.log('TransactionError-finalize:', error);
 	})
 	.catch (error => {
 		throw new Error(error);
