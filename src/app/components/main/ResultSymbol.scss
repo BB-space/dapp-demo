@@ -1,0 +1,26 @@
+@import "../../stylesheets/colors";
+
+
+.wrapper {
+	$height: 40px;
+	
+	display: inline-block;
+	width: $height;
+	height: $height;
+	line-height: $height;
+	text-align: center;
+	border: 1px solid $black;
+	border-radius: 3px;
+	background-color: $white;
+	vertical-align: top;
+
+	&:not(:last-child) {
+		margin-right: 5px;
+	}
+
+	img {
+		max-width:100%;
+		max-height:100%;
+		vertical-align: middle;
+	}
+}

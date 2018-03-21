@@ -27,7 +27,7 @@ export default class Results extends Component {
 						<td>Status</td>
 						<td>Bet Amount</td>
 						<td>Result</td>
-						<td>Reward</td>
+						<td>Profit</td>
 					</tr>
 				</thead>
 				<tbody>

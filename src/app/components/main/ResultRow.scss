@@ -1,0 +1,16 @@
+@import "../../stylesheets/colors";
+
+
+.tr {
+	td {
+		vertical-align: middle !important;
+	}
+}
+
+.positive {
+	color: $mid-green;
+}
+
+.negative {
+	color: $tomato;
+}

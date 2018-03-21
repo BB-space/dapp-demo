@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import serviceWeb3 from  '../../utils/web3';
 import { reconstructResult, fromWei } from '../../../common/utils';
 import { gameABI, gameAddress } from '../../../common/constants/contracts';
-import Dice from '../common/Dice';
+import ResultSymbol from './ResultSymbol';
 
+import styles from './ResultRow.scss';
 
 
 export default class Results extends Component {
@@ -26,17 +28,6 @@ export default class Results extends Component {
 		super(props);
 	}
 
-
-	getDiceComponent(numbers) {
-		return (
-			<div className="dice-box bet-table">
-				{ numbers.map((num, idx) => (
-					<Dice key={idx} face={num} />
-				)) }
-			</div>
-		);
-	}
-
 	render() {
 		const {
 			initGameTxHash,
@@ -53,7 +44,7 @@ export default class Results extends Component {
 		} = this.props;
 		
 		const waitingElem = (
-			<tr {...restProps}>
+			<tr className={styles.tr} {...restProps}>
 				<td>
 					<a target="_blank" href={`https://rinkeby.etherscan.io/tx/${initGameTxHash}`}> { initGameTxHash } </a> <br />
 					
@@ -74,7 +65,7 @@ export default class Results extends Component {
 		);
 
 		const resultElem = (
-			<tr {...restProps}>
+			<tr className={styles.tr} {...restProps}>
 				<td>
 					<a target="_blank" href={`https://rinkeby.etherscan.io/tx/${initGameTxHash}`}> { initGameTxHash } </a> <br />
 				</td>
@@ -85,13 +76,18 @@ export default class Results extends Component {
 					{ betInEth } ETH
 				</td>
 				<td>
-					{ (symbolIndices || []).join(',') }
+					{ (symbolIndices || []).map((symbol, idx)=> (
+						<ResultSymbol index={symbol} key={idx} />
+					)) }
 				</td>
 				<td>
-					{ reward }
+					<span className={classNames({
+							[styles.positive]: (reward - betInEth) > 0,
+							[styles.negative]: (reward - betInEth) < 0
+					})}>
+						{ (reward - betInEth) } ETH
+					</span>
 				</td>
-				
-
 			</tr>
 		);
 
