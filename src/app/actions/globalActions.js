@@ -14,3 +14,17 @@ export function setSettingsModal(isOpen) {
 		isOpen
 	};
 }
+
+export function setResultModal(isOpen) {
+	return {
+		type: actionTypes.GLOBAL_SET_RESULT_MODAL,
+		isOpen
+	};
+}
+
+export function setResultModalContent(content) {
+	return {
+		type: actionTypes.GLOBAL_SET_RESULT_MODAL_CONTENT,
+		resultModalContent: content
+	};
+}

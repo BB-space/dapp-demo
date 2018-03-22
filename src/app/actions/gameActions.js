@@ -36,13 +36,6 @@ export function fetchHashedServerSeed() {
 	};
 }
 
-export function setBetIndex(betIdx) {
-	return {
-		type: actionTypes.GAME_SET_BET_INDEX,
-		betIdx
-	};
-}
-
 
 /* export function getGameResult() {
  * 	const url = '/api/games';

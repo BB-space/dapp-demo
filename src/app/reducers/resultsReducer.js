@@ -21,7 +21,8 @@ Game Object: {
    hashedServerSeed,
    betInEth,
    reward,
-   symbolIndices
+   symbolIndices,
+   timeTxMade
 }
 */
 const initialState = [];

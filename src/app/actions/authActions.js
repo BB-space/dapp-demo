@@ -121,7 +121,7 @@ export function setMetamaskUse(toUseMetamask) {
 			let wallet = injectedWeb3.eth.defaultAccount;
 			
 			if(!wallet) {
-				web3.eth.getAccounts(function (error, result) {
+				web3.eth.getAccounts(async function (error, result) {
 					if (error) {
 						console.error(error);
 					} else {
@@ -129,23 +129,23 @@ export function setMetamaskUse(toUseMetamask) {
 							alert('Unlock MetaMask *and* click \'Get Accounts\'');
 							return false;
 						} else {
-							dispatch(setUser({ wallet: result[0] }));
+							wallet = result[0]
+							dispatch(setUser({ wallet }));
+
+							const balance = await dispatch(fetchBalanceInEth(wallet));
+							dispatch(setEthBalance(balance));
 						}
 					}
 				});
 			} else {
 				dispatch(setUser({ wallet }));
-			}
-
-			try {
+				
 				const balance = await dispatch(fetchBalanceInEth(wallet));
 				dispatch(setEthBalance(balance));
-			} catch(e){
-				console.error(e);
 			}
-			
-			dispatch(fetchMetamaskNetwork());
 		}
+
+		dispatch(fetchMetamaskNetwork());
 
         return true;
     };
@@ -198,11 +198,16 @@ export function setIfWeb3Injected(isInjected) {
 
 export function fetchBalanceInEth(wallet) {
 	return async (dispatch, getState) => {
- 		const balanceInWei = await serviceWeb3.eth.getBalance(wallet);
-		const balanceInEth = parseFloat(fromWei(balanceInWei).toNumber());
-		dispatch(setEthBalance(balanceInEth));
-		
-		return balanceInEth;
+		try {
+ 			const balanceInWei = await serviceWeb3.eth.getBalance(wallet);
+			const balanceInEth = parseFloat(fromWei(balanceInWei).toNumber());
+			dispatch(setEthBalance(balanceInEth));
+			
+			return balanceInEth;
+		} catch(e) {
+			console.error(e);
+			return null;
+		}
 	};
 }
 

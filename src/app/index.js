@@ -7,6 +7,8 @@ import configureStore from './store/configureStore';
 import { setInjectedWeb3, serviceWeb3 } from './utils/web3';
 import { setIfWeb3Injected, setMetamaskUse } from './actions/authActions';
 
+import './polyfills';
+
 
 let initialState = window.__INITIAL_STATE__ || {};
 const store = configureStore(initialState);
