@@ -28,7 +28,6 @@ export default class MainPage extends Component {
 				<div className="row">
 					<GameSection />
 					<ResultsSection />
-					<ValidationSection />
 				</div>
 			</main>
 		);

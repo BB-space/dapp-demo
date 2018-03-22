@@ -8,6 +8,7 @@ import MainPage from './main/MainPage';
 import FaqPage from './faq/FaqPage';
 import AccountPage from './account/AccountPage';
 import SettingsModal from './main/SettingsModal';
+import ResultDetailModal from './main/ResultDetailModal';
 // import SignUpModal from './auth/SignUpModal';
 
 import '../stylesheets/style.scss';
@@ -17,7 +18,8 @@ import 'font-awesome/css/font-awesome.css';
 @connect(
 	(state, ownProps) => ({
 		isSignUpModalOpen: state.global.isSignUpModalOpen,
-		isSettingsModalOpen: state.global.isSettingsModalOpen
+		isSettingsModalOpen: state.global.isSettingsModalOpen,
+		isResultModalOpen: state.global.isResultModalOpen,
 	}),	{
 		checkAuth
 	},
@@ -29,16 +31,24 @@ export default class MainApp extends Component {
 		// this.props.checkAuth();
 	}
 
-	render() {
-        const {
+	isModalOpen = () => {
+		const {
 			isSignUpModalOpen,
-			isSettingsModalOpen
+			isSettingsModalOpen,
+			isResultModalOpen
 		} = this.props;
+		
+		return isSignUpModalOpen
+			|| isSettingsModalOpen
+			|| isResultModalOpen;
+	}
+
+	render() {
 
         return (
             <div className={classNames({
 					"app-container": true,
-					"modal-open": isSignUpModalOpen || isSettingsModalOpen
+					"modal-open": this.isModalOpen()
 			})}>
 				<Header />
 				<Switch>
@@ -51,6 +61,7 @@ export default class MainApp extends Component {
 				</Switch>
 				
 				<SettingsModal />
+				<ResultDetailModal />
 				{/* <SignUpModal /> */}
             </div>
         );

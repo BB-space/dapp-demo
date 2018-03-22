@@ -31,7 +31,13 @@ export default class Results extends Component {
 					</tr>
 				</thead>
 				<tbody>
-					{ gameResults.map((e, idx) => <ResultRow {...e} key={idx} />) }
+					{ gameResults.map((e, idx) => (
+						<ResultRow
+							{...e}
+						    key={idx}
+						    indexInResults={idx}
+						/>
+					)) }
 				</tbody>
 			</table>				
 			

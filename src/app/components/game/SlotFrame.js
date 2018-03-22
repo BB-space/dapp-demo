@@ -61,7 +61,7 @@ export default class SlotFrame extends Component {
 		super(props);
 
 		this.state = {
-			gameState: null
+			gameState: '0'
 		};
 
 		this.handleClickSpin = this.handleSpin.bind(this, 'PressSpin');
@@ -88,6 +88,8 @@ export default class SlotFrame extends Component {
 		window.removeEventListener('OnClickBetMax', this.handleBetMax);
 		window.removeEventListener('OnClickSpin', this.handleClickSpin);
 		window.removeEventListener('OnPullLever', this.handlePullLever);
+
+		//TODO: unlisten Finalize ?
 	}
 
 	shouldComponentUpdate() {
@@ -99,7 +101,7 @@ export default class SlotFrame extends Component {
 	}
 
 	handleGameLoad = evt => {
-		// Set bet range
+		// set bet range
 		this.ifr.contentWindow.c2_callFunction('SetBetRange', betRange);
 		
 		// set pay table
@@ -108,17 +110,20 @@ export default class SlotFrame extends Component {
 			size: [19, 4, 1],
 			data: payTableData
 		};
-		
 		this.ifr.contentWindow.c2_callFunction('SetPayTable', [JSON.stringify(payTable)]);
 		const table = this.ifr.contentWindow.c2_callFunction('GetPayTable', []);
 		console.log('PayTable:', table);
 
+		// set ETH <-> credit conversion rate
+		this.ifr.contentWindow.c2_callFunction('SetCreditPerEthereum', [ethToCreditRate]);
+
 		// set balance
-		const { ethBalance } = this.props;
-		console.log(ethBalance);
+		let { ethBalance } = this.props;
+		ethBalance = Math.floor10(ethBalance, -2);
 		this.setBalanceInGame(
 			BigNumber(ethBalance).times(ethToCreditRate).toNumber()
 		);
+		this.fetchAndSetBalance();  // fetch once more at beginning
 
 		// start game
 		this.ifr.contentWindow.c2_callFunction('StartGame', []);
@@ -193,14 +198,15 @@ export default class SlotFrame extends Component {
 						serverSeed: '',
 						hashedServerSeed,
 						betInEth,
-						reward: ''
+						reward: '',
+						timeTxMade: ''
 					});
 
 					// Fetch a new dealer hash
 					fetchHashedServerSeed();
 				})
 				.once('confirmation', async (confNumber, receipt) => {
-					setInitOccurence(hashedServerSeed, true);
+					setInitOccurence(hashedServerSeed, true, (new Date()).toString());
 					this.fetchAndSetBalance();
 				})
 				.on('error', error => {
@@ -258,7 +264,9 @@ export default class SlotFrame extends Component {
 			fetchBalanceInEth
 		} = this.props;
 		
-		const balanceInEth = await fetchBalanceInEth(wallet);
+		let balanceInEth = await fetchBalanceInEth(wallet);
+		balanceInEth = Math.floor10(balanceInEth, -2);
+		
 		// set balance in game
 		this.setBalanceInGame(
 			BigNumber(balanceInEth)

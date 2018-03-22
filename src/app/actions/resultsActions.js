@@ -15,17 +15,18 @@ export function changeGameState(newState){
 	};
 }
 
-export function setInitOccurence(dealerHash, occurence){
+export function setInitOccurence(dealerHash, occurence, txTime){
 	return {
 		type: actionTypes.RESULTS_CHANGE_GAME_STATE,
 		newState: {
 			hashedServerSeed: dealerHash,
-			initTransacted: occurence
+			initTransacted: occurence,
+			timeTxMade: txTime
 		}
 	};
 }
 
-export function setFailure(dealerHash, hasFailed){
+export function setFailure(dealerHash, hasFailed) {
 	return {
 		type: actionTypes.RESULTS_CHANGE_GAME_STATE,
 		newState: {

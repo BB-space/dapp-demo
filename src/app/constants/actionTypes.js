@@ -4,6 +4,8 @@ export default keymirror({
 	// global
 	GLOBAL_SET_SIGNUP_MODAL: null,
 	GLOBAL_SET_SETTINGS_MODAL: null,
+	GLOBAL_SET_RESULT_MODAL: null,
+	GLOBAL_SET_RESULT_MODAL_CONTENT: null,
 
 	// auth
 	AUTH_SET_AUTHENTICATING: null,
