@@ -7,13 +7,12 @@ import session from 'koa-session';
 import passport from 'koa-passport';
 import path from 'path';
 import fs from 'fs';
-import Web3 from 'web3';
 import webpack from 'webpack';
 import runDevServer from './runDevServer';
 import renderApp from './renderApp';
 import listenAndFinalize from './listenAndFinalize';
-import { nodeUrl } from '../common/constants/config';
 import { NUMBER_OF_SEEDS, INTERVAL_TO_REGEN_SEEDS, SEED_CHUNKS } from './constants/config'
+import { Web3, createGlobalWeb3 } from './utils/web3';
 
 // routes
 import gameRoutes from './routes/games';
@@ -24,42 +23,8 @@ import webpackConfig from '../../webpack.config';
 
 import hashGenerator from './db/hashGenerator';
 
-console.log(nodeUrl);
-
-/*
-* TODO:
-* geth로부터 웹소켓 커넥션이 끊어졌을 경우의 대처가 명확하지 않다.
-* 현재 시점에서는 Web3 의 동작을 정확히 알 수 없으니 이 부분도
-* 테스트를 통해 대처 방법을 찾을 필요가 있다.
-*/
-function createWeb3() {
-    let wsp = new Web3.providers.WebsocketProvider(nodeUrl);
-
-    //
-    // Web3-provider 의 코드를 확인해 보니 문제가 있어 보여서 아래 처리는 잠시 보류
-    // 
-
-    // wsp.on('connect', e => {
-    //     //console.log('ws-connect', e);
-    // })
-    // wsp.on('end', e => {
-    //     // 연결이 종료된 경우
-    //     // 이 경우는 에러가 아니라고 볼 수도 있지만 keepalive 시간이 지나면
-    //     // 연결이 끊어질 수 있기 때문에 재연결 처리를 해야 한다.
-    //     // 문제는 트랜잭션 처리 도중에 이 이벤트가 발생하는 경우인데...
-    //     // 현재 시점에서는 어떻게 동작할지 알 수 없다.
-    //     console.log('ws-end', e);
-    //     global.web3 = createWeb3();
-    // })
-    // wsp.on('error', e => {
-    //     // 에러에서도 일단 재연결한다.
-    //     console.log('ws-error', e);
-    //     global.web3 = createWeb3();
-    // })
-    return new Web3(wsp);
-}
-
-global.web3 = createWeb3();
+// global.web3
+createGlobalWeb3();
 
 // 주기적으로 시드정보를 생성하기 위한 함수
 var genfunc = function() {
