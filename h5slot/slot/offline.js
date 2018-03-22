@@ -1,5 +1,5 @@
 ﻿{
-	"version": 1521643541,
+	"version": 1521724982,
 	"fileList": [
 		"data.js",
 		"c2runtime.js",
@@ -77,6 +77,9 @@
 		"images/sprite-sheet0.png",
 		"images/loading_bg.png",
 		"images/loading_txt-sheet0.png",
+		"images/sprite2-sheet0.png",
+		"images/9patch2.png",
+		"images/sprite3-sheet0.png",
 		"media/c001.freespin.bgm.m4a",
 		"media/c001.freespin.bgm.ogg",
 		"media/c001.reelplay.bgm.m4a",
