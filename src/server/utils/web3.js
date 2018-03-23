@@ -7,25 +7,35 @@
  */
 import Web3 from 'web3';
 import { nodeUrl } from '../../common/constants/config';
+import { SOCK_GETH } from '../constants/config';
+import net from 'net';
+import fs from 'fs';
+
+var connectionCallback;
 
 console.log('>>> ether node URL:', nodeUrl);
 
 /*
-* TODO:
-* geth로부터 웹소켓 커넥션이 끊어졌을 경우의 대처가 명확하지 않다.
-* 현재 시점에서는 Web3 의 동작을 정확히 알 수 없으니 이 부분도
-* 테스트를 통해 대처 방법을 찾을 필요가 있다.
+* IPC를 기본으로, Unix Socket 이 없을 경우만 WebSocket으로 연결한다.
 */
 var retries = 0;
 var reconnectionWaiting = false;
 function createWeb3() {
-    let wsp = new Web3.providers.WebsocketProvider(nodeUrl);
+    let wsp;
+    if (fs.existsSync(SOCK_GETH)) {
+        console.log('create IPC channel:', SOCK_GETH);
+        wsp = new Web3.providers.IpcProvider(SOCK_GETH, net);
+    } else {
+        console.log('create websocket channel:', nodeUrl);
+        wsp = new Web3.providers.WebsocketProvider(nodeUrl);
+    }
+
     let rct = [0, 10, 10, 10, 30, 30, 30, 30, 60];
 
     function createNewWeb3Instance() {
         if (reconnectionWaiting)
             return;
-            reconnectionWaiting = true;
+        reconnectionWaiting = true;
         wsp.removeAllListeners();
         setTimeout(() => {
             console.log('>>> try to reconnect Web3');
@@ -47,13 +57,26 @@ function createWeb3() {
     // ※ 주의
     // 이 기능은 문서화 되어 있지 않다. 소스코드를 통해 분석한 내용이므로 추후 얼마든지 변경될 수 있다.
     // Web3 라이브러리 업데이트 후에는 구현 변경 여부를 필히 확인해야 한다!!!
+    //
+    // ※ 주의
+    // 현재의 구현은 연결이 정상적으로 끊어진 경우에 대해서는 대처가 가능하지만,
+    // 비정상적인 오류에 대해서는 대처가 불가능하다. (Websocket의 ping pong 기능이 구현되어 있지 않은 듯)
+    // 안정성을 위해 서버에서는 IPC 를 사용하도록 한다.
     // 
     wsp.on('connect', () => {
-        console.log('WebSocket connected!!!');
+        console.log('Web3 socket connected!!!');
         retries = 0;
+        if (connectionCallback) {
+            try {
+                connectionCallback();
+            } catch (e) {
+                console.error(e);
+            }
+        }
     })
     wsp.on('data', (e) => {
         if (e) {
+            console.log('WS-closed');
             // 연결이 종료된 경우
             // 이 경우는 에러가 아니라고 볼 수도 있지만 keepalive 시간이 지나면
             // 연결이 끊어질 수 있기 때문에 재연결 처리를 해야 한다.
@@ -65,6 +88,9 @@ function createWeb3() {
     // 현재까지 파악된 바로는 에러가 발생하면 error 와 end 이벤트가 모두 발생하기 때문에
     // 특별히 여기에 처리를 넣을 필요는 없어 보인다. (그래서 이 이벤트를 data 핸들러로 전달하지 않는 듯...)
     // wsp.on('error', e => {
+    //     console.error('WS-Error:', e);
+    //     wsp._timeout();
+    //     createNewWeb3Instance();
     // })
     return new Web3(wsp);
 }
@@ -72,4 +98,7 @@ function createWeb3() {
 exports.Web3 = Web3;
 exports.createGlobalWeb3 = function() {
     global.web3 = createWeb3();
+}
+exports.registConnectionCallback = function(f) {
+    connectionCallback = f;
 }

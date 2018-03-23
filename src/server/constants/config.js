@@ -11,6 +11,9 @@ export const INTERVAL_TO_REGEN_SEEDS = 1000 * 60; // 1min
 // 한번에 입력을 시도할 시드 수
 export const SEED_CHUNKS = 10;
 
+// geth Unix socket
+export const SOCK_GETH = '/data/files/chains/geth.ipc';
+
 // Redis 서버 주소
 export const REDIS_URL = {
 	local: { url: 'redis://localhost:6379', password: undefined },
