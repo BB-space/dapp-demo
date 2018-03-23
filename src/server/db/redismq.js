@@ -122,8 +122,9 @@ class MQ {
      * @param {*} channel 
      * @param {*} handler function (job) { }
      */
-    static consume(channel, handler) {
-        queue.process(channel, MQCONFIG.jobs.concurrency, function(job, done) {
+    static consume(channel, handler, concurrency) {
+        concurrency || (concurrency = MQCONFIG.jobs.concurrency);
+        queue.process(channel, concurrency, function(job, done) {
             handler(job)
             .then(done)
             .catch(done);

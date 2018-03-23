@@ -88,7 +88,7 @@ MQ.consume(LISTEN_Q, async (job) => {
 		console.error(e);
 		throw e; // Job을 실패처리하고 재시도한다.
 	}
-});
+}, 10);
 
 async function executeFinalizeTransaction(job) {
 	let gameInstance = new web3.eth.Contract(gameABI, gameAddress);
