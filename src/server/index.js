@@ -13,6 +13,7 @@ import renderApp from './renderApp';
 import listenAndFinalize from './listenAndFinalize';
 import { NUMBER_OF_SEEDS, INTERVAL_TO_REGEN_SEEDS, SEED_CHUNKS } from './constants/config'
 import { Web3, createGlobalWeb3 } from './utils/web3';
+import { Mutex } from 'await-semaphore';
 
 // routes
 import gameRoutes from './routes/games';
@@ -22,6 +23,9 @@ import ethRoutes from './routes/eth';
 import webpackConfig from '../../webpack.config';
 
 import hashGenerator from './db/hashGenerator';
+
+// account lock
+global.accountLock = new Mutex();
 
 // global.web3
 createGlobalWeb3();

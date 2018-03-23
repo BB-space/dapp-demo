@@ -17,19 +17,19 @@ console.log('>>> ether node URL:', nodeUrl);
 * 테스트를 통해 대처 방법을 찾을 필요가 있다.
 */
 var retries = 0;
-var reconnecting = false;
+var reconnectionWaiting = false;
 function createWeb3() {
     let wsp = new Web3.providers.WebsocketProvider(nodeUrl);
     let rct = [0, 10, 10, 10, 30, 30, 30, 30, 60];
 
-    function createNewWeb() {
-        if (reconnecting)
+    function createNewWeb3Instance() {
+        if (reconnectionWaiting)
             return;
-        reconnecting = true;
+            reconnectionWaiting = true;
         wsp.removeAllListeners();
         setTimeout(() => {
             console.log('>>> try to reconnect Web3');
-            reconnecting = false;
+            reconnectionWaiting = false;
             global.web3 = createWeb3();
         }, 1000 * rct[Math.min(retries++, rct.length)]);
     }
@@ -48,24 +48,24 @@ function createWeb3() {
     // 이 기능은 문서화 되어 있지 않다. 소스코드를 통해 분석한 내용이므로 추후 얼마든지 변경될 수 있다.
     // Web3 라이브러리 업데이트 후에는 구현 변경 여부를 필히 확인해야 한다!!!
     // 
-    wsp.on('connect', e => {
+    wsp.on('connect', () => {
         console.log('WebSocket connected!!!');
         retries = 0;
     })
-    wsp.on('data', (e, data) => {
+    wsp.on('data', (e) => {
         if (e) {
             // 연결이 종료된 경우
             // 이 경우는 에러가 아니라고 볼 수도 있지만 keepalive 시간이 지나면
             // 연결이 끊어질 수 있기 때문에 재연결 처리를 해야 한다.
             // 문제는 트랜잭션 처리 도중에 이 이벤트가 발생하는 경우인데...
             // 현재 시점에서는 어떻게 동작할지 알 수 없다.
-            createNewWeb();
+            createNewWeb3Instance();
         }
     })
-    wsp.on('error', e => {
-        // 현재까지 파악된 바로는 에러가 발생하면 error 와 end 이벤트가 모두 발생하기 때문에
-        // 특별히 여기에 처리를 넣을 필요는 없다.
-    })
+    // 현재까지 파악된 바로는 에러가 발생하면 error 와 end 이벤트가 모두 발생하기 때문에
+    // 특별히 여기에 처리를 넣을 필요는 없어 보인다. (그래서 이 이벤트를 data 핸들러로 전달하지 않는 듯...)
+    // wsp.on('error', e => {
+    // })
     return new Web3(wsp);
 }
 

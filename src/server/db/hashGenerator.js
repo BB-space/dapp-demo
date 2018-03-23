@@ -49,6 +49,7 @@ async function generateNewHashItems(cli, count) {
     }
 
     if (items.length > 0) {
+        const release = await accountLock.acquire();
         try {
             // contract 추가 시도
             await pushHashes(items);
@@ -59,6 +60,8 @@ async function generateNewHashItems(cli, count) {
             let deleted = await deleteItems(cli, items);
             console.log('Deleted count: ', deleted);
             return 0;
+        } finally {
+            release();
         }
     }
 }
@@ -76,19 +79,19 @@ async function pushHashes(items) {
         nonce,
         txData
     )
-    .once('transactionHash-pushHashes:', hash => {
+    .once('transactionHash', hash => {
         console.log('pushHashes transaction hash');
-        console.log(hash);
+        //console.log(hash);
     })
-    .once('receipt-pushHashes:', receipt => {
+    .once('receipt', receipt => {
         console.log('pushHashes reciept');
-        console.log(receipt);
+        //console.log(receipt);
     })
-    .once('confirmation-pushHashes:', (confNumber, receipt) => {
+    .once('confirmation', (confNumber, receipt) => {
         console.log('pushHashes confirmation');
         console.log(confNumber, ':', receipt);
     })
-    .on('error-pushHashes:', error => {
+    .on('error', error => {
         console.error(error);
     })
     .catch (error => {

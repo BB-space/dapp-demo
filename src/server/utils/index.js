@@ -41,7 +41,6 @@ export function makeSignedTransaction(
  */
 export async function getNonce(address) {
 	let txCount = await web3.eth.getTransactionCount(address);
-	console.log('>>> txCount-1:', txCount);
 	let sendRpc = promisify(web3.currentProvider.send).bind(web3.currentProvider);
 	let pool = await sendRpc({
 		method: "txpool_content",
@@ -52,9 +51,9 @@ export async function getNonce(address) {
 	if (pool && pool.result && pool.result.pending) {
 		let pending = pool.result.pending;
 		if (pending[address]) {
+			console.log('>>> has pending transactions:',  Object.keys(pending[address]).length);
 			txCount += Object.keys(pending[address]).length;
 		}
 	}
-	console.log('>>> txCount-2:', txCount);
 	return txCount;
 }

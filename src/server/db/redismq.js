@@ -70,6 +70,24 @@ if (MQCONFIG.monitor.enabled) {
     kue.app.listen(MQCONFIG.monitor.port);
 }
 
+// clenaup
+function cleanupQueue() {
+    const now = new Date();
+    queue.complete(function(err, ids) {
+        ids.forEach(function(id, index) {
+            kue.Job.get(id, function(err, job) {
+                const created = new Date(parseInt(job.created_at));
+                const age = parseInt(now - created);
+                if (age > MQCONFIG.jobs.max_age) {
+                    console.log('remove outdated job:', job.id);
+                    job.remove(() => {});
+                }
+            });
+        });
+    });
+}
+setInterval(cleanupQueue, MQCONFIG.jobs.gc_interval);
+
 /**
  * @class MQ
  * 

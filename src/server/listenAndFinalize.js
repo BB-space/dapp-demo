@@ -11,7 +11,7 @@ import { MQ } from './db/redismq';
 // 처리 순서:
 // Contract -> LISTEN_Q -> FINALIZE_Q -> finalize
 const LISTEN_Q = 'ListenQ:' + gameAddress;
-const FINALIZE_Q = 'FinalizeQ' + gameAddress;
+const FINALIZE_Q = 'FinalizeQ:' + gameAddress;
 
 // Contract Callback
 export default function listenAndFinalize(web3) {
@@ -141,12 +141,15 @@ async function executeFinalizeTransaction(job) {
 }
 
 MQ.consume(FINALIZE_Q, async (job) => {
+	const release = await accountLock.acquire();
 	try {
 		// 큐에서 꺼낸 Job으로 finalize 트랜잭션 처리 
 		await executeFinalizeTransaction(job);
 	} catch(e) {
 		console.error(e);
 		throw e; // Job을 실패처리하고 재시도한다.
+	} finally {
+		release();
 	}
 });
 

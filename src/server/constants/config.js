@@ -58,6 +58,8 @@ export const MQCONFIG = {
     },
     jobs: {
         attempts: 1,
-        concurrency: 5
+        concurrency: 5,
+        max_age: 1000 * 60 * 60 * 24, // 1 day
+        gc_interval: 1000 * 60 * 60,  // 1 hour
     }
 };
