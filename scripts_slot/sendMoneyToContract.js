@@ -1,6 +1,6 @@
 var Slot = artifacts.require('./Slot.sol');
 
-var ethAmount = 100000;
+var ethAmount = 1000;
 var accountIdx = 2;
 module.exports = async function(callback){
   const slot = await Slot.deployed();
